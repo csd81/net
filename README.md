@@ -3800,14 +3800,149 @@ username netadmin role NETOPS secret NetOpsPass456
 
 ---
 
-### 🧰 Want to try it in GNS3?
 
-✅ I can include:
-- A fully working lab with **TACACS+ roles**  
-- Example: Junior NOC user can only `show`, but not `configure`  
-- SSH with **role-based access**, logs forwarded to Syslog
+Awesome, Daniel! Here's an **expanded guide** to 🔒 **05.1. Configure Privilege Levels** — tailored for Cisco IOS and perfect for integrating into your GNS3 lab with TACACS+ and RBAC.
 
-Just say **“Build the RBAC lab!”** and I’ll get it ready for you! 💻🔐🔥
+---
 
+## 🔒 05.1 – Configure Privilege Levels (Expanded)
 
+**Privilege levels** in Cisco IOS provide a simple yet powerful method to define who can do what on a device. Combined with AAA and logging, they’re key to secure device access.
 
+---
+
+### 🌟 1. Why Configure Privilege Levels?
+
+| 🔐 Benefit            | 💬 Description                                                                 |
+|----------------------|--------------------------------------------------------------------------------|
+| **Enhanced Security** | Limits access to sensitive or risky commands (e.g., `reload`, `write`, `conf t`). |
+| **Role-Based Access** | Assigns different capabilities to users like `support`, `netops`, `viewer`.     |
+| **Accountability**    | Makes auditing easier by tying actions to specific privilege levels.           |
+
+---
+
+### ⚙️ 2. Configuring Privilege Levels
+
+#### 🧑‍💻 2.1. Create Users with Specific Levels
+
+```cisco
+username admin privilege 15 secret AdminPass123
+username support privilege 5 secret SupportPass123
+username viewonly privilege 1 secret ViewPass!
+```
+
+- `15`: Full administrative access
+- `5`: Limited operator functions
+- `1`: Basic read-only access
+
+---
+
+#### 🔧 2.2. Assign Commands to Custom Levels
+
+Assign specific commands to intermediate levels. Examples:
+
+**Example: Level 5 can view configs**
+```cisco
+privilege exec level 5 show running-config
+```
+
+**Example: Level 7 can configure interfaces**
+```cisco
+privilege exec level 7 configure terminal
+privilege exec level 7 interface
+```
+
+> 🧠 Pro tip: To see what’s available at each level, run:  
+> `show privilege`  
+> `show running-config | include privilege`
+
+---
+
+#### 🔐 2.3. Set Enable Passwords for Each Level
+
+```cisco
+enable secret level 5 SupportEnable123
+enable secret level 7 InterfaceTech
+```
+
+> 🔐 Now users can type:
+> ```
+> enable 5
+> (password prompt)
+> ```
+
+---
+
+#### 🌐 2.4. Limit Remote Access Based on Level
+
+```cisco
+line vty 0 4
+ login local
+ privilege level 5
+ transport input ssh
+```
+
+> Only users with privilege level **5 or higher** can log in via SSH.
+
+---
+
+### 🔍 3. Verification and Testing
+
+| Task | Command |
+|------|---------|
+| Check privilege level after login | `show privilege` |
+| Test command access | Try `show run`, `conf t`, `interface` depending on user level |
+| View users and their levels | `show running-config | include username` |
+
+---
+
+### 📊 4. Monitoring and Logging
+
+```cisco
+logging buffered 10000
+login on-success log
+login on-failure log
+```
+
+- All login activity gets logged
+- Use `show logging` to review logs
+
+---
+
+### ✅ 5. Summary of Key Commands
+
+| Task                         | Example Command                                       |
+|------------------------------|-------------------------------------------------------|
+| Create User with Priv Level  | `username admin privilege 15 secret Admin123`         |
+| Assign Command to Level      | `privilege exec level 5 show running-config`          |
+| Set Enable Password          | `enable secret level 5 SupportPass123`                |
+| Restrict VTY Priv Level      | `privilege level 5` in `line vty 0 4`                 |
+| Verify Privilege Level       | `show privilege`                                      |
+
+---
+
+### ⚔️ 6. Troubleshooting Tips
+
+| Issue | Fix |
+|-------|-----|
+| ❌ “Access denied” | User lacks privilege for the command. Use `show privilege` to verify. |
+| ❌ “Command not found” | Command not assigned to user’s level. Use `privilege exec level X` to assign. |
+| 🔒 Prompted for enable password | Enable password missing for the desired level. Add `enable secret level X` |
+
+---
+
+### 🌟 7. Benefits Recap
+
+✅ **Granular Control** – Users only access what they’re meant to  
+✅ **Hardens Security** – No unnecessary privilege exposure  
+✅ **Supports RBAC** – Can integrate with TACACS+ for command-by-command control  
+✅ **Simplifies Management** – Easily adjust roles without rewriting policies
+
+---
+
+If you want, I can also:
+- ✅ Generate a **TACACS+ role-to-privilege level map**
+- ✅ Show how to **force specific privilege levels via TACACS+ shell roles**
+- ✅ Add a test lab with a TACACS+ fallback scenario
+
+Let me know if you want that too — happy to bundle it into your project! 💥
