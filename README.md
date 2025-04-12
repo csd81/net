@@ -4232,3 +4232,83 @@ Combining **privilege levels** with **Role-Based CLI (RBAC)** provides a powerfu
 ---
 
 Want a **quick reference card** or printable checklist for this? I can format that too 👌
+
+
+Awesome! Here's your **🔐 Role-Based Access Quick Reference Card** – ready for print, pinning to your lab wall, or saving into your notes:
+
+---
+
+## 🔐 **Cisco Role-Based Access – Quick Reference Card**
+
+### 🧱 **1. Access Control Methods**
+| Method               | Description                              |
+|----------------------|------------------------------------------|
+| **Privilege Levels** | 0–15 levels to control command access     |
+| **Role-Based CLI**   | Custom "views" with specific commands     |
+
+---
+
+### 🛠 **2. Privilege Levels (Example Config)**
+```cisco
+! Users with specific levels
+username admin privilege 15 secret AdminPass123
+username support privilege 5 secret SupportPass123
+
+! Assign commands to levels
+privilege exec level 5 show running-config
+
+! Set enable password for level
+enable secret level 5 SupportPass123
+
+! Restrict VTY access
+line vty 0 4
+ login local
+ privilege level 5
+```
+
+---
+
+### 🛠 **3. Role-Based CLI Views (RBAC)**
+```cisco
+! Enable AAA and views
+aaa new-model
+enable view
+enable secret RootViewPass
+
+! Create a custom view
+parser view NetworkSupport
+ secret SupportPass123
+ command exec include show
+ command exec include configure terminal
+
+! Assign user to view
+username support view NetworkSupport secret SupportPass123
+
+! VTY access for view users
+line vty 0 4
+ login local
+```
+
+---
+
+### 🧪 **4. Verification Commands**
+| Purpose                   | Command                      |
+|---------------------------|------------------------------|
+| View user privilege       | `show privilege`             |
+| Show all views            | `show parser view`           |
+| Log user activity         | `show logging`               |
+| List configured usernames | `show run | include username`|
+
+---
+
+### ✅ **5. Best Practices**
+- 🔐 Use **Least Privilege** principle  
+- 👤 Avoid shared user accounts  
+- 🧩 Assign **role-based views** for task-specific access  
+- 🔁 Review roles regularly  
+- 📋 Enable **Syslog** and **AAA accounting** for tracking  
+- 🔑 Use **SSH** and **MFA** where possible  
+
+---
+
+Would you like this as a downloadable PDF or printable cheat sheet format too?
