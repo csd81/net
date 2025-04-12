@@ -3946,3 +3946,167 @@ If you want, I can also:
 - ✅ Add a test lab with a TACACS+ fallback scenario
 
 Let me know if you want that too — happy to bundle it into your project! 💥
+
+
+Excellent — here’s an **expanded breakdown** of 🔒 **05.2 – Configure Role-Based CLI (RBAC)** for Cisco IOS, ideal for your GNS3 lab setup with secure device access, TACACS+, and fallback logic.
+
+---
+
+## 🔒 05.2 – Role-Based CLI Access (Expanded)
+
+**Role-Based CLI** allows you to define custom roles with tailored command access — much more fine-grained than traditional privilege levels.
+
+---
+
+### 🌟 1. Why Use Role-Based CLI?
+
+| Benefit              | Description                                                                 |
+|----------------------|-----------------------------------------------------------------------------|
+| 🔐 **Granular Access**   | Allow specific users to run only necessary commands (e.g., `show`, `interface`). |
+| 🚫 **Improved Security** | Restrict access to critical config like `reload`, `copy run start`.         |
+| 🧩 **Efficiency**         | Let different teams (NOC, Helpdesk, Ops) focus on their own tools.          |
+| 📋 **Auditability**      | Track user roles and commands executed for compliance.                      |
+
+---
+
+### ⚙️ 2. Key Concepts
+
+| Term        | Description                                                                 |
+|-------------|-----------------------------------------------------------------------------|
+| **Root View** | Required to create/manage other views — equivalent to full admin.          |
+| **Parser View** | A named view (role) with explicitly permitted commands.                   |
+| **CLI Views** | Group of commands available to a user.                                      |
+| **AAA**     | Must be enabled to support views and user-role linking.                     |
+
+---
+
+### 🛠️ 3. Configuration Steps
+
+#### ✅ 3.1. Enable AAA
+
+```cisco
+aaa new-model
+```
+
+---
+
+#### 🔓 3.2. Enable Root View
+
+```cisco
+enable view
+enable secret strongpassword123
+```
+
+- `enable view`: Activates root view system.
+- `enable secret`: Secures root view access (required to create/manage views).
+
+---
+
+#### 🧑‍🔧 3.3. Create a New View (Role)
+
+```cisco
+parser view NetworkSupport
+ secret SupportPass123
+```
+
+- `parser view`: Creates a role/view.
+- `secret`: View password (not the same as a user password).
+
+---
+
+#### ✍️ 3.4. Assign Commands to the View
+
+```cisco
+view NetworkSupport
+ command exec include show
+ command exec include configure terminal
+ command exec include interface
+```
+
+- You can be as specific as needed (e.g., `show interfaces status`, `show ip route`).
+- The view **includes only what you specify** — all else is denied by default.
+
+---
+
+#### 👥 3.5. Create Users and Assign Views
+
+```cisco
+username admin privilege 15 secret AdminPass123
+username support view NetworkSupport secret SupportPass123
+```
+
+- User `support` can only use commands in `NetworkSupport` view.
+- `admin` remains a full-access user.
+
+---
+
+#### 🌐 3.6. Apply to Remote Access (VTY)
+
+```cisco
+line vty 0 4
+ login local
+ transport input ssh
+```
+
+- The view is automatically applied when the user logs in via SSH or console.
+
+---
+
+### 🔍 4. Verification & Testing
+
+| Task                         | Command                           |
+|------------------------------|------------------------------------|
+| List existing views          | `show parser view`                |
+| Test user command access     | SSH into the router as `support`  |
+| Display view assignments     | `show running-config | include view` |
+
+---
+
+### 📊 5. Logging & Monitoring
+
+```cisco
+logging buffered 10000
+login on-success log
+login on-failure log
+```
+
+Track:
+- Successful logins by view-assigned users
+- Failed access attempts
+- Commands issued if command accounting is enabled
+
+---
+
+### ✅ 6. Summary of Key Commands
+
+| Task                          | Command Example                           |
+|-------------------------------|-------------------------------------------|
+| Enable AAA                    | `aaa new-model`                           |
+| Enable Root View              | `enable view`                             |
+| Create a View                 | `parser view NOC`                         |
+| Assign Commands to View       | `command exec include show`               |
+| Create User in a View         | `username noc view NOC secret NOCpass`    |
+| Verify View List              | `show parser view`                        |
+
+---
+
+### ⚔️ 7. Troubleshooting Tips
+
+| Symptom               | Fix or Cause                                             |
+|-----------------------|----------------------------------------------------------|
+| "Command not found"   | Command not assigned in view (`command exec include ...`) |
+| "Access denied"       | Wrong or missing view name in `username` line             |
+| Login fails           | Mismatch in username/view or incorrect view secret       |
+
+---
+
+### 🌟 8. Benefits Recap
+
+- ✅ **Custom-tailored user roles**
+- ✅ **Better than just privilege levels**
+- ✅ **Supports compliance policies**
+- ✅ **Easier to manage delegated access**
+
+---
+
+
