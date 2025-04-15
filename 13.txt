@@ -1,0 +1,560 @@
+
+Endpoint Security Overview
+
+
+
+13.1.1
+
+
+
+LAN Elements Security	News media commonly cover external network attacks on enterprise networks. These are some examples of such attacks:
+
+
+
+DoS attacks on an organization's network to degrade or even halt public access to it
+
+Breach of an organization's Web server to deface their web presence
+
+Breach of an organization's data servers and hosts to steal confidential information
+
+
+
+Various network security devices are required to protect the network perimeter from outside access. As shown in the figure, these devices could include a hardened ISR that is providing VPN services, an ASA firewall appliance, an IPS, and a AAA server.
+
+
+
+InternetPerimeterAAAServerVPNFirewallIPSESA/WSAWebServerEmailServerDNSServerHostsLAN
+
+
+
+Many attacks can, and do, originate from inside the network. Therefore, securing an internal LAN is just as important as securing the outside network perimeter. Without a secure LAN, users within an organization are still susceptible to network threats and outages that can directly affect an organization's productivity and profit margin. After an internal host is infiltrated, it can become a starting point for an attacker to gain access to critical system devices, such as servers and the sensitive information they contain.
+
+
+
+Specifically, there are two internal LAN elements to secure:
+
+
+
+Endpoints - Hosts commonly consist of laptops, desktops, servers, and IP phones which are susceptible to malware-related attacks. Endpoints also include video cameras, point-of-sale devices, and devices on the Internet of Things.
+
+
+
+Network infrastructure - LAN infrastructure devices interconnect endpoints and typically include switches, wireless devices, and IP telephony devices. Most of these devices are susceptible to LAN-related attacks including MAC address table overflow attacks, spoofing attacks, DHCP related attacks, LAN storm attacks, STP manipulatio
+
+Endpoints	Hosts commonly consist of laptops, desktops, servers, and IP phones which are susceptible to malware-related attacks. Endpoints also include video cameras, point-of-sale devices, and devices on the Internet of Things.
+
+Network infrastructure	LAN infrastructure devices interconnect endpoints and typically include switches, wireless devices, and IP telephony devices. Most of these devices are susceptible to LAN-related attacks including MAC address table overflow attacks, spoofing attacks, DHCP related attacks, LAN storm attacks, STP manipulation attacks, and VLAN attacks.
+
+13.1.2
+
+
+
+Traditional Endpoint Security	Historically, employee endpoints were company-issued computers which resided within a clearly defined LAN perimeter. These hosts were protected by firewalls and IPS devices which worked well with hosts that were connected to the LAN and behind the firewall.
+
+
+
+The endpoints also used traditional host-based security measures:
+
+
+
+Antivirus/Antimalware Software - This is software installed on a host to detect and mitigate viruses and malware. Companies that provide anti-virus software include Norton, TotalAV, McAfee, MalwareBytes and many others.
+
+
+
+Host-based IPS - This is software that is installed on the local host to monitor and report on the system configuration and application activity, provide log analysis, event correlation, integrity checking, policy enforcement, rootkit detection, and alerting. Examples include Snort IPS, OSSEC, and Malware Defender, among others.
+
+
+
+Host-based firewall - This is software that is installed on a host that restricts incoming and outgoing connections to those initiated by that host only. Some firewall software can also prevent a host from becoming infected and stop infected hosts from spreading malware to other hosts. Included in some operating systems such as Windows, or produced by companies such as NetDefender, Zonealarm, Comodo Firewall, and many others.
+
+Antivirus/Antimalware Software	This is software installed on a host to detect and mitigate viruses and malware. Companies that provide anti-virus software include Norton, TotalAV, McAfee, MalwareBytes and many others.
+
+Host-based IPS	This is software that is installed on the local host to monitor and report on the system configuration and application activity, provide log analysis, event correlation, integrity checking, policy enforcement, rootkit detection, and alerting. Examples include Snort IPS, OSSEC, and Malware Defender, among others.
+
+Host-based firewall	This is software that is installed on a host that restricts incoming and outgoing connections to those initiated by that host only. Some firewall software can also prevent a host from becoming infected and stop infected hosts from spreading malware to other hosts. Included in some operating systems such as Windows, or produced by companies such as NetDefender, Zonealarm, Comodo Firewall, and many others.
+
+13.1.3
+
+
+
+The Borderless Network	The network has evolved to include traditional endpoints and new, lightweight, portable, consumerized endpoints such as smartphones, tablets, wearables, and others. The new bring-your-own-device (BYOD) needs of workers require a different way of approaching endpoint security. These new endpoints have blurred the network border because access to network resources can be initiated by users from many locations using various connectivity methods at any time.
+
+
+
+There are some problems with the traditional method of securing endpoints. In many networks, the network-based devices are disparate and typically do not share information among themselves. Additionally, new endpoint devices are not good candidates for the traditional host-based endpoint security solutions because of the variety of devices and the variety of operating systems available on those devices.
+
+
+
+The challenge is allowing these heterogeneous devices to connect to enterprise resources securely.
+
+13.1.4
+
+
+
+Security for Endpoints in the Borderless Network	Larger organizations now require protection before, during, and after an attack. IT administrators must be able to answer the following questions:
+
+
+
+Where did the attack come from?
+
+What was the exploit method and point of entry?
+
+What systems were affected?
+
+What did the exploit do?
+
+How do we recover from the exploit?
+
+How can we mitigate the vulnerability and root cause?
+
+
+
+Organizations must also protect their endpoints from new threats and provide the protection measures that are outlined in the table below. (On cards 10-13).
+
+antimalware software	Protect endpoints from malware.
+
+spam filtering	Prevent spam emails from reaching endpoints.
+
+blocklisting	Prevent endpoints from connecting to websites with bad reputations by immediately blocking connections based on the latest reputation intelligence.
+
+data loss prevention (DLP)	Prevent sensitive information from being lost or stolen.
+
+13.1.5
+
+
+
+Network-Based Malware Protection	New security architectures for the borderless network address security challenges by having endpoints use network scanning elements. These devices provide many more layers of scanning than a single endpoint possibly could. Network-based malware prevention devices are also capable of sharing information among themselves to make better informed decisions.
+
+
+
+Protecting endpoints in a borderless network can be accomplished using network-based, as well as host-based techniques, as shown in the figure.
+
+The figure shows generic icons for the following sections: next generation firewalls, intrusion prevention systems, network access control, gateway security, and endpoint security.
+
+
+
+Gateway securityNext-generation firewallsIntrusion prevention systemsNetwork access controlEndpoint security
+
+
+
+The following are examples of devices and techniques that implement host protections at the network level.
+
+
+
+Advanced Malware Protection (AMP) - This provides endpoint protection from viruses and malware.
+
+Email Security Appliance (ESA) - This provides filtering of SPAM and potentially malicious emails before they reach the endpoint. An example is the Cisco ESA.
+
+Web Security Appliance (WSA) - This provides filtering and blocking of websites to prevent hosts from reaching dangerous locations on the web. The Cisco WSA provides control over how users access the internet and can enforce acceptable use policies, control access to specific sites and services, and scan for malware.
+
+Network Admission Control (NAC) - This permits only authorized and compliant systems to connect to the network.
+
+
+
+These technologies work in concert with each other to give more protection than host-based suites can provide, as shown in the figure.
+
+
+
+The figure shows a circle in the center labeled cybersecurity operations. There is a square in the middle with the following w
+
+Advanced Malware Protection (AMP)	This provides endpoint protection from viruses and malware.
+
+Email Security Appliance (ESA)	This provides filtering of SPAM and potentially malicious emails before they reach the endpoint. An example is the Cisco ESA.
+
+Web Security Appliance (WSA)	This provides filtering and blocking of websites to prevent hosts from reaching dangerous locations on the web. The Cisco WSA provides control over how users access the internet and can enforce acceptable use policies, control access to specific sites and services, and scan for malware.
+
+Network Admission Control (NAC)	This permits only authorized and compliant systems to connect to the network.
+
+13.1.6
+
+
+
+Hardware and Software Encryption of Local Data	Endpoints are also susceptible to data theft. For instance, if a corporate laptop is lost or stolen, a thief could scour the hard drive for sensitive information, contact information, personal information, and more.
+
+
+
+The solution is to locally encrypt the disk drive with a strong encryption algorithm such as 256-bit AES encryption. The encryption protects the confidential data from unauthorized access. The encrypted disk volumes can only be mounted for normal read/write access with the authorized password.
+
+
+
+Operating systems such as MAC OSX natively provide encryption options. The Microsoft Windows 10 operating system also provides encryption natively. Individual files, folders, and drives can be configured to encrypt data. In Windows, BitLocker provides drive encryption, as shown in the figure. Files can also be encrypted, but because applications can create unencrypted back up files, the entire folder that the file is stored in should be encrypted.
+
+13.1.7
+
+
+
+Network Access Control	The purpose of network access control (NAC) is to allow only authorized and compliant systems, whether managed or unmanaged, to access the network. It unifies endpoint security technologies with user or device authentication and network security policy enforcement. A NAC system can deny network access to noncompliant devices, place them in a quarantined area, or give them only restricted access to computing resources, thus keeping insecure nodes from infecting the network.
+
+
+
+NAC systems can have the following capabilities:
+
+
+
+Profiling and visibility - This recognizes and profiles users and their devices before malicious code can cause damage.
+
+Guest network access - This manages guests through a customizable, self-service portal that includes guest registration, guest authentication, guest sponsoring, and a guest management portal.
+
+Security posture checking - This evaluates security-policy compliance by user type, device type, and operating system.
+
+Incident response - This mitigates network threats by enforcing security policies that block, isolate, and repair noncompliant machines without administrator attention.
+
+
+
+NAC systems should extend NAC to all network access methods, including access through LANs, remote-access gateways, and wireless access points.
+
+
+
+The Cisco Identity Services Engine (ISE) combines AAA and network device profiling into a single system.
+
+Profiling and visibility	This recognizes and profiles users and their devices before malicious code can cause damage.
+
+Guest network access	This manages guests through a customizable, self-service portal that includes guest registration, guest authentication, guest sponsoring, and a guest management portal.
+
+Security posture checking	This evaluates security-policy compliance by user type, device type, and operating system.
+
+Incident response	This mitigates network threats by enforcing security policies that block, isolate, and repair noncompliant machines without administrator attention.
+
+13.1.8
+
+
+
+NAC Functions	The goal of NAC systems is to ensure that only hosts that are authenticated and have had their security posture examined and approved are permitted onto the network. For example, company laptops used offsite for a period of time might not have received current security updates or could have become infected from other systems. Those systems cannot connect to the network until they are examined, updated, and approved.
+
+
+
+Network access devices can function as the enforcement layer, as shown in the figure. They force the clients to query a RADIUS server for authentication and authorization. The RADIUS server can query other devices, such as an antivirus server, and reply to the network enforcers.
+
+
+
+Network Access Devices Enforce Security
+
+
+
+EnforcementCredentialsHosts Attempting Network AccessNetwork Access DevicesPolicy Server DecisionPoints and RemediationEAP/UDP,EAP/802.1xNotificationCredentialsAccess RightsCredentialsHTTPSAAA RADIUS ServerVendor Servers
+
+13.1.9
+
+
+
+Check Your Understanding - Endpoint Security Overview	Check your understanding of endpoint security by choosing the correct answer to the following questions.
+
+1. What prevents endpoints from connecting with websites that have a bad reputation based on the latest reputation intelligence?	blocklisting
+
+2. What protects endpoints from malicious software?	antimalware software
+
+3. What prevents sensitive information from being lost or stolen?	data loss prevention
+
+4. What filters unwanted emails before they reach the endpoint?	spam filtering
+
+802.1X Authentication
+
+
+
+13.2.1
+
+
+
+Security Using 802.1X Port-Based Authentication	The IEEE 802.1X standard defines a port-based access control and authentication protocol that restricts unauthorized workstations from connecting to a LAN through publicly accessible switch ports. The authentication server authenticates each workstation that is connected to a switch port before making available any services offered by the switch or the LAN.
+
+
+
+The figure shows that with 802.1X port-based authentication, the devices in the network have specific roles.
+
+
+
+802.1X Topology
+
+
+
+SupplicantAuthenticatorAuthentication Server (RADIUS)SupplicantRequires access and responds to requests from the switchControls physical access to the network based on client authentication statusPerforms client authentication
+
+
+
+The 802.1x roles include:
+
+
+
+Supplicant (Client) - The device (workstation) that requests access to LAN and switch services and then responds to requests from the switch. The workstation must be running 802.1X-compliant client software. (The port that the client is attached to is the supplicant [client] in the IEEE 802.1X specification.)
+
+Authenticator (Switch) - This device controls physical access to the network based on the authentication status of the client. The switch acts as an intermediary (proxy) between the client (supplicant) and the authentication server, requesting identifying information from the client, verifying that information with the authentication server, and relaying a response to the client. The switch uses a RADIUS software agent, which is responsible for encapsulating and de-encapsulating the EAP (Extensible Authentication Protocol) frames and interacting with the authentication server.
+
+Authentication server - This server performs the actual authentication of the client. The authentication server validates the identity of the client and notifies the switch whether the client is authorized to acc
+
+Supplicant (Client)	The device (workstation) that requests access to LAN and switch services and then responds to requests from the switch. The workstation must be running 802.1X-compliant client software. (The port that the client is attached to is the supplicant [client] in the IEEE 802.1X specification.)
+
+Authenticator (Switch)	This device controls physical access to the network based on the authentication status of the client. The switch acts as an intermediary (proxy) between the client (supplicant) and the authentication server, requesting identifying information from the client, verifying that information with the authentication server, and relaying a response to the client. The switch uses a RADIUS software agent, which is responsible for encapsulating and de-encapsulating the EAP (Extensible Authentication Protocol) frames and interacting with the authentication server.
+
+Authentication server	This server performs the actual authentication of the client. The authentication server validates the identity of the client and notifies the switch whether the client is authorized to access the LAN and switch services. Because the switch acts as the proxy, the authentication service is transparent to the client. The RADIUS security system with EAP extensions is the only supported authentication server.
+
+Between the supplicant and the authenticator	EAP data is encapsulated in EAPOL frames.
+
+Between the authenticator and the authentication server	EAP data is encapsulated using RADIUS.
+
+13.2.2
+
+
+
+Control the 802.1X Authorization State	It may be necessary to configure a switch port to override the 802.1X authentication process. To do this, use the authentication port-control interface configuration command to control the port authorization state. The parameters for this command are shown below. The individual port on the authenticator switch is configured with this command, in this case, port F0/1 of S1. By default, a port is in the force-authorized state meaning it can send and receive traffic without 802.1x authentication.
+
+
+
+S1F0/1
+
+SupplicantAuthenticatorAuthentication Server (RADIUS)
+
+
+
+S1(config-if)# authentication port-control ?
+
+auto PortState set to automatic
+
+force-authorized PortState set to AUTHORIZED <--default
+
+force-unauthorized PortState set to UnAuthorized
+
+
+
+S1(config-if)# authentication port-control
+
+
+
+Parameters are on (Cards 38-40).
+
+
+
+The auto keyword must be entered to enable 802.1X authentication. Therefore, to enable 802.1X on the port, use the authentication port-control auto interface configuration command.
+
+
+
+If the client is successfully authenticated (receives an Accept frame from the authentication server), the port state changes to authorized, and all frames from the authenticated client are allowed through the port. If the authentication fails, the port remains in the unauthorized state, but authentication can be retried. If the authentication server cannot be reached, the switch can resend the request. If no response is received from the server after the specified number of attempts, authentication fails, and network access is not granted.
+
+
+
+When a client logs off, it sends an EAPOL-logoff message, causing the switch port to change to the unauthorized state.
+
+
+
+If the link state of a port changes from up to down, or if an EAPOL-logoff frame is received, the port returns to the unauthorized state.
+
+auto	Enables 802.1X port-based authentication and causes the port to begin in the unauthorized state. During this time only EAPOL, STP, and CDP frames are the only type of frames that can be sent or received through the port until the client device has been authenticated.
+
+force-authorized	The port sends and receives normal traffic without 802.1x-based authentication of the client. This is the default setting.
+
+force-unauthorized	Causes the port to remain in the unauthorized state, ignoring all attempts by the client to authenticate. The switch cannot provide authentication services to the client through the port.
+
+13.2.3
+
+
+
+802.1X Configuration	This scenario is implemented the same topology as above. A PC is attached to F0/1 on the switch and the device is will be authenticated via 802.1X with a RADIUS server. Unlike in previous AAA scenarios in which administrators were authenticated to the router configuration lines, in this scenario, an endpoint is authenticated before access is granted to the network.
+
+
+
+Configuring 802.1X requires a few basic steps:
+
+
+
+Step 1. Enable AAA using the aaa new-model command.
+
+Step 2. Designate the RADIUS server and configure its address and ports.
+
+Step 3. Create an 802.1X port-based authentication method list using the aaa authentication dot1x command.
+
+Step 4. Globally enable 802.1X port-based authentication using the dot1x system-auth-control command.
+
+Step 5. Enable port-based authentication on the interface using the authentication port-control auto command.
+
+Step 6. Enable 802.1X authentication on the interface using the dot1x pae command. The authenticator options sets the Port Access Entity (PAE) type so the interface acts only as an authenticator and will not respond to any messages meant for a supplicant.
+
+
+
+An example configuration is shown below.
+
+
+
+S1(config)# aaa new-model
+
+S1(config)# radius server NETSEC
+
+S1(config-radius-server)# address ipv4 10.1.1.50 auth-port 1812 acct-port 1813
+
+S1(config-radius-server)# key RADIUS-Pa55w0rd
+
+S1(config-radius-server)# exit
+
+S1(config)#
+
+S1(config)# aaa authentication dot1x default group radius
+
+S1(config)# dot1x system-auth-control
+
+S1(config)#
+
+S1(config)# interface F0/1
+
+S1(config-if)# description Access Port
+
+S1(config-if)# switchport mode access
+
+S1(config-if)# authentication port-control auto
+
+S1(config-if)# dot1x pae authenticator
+
+13.2.4
+
+
+
+Syntax Checker - Configure 802.1x Port-Authentication	Use this Syntax Checker to practice configuring 802.1X port-authentication on a 2960 switch.
+
+
+
+Configure a RADIUS server on S1 using the following instructions:
+
+
+
+Enable AAA.
+
+Enter RADIUS server configuration mode and name the configuration NETSEC.
+
+Configure the RADIUS server address to 10.1.1.50 with the authentication port of 1812 and the accounting port of 1813.
+
+Configure the shared secret key RADIUS-Pa55w0rd.
+
+Exit RADIUS configuration mode.
+
+
+
+S1(config)#aaa new-model
+
+S1(config)#radius server NETSEC
+
+S1(config-radius-server)#address ipv4 10.1.1.50 auth-port 1812 acct-port 1813
+
+S1(config-radius-server)#key RADIUS-Pa55w0rd
+
+S1(config-radius-server)#exit
+
+
+
+Complete the following steps to configure 802.1x port-based authentication:
+
+
+
+Specify an 802.1x port-based default authentication method list with the primary option RADIUS.
+
+Globally enable 802.1x port-based authentication.
+
+
+
+S1(config)#aaa authentication dot1x default group radius
+
+S1(config)#dot1x system-auth-control
+
+
+
+Complete the following steps to enable 802.1X authentication on the interface:
+
+
+
+Enter interface configuration mode for F0/1.
+
+Configure the interface as an access switchport.
+
+Enable port-based authentication on the interface with the auto parameter.
+
+Enable 802.1x authentication with the Port Access Entity (PAE) type so the interface acts only as an authenticator.
+
+Use the end command to exit from configuration mode.
+
+
+
+S1(config)#interface F0/1
+
+S1(config-if)#switchport mode access
+
+S1(config-if)#authentication port-control auto
+
+S1(config-if)#dot1x pae authenticator
+
+S1(config-if)#end
+
+*Mar 3 18:22:23.443: %SYS-5-CONFIG_I: Configured from console by console
+
+
+
+You successfully configured 802.1x port-authentication on a 2960 switch.
+
+Endpoint Security Summary
+
+
+
+13.3.1
+
+
+
+What Did I Learn in this Module?	Introducing Endpoint Security
+
+
+
+Traditionally endpoints included PCs, servers, and printers. However, in today's network, endpoints also include phones, tablets, laptops, Internet of Things devices, network video cameras and many other things. Endpoint security used to depend on host-based security measures such as antimalware software, host-based IPS, and host-based firewall software. Many devices and technologies enhance host-based endpoint protections. Some of them are email security appliances, web security appliances, NAC, and the Cisco Identity Services Engine. Another way that endpoints can be protected from data loss is through the use of encryption of local data at the file, folder, or drive level. Software such as BitLocker is included with Microsoft Windows 10 for this purpose.
+
+
+
+Network Access Control is a system that can check whether endpoints that attempt to the network comply with network security policies. It handles user authentication and can take action against devices that violate security policies by having out date security software. It can even take action to bring devices up to compliance standard before allowing access. NAC can also provide easy to manage methods of providing network access to guest computers require connectivity to the network. Cisco ISE combines AAA and NAC and into a single system.
+
+
+
+802.1X Authentication
+
+
+
+802.1X provides a means by which authenticator network access switch can act as an intermediary between a client and an authentication server. The switch forwards authentication information from the client to the server. If authentication is successful, the client will be allowed to access the network through the connected switch port. If authorization fails, the switch will not permit the client endpoint to connect to the network. The system uses the EAP and EAPOL to carry
+
+13.3.2
+
+
+
+Module 13 - Endpoint Security Quiz	
+
+1. A switch has the following command issued as part of an 802.1X deployment.
+
+
+
+address ipv4 10.1.1.50 auth-port 1812 acct-port 1813
+
+
+
+What is the purpose of this command?	It identifies the address of the RADIUS server and ports on the server used for RADIUS traffic.
+
+2. Which device is used as the authentication server in an 802.1X implementation?	RADIUS server
+
+3. What are two main capabilities of a NAC system? (Choose two.)	security positive check
+
+
+
+incident response
+
+4. Which Cisco appliance can be used to filter network traffic contents to report and deny traffic based on the web server reputation?	WSA
+
+5. Which command is used to enable AAA as part of the 802.1X configuration process on a Cisco device?	aaa new-model
+
+6. The switch port to which a client attaches is configured for the 802.1X protocol. The client must authenticate before being allowed to pass data onto the network. Between which two 802.1X roles is EAP data encapsulated using RADIUS? (Choose two.)	authentication server
+
+
+
+authenticator
+
+7. Which host-based security measure is used to restrict incoming and outgoing connections?	host-based firewall
+
+8. Which security service is provided by 802.1x?	port-based network access control
+
+9. Why is it important to protect endpoints?	After an endpoint is breached, an attacker can gain access to other devices.
+
+10. Websites are rated based on the latest website reputation intelligence. Which endpoint security measure prevents endpoints from connecting to websites that have a bad rating?	denylisting
+
+11. When would the authentication port-control command be used during an 802.1X implementation?	when an organization needs to control the port authorization state on a switch.
+
+12. When using 802.1X authentication, what device controls physical access to the network, based on the authentication status of the client?	the switch that the client is connected to
+
+13. A port has been configured for the 802.1X protocol and the client has successfully authenticated. Which 802.1X state is associated with this PC?	authorized

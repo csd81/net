@@ -1,0 +1,634 @@
+
+ASA Solutions
+
+
+
+20.1.1
+
+
+
+ASA Firewall Models	An IOS router firewall solution is appropriate for small branch deployments and for administrators who are experienced with Cisco IOS. However, an IOS firewall solution does not scale well and typically cannot meet the needs of a large enterprise.
+
+
+
+The Cisco ASA with FirePOWER Services family of products provides dedicated firewall services in one device. These are next-generation firewall (NGFW) devices that deliver integrated threat defense across the entire attack continuum.
+
+
+
+There are several ASA models addressing the needs of various organizations. Cisco ASA devices scale to meet a range of requirements and network sizes. The choice of ASA model depends on an organization's requirements, such as maximum throughput, maximum connections per second, and budget.
+
+
+
+The following figures display these models and their stateful inspection throughput.
+
+
+
+All models provide advanced stateful firewall features and VPN functionality. The biggest difference between the models is the maximum traffic throughput handled by each model and the number and types of interfaces.
+
+	Click below to learn more about different ASA models.
+
+Cisco Firepower 1000	This model is suitable for small office and home office (SOHO) and small business.
+
+
+
+Cisco also supports the virtualization of computing infrastructure by taking advantage of the increased power availability of modern x86 servers. The Cisco Adaptive Security Virtual Appliance (ASAv) brings the power of ASA appliances to the virtual domain. A server hypervisor can create a virtual switch capable of supporting many types of virtual machines (VMs). The Cisco ASAv operates as a VM using the server's interfaces to process traffic.
+
+
+
+Like the physical Cisco ASA devices, the ASAv also supports site-to-site VPN, remote-access VPN, and clientless VPN functionalities.
+
+
+
+Note: The ASAv does not support clustering and multiple contexts.
+
+
+
+To provide a suitable fit for customer needs, Cisco ASAv is available in five models: 
+
+
+
+Cisco ASAv5 - This appliance requires 2 GB of memory and delivers up to 100 Mbps of stateful inspection throughput.
+
+
+
+Cisco ASAv10 - This appliance requires 4 GB of memory and delivers up to 1 Gbps of stateful inspection throughput.
+
+
+
+Cisco ASAv30 - This appliance requires 8 GB of memory and delivers up to 2 Gbps of stateful inspection throughput.
+
+
+
+Cisco ASAv50 - This appliance requires 16 GB of memory and delivers up to 10 Gbps of stateful inspection throughput.
+
+
+
+Cisco ASAv100 - This appliance requires 32 GB of memory and delivers up to 20 Gbps of stateful inspection throughput.
+
+
+
+Note: The focus of this module will be on the ASA 5506-X which is designed for small business, branch office, and enterprise teleworker implementations.
+
+Cisco Firepower 2100	These models that are intended for the Internet edge of medium to large businesses.
+
+
+
+Cisco also supports the virtualization of computing infrastructure by taking advantage of the increased power availability of modern x86 servers. The Cisco Adaptive Security Virtual Appliance (ASAv) brings the power of ASA appliances to the virtual domain. A server hypervisor can create a virtual switch capable of supporting many types of virtual machines (VMs). The Cisco ASAv operates as a VM using the server's interfaces to process traffic.
+
+
+
+Like the physical Cisco ASA devices, the ASAv also supports site-to-site VPN, remote-access VPN, and clientless VPN functionalities.
+
+
+
+Note: The ASAv does not support clustering and multiple contexts.
+
+
+
+To provide a suitable fit for customer needs, Cisco ASAv is available in five models:
+
+
+
+Cisco ASAv5 - This appliance requires 2 GB of memory and delivers up to 100 Mbps of stateful inspection throughput.
+
+
+
+Cisco ASAv10 - This appliance requires 4 GB of memory and delivers up to 1 Gbps of stateful inspection throughput.
+
+
+
+Cisco ASAv30 - This appliance requires 8 GB of memory and delivers up to 2 Gbps of stateful inspection throughput.
+
+
+
+Cisco ASAv50 - This appliance requires 16 GB of memory and delivers up to 10 Gbps of stateful inspection throughput.
+
+
+
+Cisco ASAv100 - This appliance requires 32 GB of memory and delivers up to 20 Gbps of stateful inspection throughput.
+
+
+
+Note: The focus of this module will be on the ASA 5506-X which is designed for small business, branch office, and enterprise teleworker implementations.
+
+Cisco Firepower 4100	This figure displays a 4100 series ASA that is intended for large campus and data center use.
+
+
+
+Cisco also supports the virtualization of computing infrastructure by taking advantage of the increased power availability of modern x86 servers. The Cisco Adaptive Security Virtual Appliance (ASAv) brings the power of ASA appliances to the virtual domain. A server hypervisor can create a virtual switch capable of supporting many types of virtual machines (VMs). The Cisco ASAv operates as a VM using the server's interfaces to process traffic.
+
+
+
+Like the physical Cisco ASA devices, the ASAv also supports site-to-site VPN, remote-access VPN, and clientless VPN functionalities.
+
+
+
+Note: The ASAv does not support clustering and multiple contexts.
+
+
+
+To provide a suitable fit for customer needs, Cisco ASAv is available in five models:
+
+
+
+Cisco ASAv5 - This appliance requires 2 GB of memory and delivers up to 100 Mbps of stateful inspection throughput.
+
+
+
+Cisco ASAv10 - This appliance requires 4 GB of memory and delivers up to 1 Gbps of stateful inspection throughput.
+
+
+
+Cisco ASAv30 - This appliance requires 8 GB of memory and delivers up to 2 Gbps of stateful inspection throughput.
+
+
+
+Cisco ASAv50 - This appliance requires 16 GB of memory and delivers up to 10 Gbps of stateful inspection throughput.
+
+
+
+Cisco ASAv100 - This appliance requires 32 GB of memory and delivers up to 20 Gbps of stateful inspection throughput.
+
+
+
+Note: The focus of this module will be on the ASA 5506-X which is designed for small business, branch office, and enterprise teleworker implementations.
+
+Cisco Firepower 9300	Designed for service providers and high-performance data centers, the 9300 appliance delivers carrier-grade performance in a modular chassis. It creates separate logical firewalls for deployment flexibility, quickly inspects encrypted traffic, gains application visibility, detects and blocks network intrusions, deploys scalable VPNs, and provides integrated protection against DDoS attacks. Devices can be clustered for performance and high availability.
+
+
+
+Cisco also supports the virtualization of computing infrastructure by taking advantage of the increased power availability of modern x86 servers. The Cisco Adaptive Security Virtual Appliance (ASAv) brings the power of ASA appliances to the virtual domain. A server hypervisor can create a virtual switch capable of supporting many types of virtual machines (VMs). The Cisco ASAv operates as a VM using the server's interfaces to process traffic.
+
+
+
+Like the physical Cisco ASA devices, the ASAv also supports site-to-site VPN, remote-access VPN, and clientless VPN functionalities.
+
+
+
+Note: The ASAv does not support clustering and multiple contexts.
+
+
+
+To provide a suitable fit for customer needs, Cisco ASAv is available in five models:
+
+
+
+Cisco ASAv5 - This appliance requires 2 GB of memory and delivers up to 100 Mbps of stateful inspection throughput.
+
+
+
+Cisco ASAv10 - This appliance requires 4 GB of memory and delivers up to 1 Gbps of stateful inspection throughput.
+
+
+
+Cisco ASAv30 - This appliance requires 8 GB of memory and delivers up to 2 Gbps of stateful inspection throughput.
+
+
+
+Cisco ASAv50 - This appliance requires 16 GB of memory and delivers up to 10 Gbps of stateful inspection throughput.
+
+
+
+Cisco ASAv100 - This appliance requires 32 GB of memory and delivers up to 20 Gbps of stateful inspection throughput.
+
+
+
+Note: The focus of this module will be on the ASA 5506-X which is desi
+
+20.1.2
+
+
+
+Video - Cisco ASA Next-Generation Firewall Appliances	
+
+20.1.3
+
+
+
+Advanced ASA Firewall Features	Click below to learn about the advanced features.
+
+ASA Virtualization	As illustrated, a single ASA can be partitioned into multiple virtual devices. Each virtual device is called a security context. Each context is an independent device, with its own security policy, interfaces, and administrators. Multiple contexts are similar to having multiple standalone devices. Many features are supported in multiple context modes, including routing tables, firewall features, IPS, and management. Some features are not supported, including VPN and dynamic routing protocols.
+
+
+
+The figure shows a topology of ASA Virtualization. a router is connected to the internet and a single a s a device. the a s a device is partitioned into 3 security contexts labeled security context a, security context b, and security context c. three customers connect to the single a s a device, but to their own, individual security context.
+
+InternetSingle ASA DeviceSecurity Context ASecurity Context CCustomer ACustomer BCustomer CSecurity Context B
+
+High Availability with Failover	As shown here, two identical ASAs can be paired into an active / standby failover configuration to provide device redundancy. Both platforms must be identical in software, licensing, memory, and interfaces, including the Security Services Module (SSM). In the example, ASA-1 is the primary/active forwarding device and traffic leaving PC-1 takes the preferred path using ASA-1. ASA-1 and ASA-2 monitor each other using the LAN failover link. If ASA-1 fails, then ASA-2 would immediately assume the primary role and become active.
+
+
+
+The figure shows a computer labeled PC 1 connected to a switch. The switch is connected to 2 a s as. a s a 1 is labeled primary / active. a s a 2 is labeled secondary / standby. there is a link between the two a s as labeled lan failover link.
+
+10.2.2.0/3010.1.1.0/29192.168.1.0/24PC1
+
+ASA-1Primary/ActiveLAN Failover LinkInternetASA-2Secondary/StandbyLAN Failover Link
+
+Identity Firewall	The ASA provides optional, granular access control based on an association of IP addresses to Windows Active Directory login information. For example, in the figure, when a client attempts to access the server resources, it must first be authenticated using the Microsoft Active Directory Identity-based firewall services. These services enhance the existing access control and security policy mechanisms by allowing users, or groups, to be specified in place of source IP addresses. Identity-based security policies can be interleaved without restriction between traditional IP address-based rules.
+
+
+
+The figure shows a client connected to the internet on one side and a server connected to an a s a connected to the internet on the other. an active directory agent is shown interacting with active directory and the a s a to authenticate the client to access the server.
+
+ClientInternetASAServerMicrosoft Active DirectoryAD Agent
+
+Threat Control and Containment Services	All ASA models support basic IPS features. However, advanced IPS features can only be provided by integrating special hardware modules with the ASA architecture. IPS capability is available using the Advanced Inspection and Prevention (AIP) modules. Antimalware capabilities can be deployed by integrating the Content Security and Control (CSC) module. The Cisco Advanced Inspection and Prevention Security Services Module (AIP-SSM) and Cisco Advanced Inspection and Prevention Security Services Card (AIP-SSC) deliver protection against tens of thousands of known exploits. They also protect against millions of other unknown exploit variants using specialized IPS detection engines and thousands of signatures. Cisco Services for IPS provides signature updates through a global intelligence team that is working 24 hours a day to help ensure protection against the latest threats.
+
+
+
+The figure shows multiple a s a appliances and an a i p - s s m and an a i p - s s c.
+
+AIP-SSM for the ASA 5540AIP-SSC for the ASA 5505
+
+20.1.4
+
+
+
+Cisco Firepower Series	Traditionally, organizations used dedicated devices to protect their network. The Cisco next-generation firewall (NGFW) combines proven firewall technology with advanced threat and malware detection capabilities.
+
+
+
+These NGFWs consolidate multiple security layers into a single platform, eliminating the cost of buying and managing multiple solutions. This integrated approach combines best-in-class security technology with multilayer protection that is integrated into a single device.
+
+
+
+The Cisco ASA 5500-X with FirePOWER Services devices are part of the new Cisco NGFWs. Designed for small to medium branch offices, the ASA 5500-X with FirePOWER Services merges the ASA 5500 stateful firewall features with some of the following advanced threat and malware detection capabilities:
+
+
+
+Next-generation IPS (NGIPS)
+
+Advanced Malware Protection (AMP)
+
+Application control and URL filtering
+
+
+
+Note: "FirePOWER" refers to the Firepower services running on an ASA while "Firepower" refers to Cisco Firepower series of NGFW devices.
+
+20.1.5
+
+
+
+Video - Cisco FTD: Threat Centric NGFW	
+
+20.1.6
+
+
+
+Review of Firewalls in Network Design	When discussing networks that are connected to a firewall, there are some general terms to consider:
+
+
+
+Outside network - The network/zone that is outside the protection of the firewall.
+
+
+
+Inside network - The network/zone that is protected and behind the firewall.
+
+
+
+DMZ - The demilitarized zone that allows both inside and outside users access to protected network resources.
+
+
+
+Firewalls protect inside networks from unauthorized access by users who are on an outside network. They also protect inside network users from each other. For example, by creating zones, an administrator can keep the network that is hosting the accounting servers separate from other networks in an organization.
+
+
+
+The figure illustrates how these zones interact for permitted traffic:
+
+
+
+Traffic originating from the inside network going to the outside network is permitted.
+
+
+
+Traffic originating from the inside network going to the DMZ network is permitted.
+
+
+
+Traffic originating from the outside network going to the DMZ network is selectively permitted.
+
+
+
+Permitted Traffic
+
+
+
+G1/1G1/2G1/3
+
+InternetOutsideDMZWeb ServerInside
+
+
+
+The figure below illustrates how these zones interact for denied traffic:
+
+
+
+Traffic originating from the outside network going to the inside network is denied.
+
+
+
+Traffic originating from the DMZ network going to the inside network is denied.
+
+
+
+Denied Traffic
+
+
+
+G1/1G1/2G1/3
+
+InternetOutsideDMZWeb ServerInside
+
+
+
+Cisco ISRs can provide firewall features by using either the Zone-Based Policy Firewall (ZPF) or by using the older context-based access control (CBAC) feature. An ASA provides the same features, but the configuration differs considerably from the IOS router configuration of the ZPF.
+
+
+
+The ASA is a dedicated firewall appliance. By default, it treats a defined inside interface as the trusted network and any defined outside interfaces as untrust
+
+20.1.7
+
+
+
+ASA Firewall Modes of Operation	There are two firewall interface modes of operation available on ASA devices: routed mode and transparent mode.
+
+
+
+In routed mode, two or more interfaces separate Layer 3 networks (i.e., domains). In the figure, the ASA is considered to be a router hop in the network and can perform NAT between connected networks. Routed mode supports multiple interfaces. Each interface is on a different subnet and requires an IP address on that subnet. The ASA applies policies to flows as they transit the firewall.
+
+
+
+Note: The focus of this module is on the routed mode.
+
+
+
+Routed Mode
+
+
+
+10.2.1.0/2410.2.1.110.1.1.110.1.1.0/24
+
+
+
+An ASA in transparent mode is often referred to as a "bump in the wire," or a "stealth firewall" because the ASA functions like a Layer 2 device and is not considered a router hop. In the figure below, the ASA is only assigned an IP address on the local network for management purposes. This mode is useful to simplify a network configuration, or when the existing IP addressing cannot be altered. However, the drawbacks include no support for dynamic routing protocols, VPNs, QoS, or DHCP Relay.
+
+
+
+Transparent Mode
+
+
+
+10.1.1.3.1.210.1.1.0/29
+
+20.1.8
+
+
+
+ASA Licensing Requirements	A license specifies the options that are enabled on a given ASA. Most ASA appliances come pre-installed with either a Base license or a Security Plus license. For example, the Cisco ASA 5506-X model comes with a Base license and the option to upgrade to the Security Plus license. The Security Plus upgrade license enables the Cisco ASA 5506-X to scale to support a higher connection capacity and up to 50 IPsec VPN users. It adds full DMZ support and integrates into switched network environments through VLAN trunking support. Furthermore, the Security Plus license enables support for redundant ISP connections and stateless active/standby high-availability services. This feature helps to ensure business continuity.
+
+
+
+To provide more features to the ASA, additional time-based or optional licenses can be purchased. For example, an administrator can install a Botnet Traffic Filter time-based license that is valid for one year. Another example would be if the ASA must handle a short-term surge in the number of concurrent SSL VPN users. In this case, an optional AnyConnect Premium license can be purchased.
+
+
+
+Combining these additional licenses to the pre-installed licenses creates a permanent license. The permanent license is then activated by installing a permanent activation key using the activation-key command. The permanent activation key includes all licensed features in a single key. A product activation key can be purchased from a Cisco account representative.
+
+
+
+Note: Only one permanent license key can be installed. After it is installed, it is referred to as the running license.
+
+
+
+To verify the license information on an ASA device, use the show activation-key command, as shown below, or the show version command.
+
+
+
+NETSEC-ASA# show activation-key
+
+
+
+Serial Number: JAD242301E6
+
+Running Permanent Activation Key: 0x1e14e468 0x7c715
+
+The ASA 5506-X with FirePOWER Services
+
+
+
+20.2.1
+
+
+
+Overview of ASA 5506-X	The Cisco ASA 5506-X is a full-featured security appliance for small businesses, branch offices, and enterprise teleworker environments. It delivers a high-performance firewall, SSL VPN, IPsec VPN, and rich networking services in a modular, plug-and-play appliance.
+
+
+
+The figure illustrates the front panel of the ASA 5506-X.
+
+
+
+ASA 5506-X Front Panel
+
+
+
+The figure below illustrates the back panel of the Cisco ASA 5506-X. The default DRAM memory is 4 GB and the default internal flash memory is 8 GB. In a failover configuration, the two units must be identical models with the same hardware configuration, the same number and types of interfaces, and the same amount of RAM. Failover is available with the Security Plus license.
+
+
+
+ASA 5506-X Backplane
+
+
+
+1. 12V power connector
+
+2. Four status LEDs for Power, Status, Active, and WLAN.
+
+3. 8 - 1 Gigabit Ethernet interfaces. The L indicates link status and the S indicates connection speed.
+
+4. Gigabit Ethernet management interface.
+
+5. USB Type A port connection for external storage device.
+
+6. RJ45 and mini-USB console ports.
+
+7. Reset pin. When pressed for three seconds, the ASA resets to default new state on reboot. Flash is not erased.
+
+
+
+The figure below shows the inside components of the Cisco ASA 5506-X.
+
+
+
+Note: Unlike the ASA 5506-X that uses routed interfaces and IP addresses, the ASA 5505 used switchports and VLANs similar to a Layer 2 switch.
+
+
+
+ASA 5506-X Inside Components
+
+
+
+1. 50GB mSata solid state drive
+
+2. Crypto accelerator CPU
+
+3. Multicore 1.25 GHz CPU
+
+4. 4GB DRAM
+
+20.2.2
+
+
+
+ASA Security Levels	The ASA assigns security levels to distinguish between inside and outside networks. Security levels define the level of trustworthiness of an interface. The higher the level, the more trusted the interface. The security level numbers range from 0 (untrustworthy) to 100 (very trustworthy). Each operational interface must have a name and a security level from 0 (lowest) to 100 (highest) assigned.
+
+
+
+As shown in the figure below, level 100 should be assigned to the most secure network, such as the inside network. Level 0 can be assigned to the outside network, which is connected to the Internet. DMZs and other networks can be assigned a security level between 0 and 100. When traffic moves from an interface with a higher security level to an interface with a lower security level, it is considered outbound traffic. Conversely, traffic moving from an interface with a lower security level to an interface with a higher security level is considered inbound traffic.
+
+
+
+Security Level Settings
+
+
+
+G1/1G1/3G1/2
+
+Outside NetworkInterface Name: outsideSecurity Level: 0Inside NetworkInterface Name: insideSecurity Level: 100DMZ NetworkInterface Name: dmzSecurity Level: 50OutsideInternetInsideDMZWeb Server
+
+
+
+Security levels help to control many aspects of network traffic as shown in the table below. (On cards 20-22).
+
+
+
+Outbound traffic is allowed and inspected by default. Returning traffic is allowed because of stateful packet inspection. For example, internal users on the inside interface can easily access resources on the DMZ. They can also initiate connections to the Internet with no restrictions and without the need for an additional policy or additional commands. However, traffic that is coming from the outside network and going into either the DMZ or the inside network, is denied by default. Return traffic, originating on the inside networ
+
+Network Access	By default, there is an implicit permit from a higher security interface to a lower security interface (outbound). Hosts on the higher security interface can access hosts on a lower security interface. Multiple interfaces can be assigned the same security level. If communication is enabled for interfaces with the same security level, there is an implicit permit for traffic between the interfaces.
+
+Inspection Engines	Some application inspection engines are dependent on the security level. When interfaces have the same security level, the ASA inspects traffic in either direction.
+
+Application Filtering	HTTPS and FTP filtering applies only for outbound connections that are from a higher level to a lower level. If communication is enabled for interfaces with the same security level, traffic can be filtered in either direction.
+
+20.2.3
+
+
+
+ASA 5506-X Deployment Scenarios	The ASA 5506-X is commonly used as an edge security device. It connects a small business to an ISP device, such as a DSL or cable modem, for access to the internet. It can be deployed to interconnect and protect several workstations, network printers, and IP phones.
+
+
+
+In a small branch, a common deployment would include an inside network with security level 100 and an outside network with security level 0, as shown in the figure below.
+
+
+
+ASA Deployment in Small Branches
+
+
+
+G1/2G1/1G1/3G1/4G1/5G1/6ASA 5506-X
+
+WorkstationsIP PhonesInsideNetwork PrinterOutsideInternet
+
+
+
+In the small business, as shown below, the ASA 5506-X can be deployed with two different protected network segments. One segment is the inside network, which connects workstations and IP phones. The other segment is the DMZ, which connects a company web server. The outside interface is used to connect to the internet.
+
+
+
+ASA Deployment in a Small Business
+
+
+
+G1/1G1/2G1/4G1/5G1/6G1/7
+
+IP PhonesInsideOutsideDMZWeb ServerWorkstationsInternet
+
+
+
+In an enterprise deployment, as shown here, the ASA 5506-X can be used by telecommuters and home users to connect to a centralized location using a VPN.
+
+
+
+ASA Deployment in an Enterprise
+
+
+
+Corporate HeadquartersASAIPsec VPNIPsec VPNInternetASA 5506-XASA 5506-XWorkstationWorkstationIP PhoneIP PhoneTelecommuter 1Telecommuter 2
+
+Introduction to the ASA Summary
+
+
+
+20.3.1
+
+
+
+What Did I Learn in this Module?	ASA Solutions
+
+
+
+The Cisco ASA with FirePOWER Services family of products provides dedicated firewall services in one device. These are NGFW devices that deliver integrated threat defense across the entire attack continuum. The choice of ASA model depends on an organization's requirements, such as maximum throughput, maximum connections per second, and budget. The Cisco ASAv brings the power of ASA appliances to the virtual domain. When discussing networks connected to a firewall, there are some general terms to consider: outside network, inside network, and the DMZ.
+
+
+
+There are two firewall interface modes of operation available on ASA devices: routed mode and transparent mode. In routed mode, two or more interfaces separate Layer 3 networks, i.e. domains. An ASA in transparent mode is often referred to as a "bump in the wire," or a "stealth firewall" because the ASA functions like a Layer 2 device and is not considered a router hop. Advanced ASA firewall features include ASA virtualization, high availability with failover, identity firewall, and threat control and containment services. Most ASA appliances come pre-installed with either a Base license or a Security Plus license.
+
+
+
+The ASA 5506-X with FirePOWER Services
+
+
+
+The Cisco ASA 5506-X is a full-featured security appliance for small businesses, branch offices, and enterprise teleworker environments. It delivers a high-performance firewall, SSL VPN, IPsec VPN, and rich networking services in a plug-and-play appliance. The ASA assigns security levels to distinguish between inside and outside networks. The security level numbers range from 0 (untrustworthy) to 100 (very trustworthy). Outbound traffic is allowed and inspected by default. Returning traffic is allowed because of stateful packet inspection. The ASA 5506-X is commonly used as an edge security device. It conn
+
+20.3.2
+
+
+
+Module 20 - Introduction to the ASA Quiz	
+
+1. What is a characteristic of ASA security levels?​	An ACL needs to be configured to explicitly permit traffic from an interface with a lower security level to an interface with a higher security level.
+
+2. What are the two biggest differences among various ASA firewall models. (Choose two.)	in the number and types of interfaces
+
+
+
+in the maximum traffic throughput supported
+
+3. Which statement describes the Cisco ASAv product?	It is a virtual machine version of Cisco ASA product.
+
+4. What two features must match between ASA devices to implement a failover configuration? (Choose two.)​	device model 
+
+
+
+amount of RAM
+
+5. Which feature is specific to the Security Plus upgrade license of an ASA and provides increased availability?	redundant ISP connections
+
+6. What is the most trustworthy security level that can be configured on an ASA device interface?	100
+
+7. Which two statements describe the 8 Gigabit Ethernet ports in the backplane of a Cisco ASA 5506-X device? (Choose two.)	These ports all require IP addresses.
+
+
+
+They are all routed ports.
+
+8. Which advanced ASA Firewall feature provides granular access control based on an association of IP addresses to Windows Active Directory login information?	identity firewall
+
+9. What are two basic configuration requirements for each operational interface on an ASA 5506-X device? (Choose two.)	a security level
+
+
+
+a name
+
+10. What is one of the drawbacks to using transparent mode operation on an ASA device?​	no support for QoS
+
+11. Which service is added to the Cisco ASA 5500 by the ASA 5500-X?	FirePOWER service
+
+12. Which statement describes the default network access control on an ASA firewall device?	Returning traffic from the outside network to the inside network is allowed.

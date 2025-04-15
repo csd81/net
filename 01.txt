@@ -1,0 +1,398 @@
+
+Current State of Affairs
+
+
+
+1.1.1
+
+
+
+Networks Are Targets	Networks are routinely under attack. It is common to read in the news about yet another network that has been compromised. A quick internet search for network attacks will return many articles about network attacks, including news about organizations which have been compromised, the latest threats to network security, tools to mitigate attacks, and more.
+
+
+
+To help you comprehend the gravity of the situation, Kapersky maintains the interactive Cyberthreat Real-Time Map display of current network attacks. The attack data is submitted from Kapersky network security products that are deployed worldwide. The figure displays a sample screenshot of this web tool, which shows these attacks in real time. Many similar tools are available on the internet and can be found by searching for cyberthreat maps.
+
+1.1.2
+
+
+
+Reasons for Network Security	Network security relates directly to an organization's business continuity. Network security breaches can disrupt e-commerce, cause the loss of business data, threaten people's privacy, and compromise the integrity of information. These breaches can result in lost revenue for corporations, theft of intellectual property, lawsuits, and can even threaten public safety.
+
+
+
+Maintaining a secure network ensures the safety of network users and protects commercial interests. Keeping a network secure requires vigilance on the part of an organization's network security professionals. They must constantly be aware of new and evolving threats and attacks to networks, and vulnerabilities of devices and applications.
+
+
+
+Many tools are available to help network administrators adapt, develop, and implement threat mitigation techniques. For instance, the Cisco Talos Intelligence Group website, shown in the figure, provides comprehensive security and threat intelligence to defend customers and protect their assets.
+
+
+
+Another group, called the Cisco Product Security Incident Response Team (PSIRT), is responsible for investigating and mitigating potential vulnerabilities in Cisco products. The figure displays a sample Cisco Security Advisories page which lists these vulnerabilities in real time and provides network administrators with information to help mitigate them.
+
+1.1.3
+
+
+
+Vectors of Network Attacks	An attack vector is a path by which a threat actor can gain access to a server, host, or network. Attack vectors originate from inside or outside the corporate network, as shown in the figure. For example, threat actors may target a network through the internet, to disrupt network operations and create a denial of service (DoS) attack.
+
+
+
+External and Internal Threats
+
+
+
+InternetExternal ThreatCompromised HostInternal Threat
+
+
+
+Note: A DoS attack occurs when a network device or application is incapacitated and no longer capable of supporting requests from legitimate users.
+
+
+
+An internal user, such as an employee, can accidentally or intentionally:
+
+
+
+Steal and copy confidential data to removable media, email, messaging software, and other media.
+
+
+
+Compromise internal servers or network infrastructure devices.
+
+
+
+Disconnect a critical network connection and cause a network outage.
+
+
+
+Connect an infected USB drive into a corporate computer system.
+
+
+
+Internal threats have the potential to cause greater damage than external threats because internal users have direct access to the building and its infrastructure devices. Employees may also have knowledge of the corporate network, its resources, and its confidential data.
+
+
+
+Network security professionals must implement tools and apply techniques for mitigating both external and internal threats.
+
+1.1.4
+
+
+
+Data Loss	Data is likely to be an organization's most valuable asset. Organizational data can include research and development data, sales data, financial data, human resource and legal data, employee data, contractor data, and customer data.
+
+
+
+Data loss, or data exfiltration, is when data is intentionally or unintentionally lost, stolen, or leaked to the outside world. The data loss can result in:
+
+
+
+Brand damage and loss of reputation
+
+
+
+Loss of competitive advantage
+
+
+
+Loss of customers
+
+
+
+Loss of revenue
+
+
+
+Litigation/legal action that results in fines and civil penalties
+
+
+
+Significant cost and effort to notify affected parties and recover from the breach
+
+
+
+
+
+Network security professionals must protect the organization's data. Various Data Loss Prevention (DLP) controls must be implemented that combine strategic, operational, and tactical measures.
+
+
+
+Common data loss vectors are displayed in the table.
+
+Email/Social Networking	The most common vector for data loss includes instant messaging software and social media sites. For instance, intercepted email or IM messages could be captured and reveal confidential information.
+
+Unencrypted Devices	A stolen corporate laptop typically contains confidential organizational data. If the data is not stored using an encryption algorithm, then the thief can retrieve valuable confidential data.
+
+Cloud Storage Devices	Saving data to the cloud has many potential benefits. However, sensitive data can be lost if access to the cloud is compromised due to weak security settings.
+
+Removable Media	One risk is that an employee could perform an unauthorized transfer of data to a USB drive. Another risk is that a USB drive containing valuable corporate data could be lost.
+
+Hard Copy	Corporate data should be disposed of thoroughly. For example, confidential data should be shredded when no longer required. Otherwise, a thief could retrieve discarded reports and gain valuable information.
+
+Improper Access Control	Passwords are the first line of defense. Stolen passwords or weak passwords which have been compromised can provide an attacker easy access to corporate data.
+
+1.1.5
+
+
+
+Video - Anatomy of an Attack	
+
+Network Topology Overview
+
+
+
+1.2.1
+
+
+
+Campus Area Networks	All networks are targets. However, the main focus of this course is on securing Campus Area Networks (CANs). Campus Area Networks consists of interconnected LANs within a limited geographic area.
+
+
+
+Network professionals must implement various network security techniques to protect the organization's assets from outside and inside threats. Connections to untrusted networks must be checked in-depth by multiple layers of defense before reaching enterprise resources. This is known as defense-in-depth.
+
+
+
+The figure displays a sample CAN with a defense in-depth approach that uses various security features and security devices to secure it. The table provides an Explanation of the elements of the defense-in-depth design that are shown in the figure.
+
+
+
+Campus Area NetworkInternetAAA ServerASA FirewallIPSVPNLayer 2 SwitchesWeb ServerDHCP ServerESA/WSAHostsEmail ServerLayer 3 Switches
+
+VPN	The Cisco ISR is secured. It protects data in motion that is flowing from the CAN to the outside world by establishing Virtual Private Networks (VPNs). VPNs ensure data confidentiality and integrity from authenticated sources.
+
+ASA Firewall	A Cisco Adaptive Security Appliance (ASA) firewall performs stateful packet filtering to filter return traffic from the outside network into the campus network.
+
+IPS	A Cisco Intrusion Prevention System (IPS) device continuously monitors incoming and outgoing network traffic for malicious activity. It logs information about the activity, and attempts to block and report it.
+
+Layer 3 Switches	These distribution layer switches are secured and provide secure redundant trunk connections to the Layer 2 switches. Several different security features can be implemented, such as ACLs, DHCP snooping, Dynamic ARP Inspection (DAI), and IP source guard.
+
+Layer 2 Switches	These access layer switches are secured and connect user-facing ports to the network. Several different security features can be implemented, such as port security, DHCP snooping, and 802.1X user authentication.
+
+ESA/WSA	A Cisco Email Security Appliance (ESA) and Web Security Appliance (WSA) provide advanced threat defense, application visibility and control, reporting, and secure mobility to secure and control email and web traffic.
+
+AAA Server	An authentication, authorization, and accounting (AAA) server authenticates users, authorizes what they are allowed to do, and tracks what they are doing.
+
+Hosts	End points are secured using various features including antivirus and antimalware software, Host Intrusion Protection System features, and 802.1X authentication features.
+
+1.2.2
+
+
+
+Small Office and Home Office Networks	It is important that all types of networks, regardless of size, are protected. Attackers are also interested in home networks and small office and home office (SOHO) networks. They may want to use someone's internet connection for free, use the internet connection for illegal activity, or view financial transactions, such as online purchases.
+
+
+
+Home and SOHO networks are typically protected using a consumer grade router. These routers provide basic security features that adequately protect inside assets from outside attackers.
+
+
+
+The figure displays a sample SOHO that uses a consumer-grade wireless router to secure it. A consumer-grade wireless router provides integrated firewall features and secure wireless connections. The Layer 2 Switch is an access layer switch that is hardened with various security measures. It connects user-facing ports that use port security to the SOHO network. Wireless hosts connect to the wireless network using Wireless Protected Access 2 (WPA2) data encryption technology. Hosts typically have antivirus and antimalware software installed. Combined, these security measures provide comprehensive defense at different layers of the network.
+
+The figure shows a Small Office Home Office topology and ways to secure it.
+
+
+
+SOHO NetworkInternetWireless RouterLayer 2 SwitchWireless Host
+
+1.2.3
+
+
+
+Wide Area Networks	Wide Area Networks (WANs), as shown in the figure, span a wide geographical area, often over the public internet. Organizations must ensure secure transport for the data in motion as it travels between sites over the public network.
+
+
+
+Network security professionals must use secure devices on the edge of the networks. In the figure, the main site is protected by an ASA, which provides stateful firewall features and establishes secure VPN tunnels to various destinations.
+
+
+
+Mobile WorkerVPNBranch SiteRegional SiteSOHO SiteCorporateCisco ASA FirewallMain SitePOP
+
+
+
+The figure shows a branch site, a regional site, a SOHO site, and a mobile worker. A branch site connects to the corporate main site using a hardened ISR. The ISR can establish a permanent always-on VPN connection to the main site ASA firewall. A regional site is larger than a branch site and connects to the corporate main site using an ASA. The ASA can establish a permanent always-on VPN connection to the main site ASA. A SOHO site is a small branch site that connects to the corporate main site using a Cisco wireless router. The wireless router can establish a permanent always-on VPN connection to the main site ASA. Alternatively, the internal SOHO users could use the Cisco AnyConnect VPN client to establish a secure VPN connection to the main site ASA. A mobile worker is a teleworker who may use the Cisco AnyConnect VPN client to establish a secure VPN connection to the main site ASA from any location.
+
+1.2.4
+
+
+
+Data Center Networks	Data center networks are typically housed in an off-site facility to store sensitive or proprietary data. These sites are connected to corporate sites using VPN technology with ASA devices and integrated data center switches, such as a high-speed Cisco Nexus switches.
+
+
+
+Today's data centers store vast quantities of sensitive, business-critical information. Therefore, physical security is critical to their operation. Physical security not only protects access to the facility but also protects people and equipment. For example, fire alarms, sprinklers, seismically-braced server racks, redundant heating, ventilation, and air conditioning (HVAC), and UPS systems are in place to protect people, equipment, and data.
+
+
+
+As highlighted in the figure, data center physical security can be divided into two areas:
+
+
+
+Outside perimeter security - This can include on-premise security officers, fences, gates, continuous video surveillance, and security breach alarms.
+
+
+
+Inside perimeter security - This can include continuous video surveillance, electronic motion detectors, security traps, and biometric access and exit sensors.
+
+
+
+Data Center Physical Security
+
+
+
+Security traps provide access to the data halls where data center data is stored. As shown in the figure below, a security trap is similar to an air lock. A person must first enter the security trap using their badge ID proximity card. After the person is inside the security trap, facial recognition, fingerprints, or other biometric verifications are used to open the second door. The user must repeat the process to exit the data hall.
+
+
+
+Security Traps
+
+
+
+The figure below displays the biometric finger print scanner that is used to secure access to the Cisco Allen Data Center, in Allen, Texas.
+
+
+
+Biometric Access
+
+Outside perimeter security	This can include on-premise security officers, fences, gates, continuous video surveillance, and security breach alarms.
+
+Inside perimeter security	This can include continuous video surveillance, electronic motion detectors, security traps, and biometric access and exit sensors.
+
+1.2.5
+
+
+
+Cloud Networks and Virtualization	The cloud is playing an increasing role in enterprise networks. Cloud computing allows organizations to use services such as data storage or cloud-based applications, to extend their capacity or capabilities without adding infrastructure. By its very nature, the cloud is outside of the traditional network perimeter, allowing an organization to have a data center that may or may not reside behind the traditional firewall.
+
+
+
+The terms "cloud computing" and "virtualization" are often used interchangeably; however, they mean different things. Virtualization is the foundation of cloud computing. Without it, cloud computing, as it is most-widely implemented, would not be possible. Cloud computing separates the application from the hardware. Virtualization separates the operating system from the hardware.
+
+
+
+The cloud network consists of physical and virtual servers which are commonly housed in data centers. However, data centers are increasingly using virtual machines (VM) to provide server services to their clients. Server virtualization takes advantage of idle computing resources and consolidates the number of required servers. This also allows for multiple operating systems to exist on a single hardware platform. However, VMs are also prone to specific targeted attacks as listed below.
+
+
+
+Hyperjacking -An attacker could hijack a VM hypervisor (VM controlling software) and then use it as a launch point to attack other devices on the data center network.
+
+
+
+Instant On Activation - When a VM that has not been used for a period of time is brought online, it may have outdated security policies that deviate from the baseline security and can introduce security vulnerabilities.
+
+
+
+Antivirus Storms - This happens when all VMs attempt to download antivirus data files at the same time.
+
+
+
+For security teams, an easy to implement yet comprehen
+
+Hyperjacking	An attacker could hijack a VM hypervisor (VM controlling software) and then use it as a launch point to attack other devices on the data center network.
+
+Instant On Activation	When a VM that has not been used for a period of time is brought online, it may have outdated security policies that deviate from the baseline security and can introduce security vulnerabilities.
+
+Antivirus Storms	This happens when all VMs attempt to download antivirus data files at the same time.
+
+Secure Segmentation	ASA devices and a Virtual Security Gateway integrated into the Cisco Nexus Series switches are deployed in a data center network to provide secure segmentation. This provides granular inter-virtual-machine security.
+
+Threat Defense	ASAs and IPS devices in data center networks use threat intelligence, passive OS fingerprinting, and reputation and contextual analysis to provide threat defense.
+
+Visibility	Visibility solutions are provided using software such as the Cisco Security Manager which help simplify operations and compliance reporting.
+
+1.2.6
+
+
+
+The Evolving Network Border	In the past, employees and data resources remained within a predefined perimeter that was protected by firewall technology. Employees typically used company-issued computers connected to a corporate LAN that were continuously monitored and updated to meet security requirements.
+
+
+
+Today, consumer endpoints, such as iPhones, smartphones, tablets, and thousands of other devices, are becoming powerful substitutes for, or complements to, the traditional PC. More and more people are using these devices to access enterprise information. This trend is known as Bring Your Own Device (BYOD).
+
+
+
+To accommodate the BYOD trend, Cisco developed the Borderless Network. In a Borderless Network, access to resources can be initiated by users from many locations, on many types of endpoint devices, using various connectivity methods.
+
+
+
+To support this blurred network edge, Cisco devices support Mobile Device Management (MDM) features. MDM features secure, monitor, and manage mobile devices, including corporate-owned devices and employee-owned devices. MDM-supported and managed devices include not only handheld devices, such as smartphones and tablets, but also laptop and desktop computing devices.
+
+
+
+Click each button below to learn about the critical functions performed by MDM.
+
+Data Encryption	Most devices have built-in encryption capabilities, both at the device and file level. MDM features can ensure that only devices that support data encryption and have it enabled can access the network and corporate content.
+
+PIN Enforcement	Enforcing a PIN lock is the first and most effective step in preventing unauthorized access to a device. Furthermore, strong password policies can also be enforced by an MDM, reducing the likelihood of brute-force attacks.
+
+Data Wipe	Lost or stolen devices can be remotely fully- or partially-wiped, either by the user or by an administrator via the MDM.
+
+Data Loss Prevention (DLP)	While data protection functions (like PIN locking, data encryption and remote data wiping) prevent unauthorized users from accessing data, DLP prevents authorized users from doing careless or malicious things with critical data.
+
+Jailbreak/Root Detection	Jailbreaking (on Apple iOS devices) and rooting (on Android devices) are a means to bypass the management of a device. MDM features can detect such bypasses and immediately restrict a device's access to the network or other corporate assets.
+
+1.2.7
+
+
+
+Check Your Understanding - Network Topology Protection Overview	Check your understanding of Network Topologies by choosing the best answer to the following questions.
+
+1. Which network type consists of a number of LANs that are connected together across a limited geographic area?	CAN
+
+2. Which network type includes a consumer grade router with basic security features to protect inside assets from outside attackers?	SOHO
+
+3. Which network type consists of a number of LANs that are connected together across a limited geographic area?	Data Center
+
+Securing Networks Summary
+
+
+
+1.3.1
+
+
+
+What Did I Learn in this Module?	Current State of Affairs
+
+
+
+Network security relates directly to an organization's business continuity. Network security breaches can disrupt e-commerce, cause the loss of business data, threaten people's privacy, and compromise the integrity of information. These breaches can result in lost revenue for corporations, theft of intellectual property, lawsuits, and can even threaten public safety. Many tools are available to help network administrators adapt, develop, and implement threat mitigation techniques, including the Cisco Talos Intelligence Group. An attack vector is a path by which a threat actor can gain access to a server, host, or network. Attack vectors originate from inside or outside the corporate network. Data is likely to be an organization's most valuable asset. Various DLP controls must be implemented, that combine strategic, operational, and tactical measures. Common data loss vectors include email and social networking, unencrypted data devices, cloud storage devices, removable media, hard copy, and improper access control.
+
+
+
+Network Topology Overview
+
+
+
+There are many types of networks. CANs consist of interconnected LANS within a limited geographical area. Elements of the defense-in-depth design include VPN, ASA firewall, IPS, Layer 3 switches, layer 2 switches, ESA/WSA, AAA server, and hosts. SOHO networks are typically protected using consumer grade routers that provide integrated firewall features and secure wireless connections. Wireless hosts connect to the wireless network using WPA2 data encryption technology. WANs span a wide geographical area. Network security professionals must use secure devices on the edge of the network. Data center networks are typically housed in an off-site facility to store sensitive or proprietary data. Data center physical security is divided into two areas: outside p
+
+1.3.2
+
+
+
+Module 1 - Securing Networks Quiz	
+
+1. Which security measure is typically found both inside and outside a data center facility?	Continuous video surveillance
+
+2. Which statement accurately characterizes the evolution of threats to network security?	Internal threats can cause even greater damage than external threats.
+
+3. Which security technology is commonly used by a teleworker when accessing resources on the main corporate office network?	VPN
+
+4. A security intern is reviewing the corporate network topology diagrams before participating in a security review. Which network topology would commonly have a large number of wired desktop computers?	CAN
+
+5. In the video that describes the anatomy of an attack, a threat actor was able to gain access through a network device, download data, and destroy it. Which flaw allowed the threat actor to do this?	A flat network with no subnets or VLANs
+
+6. Which type of network commonly makes use of redundant air conditioning and a security trap?	Data center
+
+7. Which technology is used to secure, monitor, and manage mobile devices?	MDM
+
+8. When considering network security, what is the most valuable asset of an organization?	Data
+
+9. What is hyperjacking?	Taking over a virtual machine hypervisor as part of a data center attack
+
+10. Which resource is affected due to weak security settings for a device owned by the company, but housed in another location?	Cloud storage device
+
+11. Refer to the exhibit. An IT security manager is planning security updates on this particular network. Which type of network is displayed in the exhibit and is being considered for updates?	CAN

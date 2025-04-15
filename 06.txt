@@ -1,0 +1,3044 @@
+
+Secure Cisco IOS Image and Configuration Files
+
+
+
+6.1.1
+
+
+
+Cisco IOS Resilient Configuration Feature	The Cisco IOS resilient configuration feature allows for faster recovery if someone maliciously or unintentionally reformats flash memory or erases the startup configuration file in nonvolatile random-access memory (NVRAM). The feature maintains a secure working copy of the router IOS image file and a copy of the running configuration file. These secure files cannot be removed by the user and are referred to as the primary bootset.
+
+
+
+Here are a few facts about the Cisco IOS resilient configuration:
+
+
+
+The configuration file in the primary bootset is a copy of the running configuration that was in the router when the feature was first enabled.
+
+
+
+The feature secures the smallest working set of files to preserve persistent storage space.
+
+
+
+No extra space is required to secure the primary Cisco IOS image file. The feature automatically detects image or configuration version mismatch.
+
+
+
+Only local storage is used for securing files, eliminating scalability maintenance challenges from storing multiple images and configurations on TFTP servers.
+
+
+
+The feature can be disabled only through a console session.
+
+
+
+Note: The feature is only available on older routers that support a PCMCIA Advanced Technology Attachment (ATA) flash interface. Newer routers such as the ISR 4000 do not support this feature.
+
+6.1.2
+
+
+
+Enable the IOS Image Resilience Feature	The commands to secure the IOS image and running configuration file are shown in the example. To secure the IOS image and enable Cisco IOS image resilience, use the secure boot-image global configuration mode command. When enabled for the first time, the running Cisco IOS image is secured and a log entry is generated. The Cisco IOS image resilience feature can only be disabled through a console session using the no form of the command. This command functions properly only when the system is configured to run an image from a flash drive with an ATA interface. Additionally, the running image must be loaded from persistent storage to be secured as primary. Images that are loaded from a remote location, such as a TFTP server, cannot be secured.
+
+
+
+To take a snapshot of the router running configuration and securely archive it in persistent storage, use the secure boot-config global configuration mode command, as shown in the figure. A log message is displayed on the console notifying the user that configuration resilience is activated. The configuration archive is hidden and cannot be viewed or removed directly from the CLI prompt. You can use the secure boot-config command repeatedly to upgrade the configuration archive to a newer version after new configuration commands have been issued.
+
+
+
+Secured files do not appear in the output of a dir command that is issued from the CLI. This is because the Cisco IOS file system prevents secure files from being listed. The running image and running configuration archives are not visible in the dir command output. Use the show secure bootset command to verify the existence of the archive, as shown in the figure.
+
+
+
+R1(config)# secure boot-image
+
+R1(config)#
+
+Sep 22 12:47:10.183: %IOS_RESILIENCE-5-IMAGE_RESIL_ACTIVE: Successfully secured running image
+
+R1(config)#
+
+R1(config)# secure boot-confi
+
+6.1.3
+
+
+
+The Primary Bootset Image	Restore a primary bootset from a secure archive after the router has been tampered with, as shown in the following steps and example:
+
+
+
+Step 1. Reload the router using the reload command. If necessary, issue the break sequence to enter ROM monitor (ROMmon) mode.
+
+
+
+Step 2. From ROMmon mode, enter the dir command to list the contents of the device that contains the secure bootset file.
+
+
+
+Step 3. Boot the router with the secure bootset image using the boot command followed by the flash memory location (e.g. flash0), a colon, and the filename found in Step 2.
+
+
+
+Step 4. Enter global configuration mode and restore the secure configuration to a filename of your choice using the secure boot-config restore command followed by the flash memory location (e.g. flash0), a colon, and a filename of your choice. In the figure, the filename rescue-cfg is used.
+
+
+
+Step 5. Exit global configuration mode and issue the copy command to copy the rescued configuration file to the running configuration.
+
+
+
+Router# reload
+
+<Issue Break sequence, if necessary>
+
+rommon 1 > dir flash0:
+
+program load complete, entry point: 0x80803000, size: 0x1b340
+
+Directory of flash0:
+
+
+
+4 103727964 -rw- c2900-universalk9-mz.SPA.154-3.M.bin
+
+
+
+rommon 2 > boot flash0:c2900-universalk9-mz.SPA.154-3.M.bin <Router reboots with specified image>
+
+Router> enable
+
+Router# conf t
+
+Enter configuration commands, one per line. End with CNTL/Z.
+
+Router(config)# secure boot-config restore flash0:rescue-cfg
+
+ios resilience:configuration successfully restored as flash0:rescue-cfg
+
+
+
+Router(config)# end
+
+Router# copy flash0:rescue-cfg running-config
+
+Destination filename [running-config]?
+
+%IOS image resilience is already active
+
+%IOS configuration resilience is already active
+
+
+
+2182 bytes copied in 0.248 secs (8798 bytes/sec)
+
+
+
+R1#
+
+6.1.4
+
+
+
+Configure Secure Copy	The Cisco IOS Resilient feature provides a method for securing the IOS image and configuration files locally on the device. The Secure Copy Protocol (SCP) feature is used to remotely copy these files. SCP provides a secure and authenticated method for copying router configuration or router image files to a remote location.
+
+
+
+SCP relies on:
+
+
+
+SSH to secure communication
+
+AAA to provide authentication and authorization
+
+
+
+Note: AAA configuration will be covered in greater detail in a later chapter.
+
+
+
+Use the following steps to configure a router for server-side SCP with local AAA:
+
+
+
+Step 1. Configure SSH, if not already configured.
+
+
+
+Step 2. For local authentication, configure at least one local database user with privilege level 15.
+
+
+
+Step 3. Enable AAA with the aaa new-model global configuration mode command.
+
+
+
+Step 4. Use the aaa authentication login default local command to specify that the local database be used for authentication.
+
+
+
+Step 5. Use the aaa authorization exec default local command to configure command authorization. In this example, all local users will have access to EXEC commands.
+
+
+
+Step 6. Enable SCP server-side functionality with the ip scp server enable command.
+
+
+
+In the example, R1 is now an SCP server and will use SSH connections to accept secure copy transfers from authenticated and authorized users. Transfers can originate from any SCP client whether that client is another router, switch, or workstation.
+
+
+
+R1(config)# ip domain-name span.com
+
+R1(config)# crypto key generate rsa general-keys modulus 2048
+
+R1(config)# username Bob privilege 15 algorithm-type scrypt secret cisco12345
+
+R1(config)# aaa new-model
+
+R1(config)# aaa authentication login default local
+
+R1(config)# aaa authorization exec default local
+
+R1(config)# ip scp server enable
+
+
+
+Now assume that we want to securely copy the backup configuration of a ro
+
+6.1.5
+
+
+
+Recover a Router Password	If a router is compromised or needs to be recovered from a misconfigured password, an administrator must use password recovery procedures, such as those shown in the steps below. For security reasons, password recovery requires the administrator to have physical access to the router through a console cable. Depending on the device, the detailed procedure for password recovery varies.
+
+
+
+Step 1. Connect to the console port.
+
+
+
+Step 2. Use the show version command to display the configuration register setting and document the value (e.g., 0x2102).
+
+
+
+Step 3. Power cycle the router.
+
+
+
+Step 4. Issue the break sequence (e.g., CTRL-BREAK) to enter ROMMON mode.
+
+
+
+Step 5. Change the default configuration register with the confreg 0x2142 command.
+
+
+
+Step 6. Reboot the router by using the reset command in ROMMON mode.
+
+
+
+Step 7. Press Ctrl-C to skip the initial setup procedure.
+
+
+
+Step 8. Enter privileged EXEC mode.
+
+
+
+Step 9. Copy the startup configuration to the running configuration using the copy startup-config running-config command.
+
+
+
+Step 10. Verify the configuration.
+
+
+
+Step 11. Change the enable secret password.
+
+
+
+Step 12. Enable all interfaces using the no shutdown command.
+
+
+
+Step 13. Return the configuration register setting to the original setting that was documented in Step 2 with the config-register global configuration command. On the next reboot, the router will use these settings and load the new startup configuration file that contains the changed password.
+
+
+
+Step 14. Save the configuration changes.
+
+6.1.6
+
+
+
+Password Recovery	If someone gained physical access to a router, they could potentially gain control of that device through the password recovery procedure. This procedure, if performed correctly, leaves the router configuration intact. If the attacker makes no major changes, this type of attack is difficult to detect. An attacker can use this attack method to discover the router configuration and other pertinent information about the network, such as traffic flows and access control restrictions.
+
+
+
+An administrator can mitigate this potential security breach by using the no service password-recovery global configuration mode command. This command is a hidden Cisco IOS command and has no arguments or keywords. If a router is configured with the no service password-recovery command, all access to ROMmon mode is disabled.
+
+
+
+When the no service password-recovery command is entered, a warning message displays and must be acknowledged before the feature is enabled, as shown in the example.
+
+
+
+R1(config)# no service password-recovery
+
+WARNING:
+
+Executing this command will disable password recovery
+
+mechanism.
+
+Do not execute this command without another plan for
+
+password recovery.
+
+Are you sure you want to continue? [yes/no]: yes
+
+R1(config)#
+
+
+
+When it is configured, the show running-config command displays a no service password-recovery statement, as shown here.
+
+
+
+R1# show running-config
+
+Building configuration...
+
+
+
+Current configuration : 836 bytes
+
+!
+
+version 12.4
+
+service timestamps debug datetime msec
+
+service timestamps log datetime msec
+
+service password-encryption
+
+no service password-recovery
+
+
+
+As shown below, when the router is booted, the initial boot sequence displays a message stating PASSWORD RECOVERY FUNCTIONALITY IS DISABLED.
+
+
+
+System Bootstrap, Version 12.4(13r)T, RELEASE SOFTWARE (fc1)
+
+Technical Support: http://www.cisco.com/techsupport
+
+Copyright
+
+Lock Down a Router Using AutoSecure
+
+
+
+6.2.1
+
+
+
+Discovery Protocols CDP and LLDP	Cisco routers are initially deployed with many services that are enabled by default. This is done for convenience and to simplify the configuration process required to get the device operational. However, some of these services can make the device vulnerable to attack if security is not enabled. Administrators can also enable services on Cisco routers that can expose the device to significant risk. Both of these scenarios must be considered when securing the network.
+
+
+
+The Cisco Discovery Protocol (CDP) is an example of a service that is enabled by default on Cisco routers. The Link Layer Discovery Protocol (LLDP) is an open standard that can be enabled on Cisco devices, as well as other vendor devices that support LLDP.
+
+
+
+LLDP configuration and verification is similar to CDP. In the figure, R1 and S1 are both configured with LLDP, using the lldp run global configuration command. Both devices are running CDP by default. The output for show cdp neighbors detail and show lldp neighbors detail will reveal a device's address, platform, and operating system details.
+
+
+
+R1(config)# lldp run
+
+R1(config)# end
+
+R1# show cdp neighbors detail
+
+
+
+Device ID: S1
+
+Entry address(es):
+
+IP address: 192.168.1.254
+
+Platform: cisco WS-C2960-24TT-L, Capabilities: Switch IGMP
+
+Interface: GigabitEthernet0/1, Port ID (outgoing port): FastEthernet0/5
+
+Holdtime : 164 sec
+
+
+
+Version :
+
+Cisco IOS Software, C2960 Software (C2960-LANBASEK9-M), Version 15.0(2)SE7,
+
+RELEASE SOFTWARE (fc1)
+
+<output omitted>
+
+
+
+R1# show lldp neighbors detail
+
+
+
+Local Intf: Gi0/1
+
+Chassis id: 0022.9121.0380
+
+Port id: Fa0/5
+
+Port Description: FastEthernet0/5
+
+System Name: S1
+
+
+
+System Description:
+
+Cisco IOS Software, C2960 Software (C2960-LANBASEK9-M), Version 15.0(2)SE7,
+
+RELEASE SOFTWARE (fc1)
+
+<output omitted>
+
+
+
+Unfortunately,
+
+6.2.2
+
+
+
+Settings for Protocols and Services	Attackers choose services and protocols that make the network more vulnerable to malicious exploitation.
+
+
+
+Many of these features should be disabled or restricted in their capabilities based on the security needs of an organization. These features range from network discovery protocols, such as CDP and LLDP, to globally available protocols such as ICMP and other scanning tools.
+
+
+
+Some of the default settings in Cisco IOS software are there for historical reasons. They were logical default settings at the time the software was originally written. Other default settings make sense for most systems, but can create security exposures if they are used in devices that form part of a network perimeter defense. Still other defaults are required by standards but are not always desirable from a security point of view.
+
+
+
+The table summarizes the feature and default settings for protocols and services.
+
+
+
+
+
+Cisco Discovery Protocol (CDP)
+
+
+
+Enabled
+
+
+
+
+
+Link Layer Discovery Protocol (LLDP)
+
+
+
+Disabled
+
+
+
+
+
+Configuration autoloading
+
+
+
+Disabled
+
+
+
+
+
+FTP server
+
+
+
+Disabled
+
+
+
+
+
+TFTP server
+
+
+
+Disabled
+
+
+
+
+
+Network Time Protocol (NTP) service
+
+
+
+Disabled
+
+
+
+
+
+Packet assembler/disassembler (PAD) service
+
+
+
+Enabled
+
+
+
+
+
+TCP and User Datagram Protocol (UDP) minor services
+
+
+
+Enabled in versions 11.3 and later
+
+
+
+
+
+Maintenance Operation Protocol (MOP) service
+
+
+
+Enabled on most Ethernet interfaces
+
+
+
+
+
+Simple Network Management Protocol (SNMP)
+
+
+
+Enabled
+
+
+
+
+
+HTTP or HTTPS configuration and monitoring
+
+
+
+Setting is Cisco device dependent.
+
+
+
+
+
+Domain Name System (DNS)
+
+
+
+Enabled
+
+
+
+
+
+Internet Control Message Protocol (ICMP) redirects
+
+
+
+Enabled
+
+
+
+
+
+IP source routing
+
+
+
+Enabled
+
+
+
+
+
+Finger service
+
+
+
+Enabled
+
+
+
+
+
+ICMP unreachable notifications
+
+
+
+Enabled
+
+
+
+
+
+ICMP mask reply
+
+
+
+Disabled
+
+
+
+
+
+IP identification service
+
+
+
+Enabled
+
+
+
+
+
+TCP keepalives
+
+
+
+Disabled
+
+
+
+
+
+Gratuitous ARP (GARP)
+
+
+
+Enabled
+
+
+
+
+
+Proxy ARP
+
+
+
+Enabled
+
+
+
+The table below show
+
+Cisco Discovery Protocol (CDP)	Should be disabled globally or on a per-interface basis if it is not required.
+
+Link Layer Discovery Protocol (LLDP)	Should be disabled globally or on a per-interface basis if it is not required.
+
+Configuration autoloading	Should remain disabled when not in use by the router.
+
+FTP server	Should be disabled when it is not required.
+
+TFTP server	It should be disabled when it is not required.
+
+Network Time Protocol (NTP) service	It should remain disabled when it is not required.
+
+Packet assembler/disassembler (PAD) service	It should be explicitly disabled when not in use.
+
+TCP and User Datagram Protocol (UDP) minor services	Disable this service explicitly.
+
+Maintenance Operation Protocol (MOP) service	It should be explicitly disabled when it is not in use.
+
+Simple Network Management Protocol (SNMP)	Disable this service when it is not required.
+
+HTTP or HTTPS configuration and monitoring	Disable service if it is not required. If this service is required, restrict access to the router HTTP or HTTPS service using access control lists (ACLs).
+
+Domain Name System (DNS)	Disable when it is not required. If the DNS lookup service is required, ensure that you set the DNS server address explicitly.
+
+Internet Control Message Protocol (ICMP) redirects	Disable when it is not required.
+
+IP source routing	Disable this service when it is not required.
+
+Finger service	Disable this service when it is not required.
+
+ICMP unreachable notifications	Disable on interfaces to untrusted networks.
+
+ICMP mask reply	Disable on interfaces to untrusted networks.
+
+IP identification service	Service should be explicitly disabled.
+
+TCP keepalives	Should be enabled globally to manage TCP connections and prevent certain denial of service (DoS) attacks. Service is enabled in Cisco IOS Software releases before Cisco IOS Release 12.0 and is disabled in Cisco IOS Release 12.0 and later. Disable this service when it is not required.
+
+Gratuitous ARP (GARP)	Disable gratuitous ARPs on each router interface unless this service is needed.
+
+Proxy ARP	Disable this service on each interface unless the router is being used as a LAN bridge.
+
+6.2.3
+
+
+
+Cisco AutoSecure	Released in IOS version 12.3, Cisco AutoSecure is a feature that is initiated from the CLI and executes a script. AutoSecure first makes recommendations for fixing security vulnerabilities and then modifies the security configuration of the router, as shown in the figure.
+
+
+
+AutoSecure can lock down the management plane functions and the forwarding plane services and functions of a router. There are several management plane services and functions:
+
+
+
+Secure BOOTP, CDP, FTP, TFTP, PAD, UDP, and TCP small servers, MOP, ICMP (redirects, mask-replies), IP source routing, Finger, password encryption, TCP keepalives, gratuitous ARP, proxy ARP, and directed broadcast
+
+Legal notification using a banner
+
+Secure password and login functions
+
+Secure NTP
+
+Secure SSH access
+
+TCP intercept services
+
+
+
+There are three forwarding plane services and functions that AutoSecure enables:
+
+
+
+Cisco Express Forwarding (CEF)
+
+Traffic filtering with ACLs
+
+Cisco IOS firewall inspection for common protocols
+
+
+
+AutoSecure is often used in the field to provide a baseline security policy on a new router. Features can then be altered to support the security policy of the organization.
+
+
+
+R1# auto secure
+
+ AutoSecure Configuration 
+
+
+
+*** AutoSecure configuration enhances the security of the router but it will not make router absolutely secure from all security attacks ***
+
+
+
+All the configuration done as part of AutoSecure will be shown here. For more details of why and how this configuration is useful, and any possible side effects, please refer to Cisco documentation of AutoSecure.
+
+
+
+At any prompt you may enter '?' for help. Use ctrl-c to abort this session at any prompt.
+
+
+
+Gathering information about the router for AutoSecure
+
+
+
+Is this router connected to internet? [no]:yes
+
+6.2.4
+
+
+
+Cisco AutoSecure Command Syntax	Use the auto secure command to enable the Cisco AutoSecure feature setup. This setup can be interactive or non-interactive. The figure shows the command syntax for the auto secure command.
+
+
+
+Router# auto secure {no-interact | full} [forwarding | management] [ntp | login | ssh | firewall | top-intercept]
+
+
+
+Here are the command parameters.
+
+
+
+R1# auto secure ?
+
+forwarding Secure Forwarding Plane
+
+management Secure Management Plane
+
+no-interact Non-interactive session of AutoSecure
+
+<cr>
+
+
+
+R1#
+
+
+
+Note: Options may vary by platform.
+
+
+
+In interactive mode, the router prompts with options to enable and disable services and other security features. This is the default mode, but it can also be configured using the auto secure full command.
+
+
+
+The non-interactive mode is configured with the auto secure no-interact command. This will automatically execute the Cisco AutoSecure feature with the recommended Cisco default settings. The auto secure command can also be entered with keywords to configure specific components, such as the management plane (management keyword) and forwarding plane (forwarding keyword).
+
+
+
+On cards 32-40.
+
+no-interact	The user will not be prompted for any interactive configurations. No interactive dialogue parameters will be configured, including usernames or passwords.
+
+full	The user will be prompted for all interactive questions. This is the default setting.
+
+forwarding	Only the forwarding plane will be secured.
+
+management	Only the management plane will be secured.
+
+ntp	Specifies the configuration of the NTP feature in the AutoSecure CLI.
+
+login	Specifies the configuration of the login feature in the AutoSecure CLI.
+
+ssh	Specifies the configuration of the SSH feature in the AutoSecure CLI.
+
+firewall	Specifies the configuration of the firewall feature in the AutoSecure CLI.
+
+tcp-intercept	Specifies the configuration of the TCP intercept feature in the AutoSecure CLI.
+
+6.2.5
+
+
+
+Cisco AutoSecure Configuration Example	When the auto secure command is initiated, a CLI wizard steps the administrator through the configuration of the device. User input is required.
+
+
+
+Click below to learn more about the CLI wizard steps. (On cards 42-48
+
+
+
+When the wizard is complete, a running configuration displays all configuration settings and changes.
+
+
+
+Note: AutoSecure should be used when a router is initially being configured. It is not recommended on production routers.
+
+1.	The auto secure command is entered. The router displays the AutoSecure configuration wizard welcome message, as shown.
+
+
+
+R1# auto secure
+
+ AutoSecure Configuration 
+
+
+
+*** AutoSecure configuration enhances the security of the router, but it will not make it absolutely resistant to all security attacks ***
+
+
+
+AutoSecure will modify the configuration of your device. All configuration changes will be shown. For a detailed explanation of how the configuration changes enhance security and any possible side effects, please refer to Cisco.com for Autosecure documentation. At any prompt you may enter '?' for help.
+
+Use ctrl-c to abort this session at any prompt.
+
+
+
+Gathering information about the router for AutoSecure
+
+
+
+<continued>
+
+2.	The wizard gathers information about the outside interfaces, as shown
+
+
+
+Gathering information about the router for AutoSecure
+
+
+
+Is this router connected to internet? [no]: yes
+
+Enter the number of interfaces facing the internet [1]:
+
+
+
+Interface IP-Address OK? Method Status Protocol
+
+FastEthernet0/0 192.168.10.1 YES manual up up
+
+FastEthernet0/1 192.168.11.1 YES manual up up
+
+FastEthernet0/1/0 unassigned YES unset up down
+
+FastEthernet0/1/1 unassigned YES unset up down
+
+FastEthernet0/1/2 unassigned YES unset up down
+
+FastEthernet0/1/3 unassigned YES unset up down
+
+Serial0/0/0 192.168.2.101 YES manual up up
+
+Serial0/0/1 unassigned YES manual administratively down down
+
+Vlan1 unassigned YES manual up down
+
+Enter the interface name that is facing the internet: Serial 0/0/0
+
+Invalid interface name
+
+Enter the interface name that is facing the internet: Serial0/0/0
+
+
+
+<continued>
+
+3.	AutoSecure secures the management plane by disabling unnecessary services, as shown.
+
+
+
+Securing Management plane services...
+
+
+
+Disabling service finger
+
+Disabling service pad
+
+Disabling udp & tcp small servers
+
+Enabling service password encryption
+
+Enabling service tcp-keepalives-in
+
+Enabling service tcp-keepalives-out
+
+Disabling the cdp protocol
+
+
+
+Disabling the bootp server
+
+Disabling the http server
+
+Disabling the finger service
+
+Disabling source routing
+
+Disabling gratuitous arp
+
+
+
+<continued>
+
+4.	AutoSecure prompts for a banner, as shown.
+
+
+
+Here is a sample Security Banner to be shown at every access to device. Modify it to suit your enterprise requirements.
+
+
+
+Authorized Access only
+
+This system is the property of So-&-So-Enterprise.
+
+UNAUTHORIZED ACCESS TO THIS DEVICE IS PROHIBITED.
+
+You must have explicit permission to access this device. All activities performed on this device are logged. Any violations of access policy will result in disciplinary action.
+
+
+
+Enter the security banner {Put the banner between k and k, where k is any character}:
+
+#
+
+********* AUTHORIZED ACCESS ONLY ***********
+
+UNAUTHORIZED ACCESS TO THIS DEVICE IS PROHIBITED.
+
+You must have explicit permission to access this device. Any violations of access policy will result in disciplinary action.
+
+#
+
+<continued>
+
+5.	AutoSecure prompts for passwords and enables password and login features, as shown.
+
+
+
+Enable secret is either not configured or is the same as enable password
+
+Enter the new enable secret: cisco123
+
+Confirm the enable secret : cisco123
+
+Enter the new enable password: cisco1
+
+% Password too short - must be at least 6 characters. Password configuration failed
+
+Enter the new enable password: cisco321
+
+Confirm the enable password: cisco321
+
+Configuring AAA local authentication
+
+Configuring Console, Aux and VTY lines for local authentication, exec-timeout, and transport
+
+Securing device against Login Attacks
+
+Configure the following parameters
+
+
+
+
+
+Blocking Period when Login Attack detected: 120
+
+Maximum Login failures with the device: 2
+
+Maximum time period for crossing the failed login attempts: 60
+
+
+
+Configure SSH server? [yes]: y
+
+
+
+<continued>
+
+6.	Interfaces are secured, as shown.
+
+
+
+Configuring interface specific AutoSecure services
+
+Disabling the following ip services on all interfaces:
+
+
+
+no ip redirects
+
+no ip proxy-arp
+
+no ip unreachables
+
+no ip directed-broadcast
+
+no ip mask-reply
+
+Disabling mop on Ethernet interfaces
+
+
+
+<continued>
+
+7.	The forwarding plane is secured, as shown..
+
+
+
+Securing Forwarding plane services...
+
+
+
+Enabling CEF (This might impact the memory requirements for your platform)
+
+Enabling unicast rpf on all interfaces connected to internet
+
+
+
+Configure CBAC Firewall feature? [yes/no]: yes
+
+6.2.6
+
+
+
+Syntax Checker - Using the auto secure Command	In this Syntax Checker, you will use AutoSecure to secure R1.
+
+
+
+Configure Serial0/0/0 as the interface facing the internet. Note: The interface name is case-specific.
+
+Create an motd banner using #Unauthorized Access is Prohibited!#.
+
+Create a local username Admin01 and password Admin01pa55 to access the router.
+
+Configure a 60 second login shutdown if 2 failed login attempts are made within 30 seconds.
+
+Use example.com as the domain name for the SSH server.
+
+Do not configure CBAC firewall.
+
+Apply the configuration from AutoSecure to the running-config.
+
+
+
+Use AutoSecure to lock down the router.
+
+
+
+R1#auto secure
+
+ AutoSecure Configuration 
+
+
+
+*** AutoSecure configuration enhances the security of the router, but it will not make it absolutely resistant to all security attacks ***
+
+
+
+AutoSecure will modify the configuration of your device. All configuration changes will be shown. For a detailed explanation of how the configuration changes enhance security and any possible side effects, please refer to Cisco.com for AutoSecure documentation.
+
+At any prompt you may enter '?' for help. 
+
+Use ctrl-c to abort this session at any prompt.
+
+
+
+Gathering information about the router for AutoSecure
+
+Is this router connected to Internet? [no]#yes
+
+Enter the number of interfaces facing the internet [1]# 1
+
+
+
+Interface IP-Address OK? Method Status Protocol
+
+Embedded-Service-Engine0/0 unassigned YES unset administratively down down
+
+GigabitEthernet0/0 unassigned YES unset administratively down down
+
+GigabitEthernet0/1 192.168.1.1 YES manual up up
+
+Serial0/0/0 10.1.1.1 YES manual up up
+
+Serial0/0/1 unassigned YES unset administratively down down
+
+Enter the interface name that is facing the internet#Serial0/0/0
+
+
+
+Securing Management plane services...
+
+
+
+Disabling service finger 
+
+Disabling service pad 
+
+Disabling udp & tcp small servers
+
+Enabling service password en
+
+6.2.7
+
+
+
+Lab - Configure Automated Security Features	In this lab, you will complete the following objectives:
+
+
+
+Part 1: Configure basic device settings.
+
+Part 2: Configure automated security features.
+
+Routing Protocol Authentication
+
+
+
+6.3.1
+
+
+
+Dynamic Routing Protocols	Dynamic routing protocols are used by routers to automatically share information about the reachability and status of remote networks. Dynamic routing protocols perform several activities, including network discovery and maintaining routing tables.
+
+
+
+Important advantages of dynamic routing protocols are the ability to select a best path, and the ability to automatically discover a new best path when there is a change in the topology.
+
+
+
+Network discovery is the ability of a routing protocol to share information about the networks that it knows about with other routers that are also using the same routing protocol. Instead of depending on manually configured static routes to remote networks on every router, a dynamic routing protocol allows the routers to automatically learn about these networks from other routers. These networks, and the best path to each, are added to the routing table of the router, and identified as a network learned by a specific dynamic routing protocol.
+
+
+
+The figure shows routers R1 and R2 using a common routing protocol to share network information.
+
+
+
+PC1PC2PC3PC4S1S2S4R1R2.10.10.10.10::10::10::10::1010.0.1.0/2410.0.2.0/2410.0.4.0/2410.0.5.0/242001:db8:acad:1::/642001:db8:acad:2::/642001:db8:acad:4::/642001:db8:acad:5::/64G0/0/0G0/0/1209.165.200.224/302001:db8:feed:224::/64.1::1.1::1.225::1.1::1S0/1/1S0/1/1S3::210.0.3.0/24S0/1/0.2G0/0/0G0/0/1.1::1.1::1ISP2001:db8:acad:3::/64.226::2S0/1/1
+
+I will share with R2 all the networks I know about and tell R2 when there are any changes.I will share with R1 all the networks I know about and tell R1 when there are any changes.Internet
+
+6.3.2
+
+
+
+Routing Protocol Spoofing	Routing systems can be attacked by disrupting peer network routers, or by falsifying or spoofing the information carried within the routing protocols. Spoofing routing information may generally be used to cause systems to misinform (lie to) each other, cause a DoS attack, or cause traffic to follow a path it would not normally follow. There are several consequences of routing information being spoofed:
+
+
+
+Redirecting traffic to create routing loops
+
+Redirecting traffic so it can be monitored on an insecure link
+
+Redirecting traffic to discard it
+
+
+
+Click the Play button on the animation to see an example of an attack that creates a routing loop.
+
+
+
+Assume an attacker has been able to connect directly to the link between R1and R2. The attacker sends R1 false routing information indicating that R2 is the preferred destination to the 192.168.10.0/24 network. Although R1 already has a routing table entry to the 192.168.10.0/24 network, the new route has a lower metric and therefore is the preferred entry in the routing table.
+
+
+
+Consequently, when PC3 sends a packet to PC1 (192.168.10.10/24), R3 forward the packet to R2 which in turn forwards it to R1. R1 does not forward the packet to the PC1 host. Instead, it routes the packet to R2 because the apparent best path to 192.168.10.0 /24 is through R2. When R2 gets the packet, it looks in its routing table and finds a legitimate route to the 192.168.10.0/24 network through R1 and forwards the packet back to R1, creating the loop. The loop was caused by the misinformation injected into R1.
+
+
+
+For more information about generic threats to routing protocols, search the internet for RFC 4593. Mitigate against routing protocol attacks by configuring OSPF authentication.
+
+
+
+Attackers Can Manipulate Unauthenticated Routing Updates
+
+6.3.3
+
+
+
+OSPF MD5 Routing Protocol Authentication	OSPF supports routing protocol authentication using MD5. MD5 authentication can be enabled globally for all interfaces or on a per interface basis.
+
+
+
+Enable OSPF MD5 authentication globally:
+
+
+
+ip ospf message-digest-key key md5 password interface configuration command.
+
+area area-id authentication message-digest router configuration command.
+
+This method forces authentication on all OSPF enabled interfaces. If an interface is not configured with the ip ospf message-digest-key command, it will not be able to form adjacencies with other OSPF neighbors.
+
+
+
+Enable MD5 authentication on a per interface basis:
+
+
+
+ip ospf message-digest-key key md5 password interface configuration command.
+
+ip ospf authentication message-digest interface configuration command.
+
+
+
+The interface setting overrides the global setting. MD5 authentication passwords do not have to be the same throughout an area. However, they do need to be the same between neighbors.
+
+
+
+In this figure, R1 and R2 are configured with OSPF and routing is functioning properly. However, OSPF messages are not authenticated or encrypted.
+
+
+
+OSPF Configured Without Authentication
+
+
+
+R1R2G0/1S/0/0/0S/0/0/0G0/1
+
+
+
+R1# show run | begin router ospf
+
+router ospf 1
+
+passive-interface GigabitEthernet0/1
+
+network 10.1.1.0 0.0.0.3 area 0
+
+network 192.168.1.0 0.0.0.255 area 0
+
+!
+
+<output omitted>
+
+!
+
+R2# show run | begin router ospf
+
+router ospf 1
+
+passive-interface GigabitEthernet0/1
+
+network 10.1.1.0 0.0.0.3 area 0
+
+network 192.168.2.0 0.0.0.255 area 0
+
+!
+
+<output omitted>
+
+
+
+In the figure below, R1 and R2 are configured with OSPF MD5 authentication. Authentication is configured on a per interface basis because both routers are using only one interface to form OSPF adjacencies. Notice that when R1 is configured, OSPF adjacency is lost with R2 until R2 is configured with the matching M
+
+6.3.4
+
+
+
+OSPF SHA Routing Protocol Authentication	MD5 is now considered vulnerable to attacks and should only be used when stronger authentication is not available. Cisco IOS release 15.4(1)T added support for OSPF SHA authentication, as detailed in RFC 5709. Therefore, the administrator should use SHA authentication as long as all of the router operating systems support OSPF SHA authentication.
+
+
+
+OSPF SHA authentication includes two major steps. The syntax for the commands is shown in the figure:
+
+
+
+Step 1. Specify an authentication key chain in global configuration mode:
+
+
+
+Configure a key chain name with the key chain command.
+
+Assign the key chain a number and a password with the key and key-string commands.
+
+Specify SHA authentication with the cryptographic-algorithm command.
+
+(Optional) Specify when this key will expire with the send-lifetime command.
+
+
+
+The syntax for these commands are as follows:
+
+
+
+Router(config)# key chain name
+
+Router(config-keychain)# key key-id
+
+Router(config-keychain-key)# key-string string
+
+Router(config-keychain-key)# cryptographic-algorithm {hmac-sha-1 | hmac-sha-256 | hmac-sha-384 | hmac-sha-512 | md5}
+
+Router(config-keychain-key)# send-lifetime start-time {infinite | end-time | duration seconds}
+
+
+
+Step 2. Use the following syntax to assign the authentication key to the desired interfaces with the ip ospf authentication key-chain command.
+
+
+
+Router(config)# interface type number
+
+Router(config-if)# ip ospf authentication key-chain name
+
+
+
+In the example that follows the figure, R1 and R2 are configured with OSPF SHA authentication using a key named SHA256 and the key string ospfSHA256. Notice that when R1 is configured, OSPF adjacency is lost with R2 until R2 is configured with the matching SHA authentication.
+
+
+
+OSPF Configured with SHA Authentication
+
+
+
+R1R2G0/1S/0/0/0S/0/0/0G0/1
+
+
+
+R1(config)# key chain SHA256
+
+R1(config-keychain)# key 1 
+
+R1(config-keychain-
+
+6.3.5
+
+
+
+Syntax Checker- OSPF SHA Routing Protocol Authentication	Use this Syntax Checker to configure OSPF authentication using SHA 256.
+
+
+
+To configure OSPF with SHA authentication, you must first configure a key chain:
+
+
+
+Issue the key chain command to create a key chain named SHA256.
+
+Assign the key chain number 1
+
+Assign the key-string name of ospfSHA256.
+
+Assign hmac-sha-256 as the cryptographic-algorithm.
+
+Enter exit twice to exit key chain configuration.
+
+
+
+R1(config)#key chain SHA256
+
+R1(config-keychain)#key 1
+
+R1(config-keychain-key)#key-string ospfSHA256
+
+R1(config-keychain-key)#cryptographic-algorithm hmac-sha-256
+
+R1(config-keychain-key)#exit
+
+R1(config-keychain)#exit
+
+
+
+Enter interface configuration mode and assign the key-chain SHA256 for OSPF authentication on S0/0/0.
+
+
+
+R1(config)#interface S0/0/0
+
+R1(config-if)#ip ospf authentication key-chain SHA256
+
+R1(config-if)#
+
+*Mar 1 16:52:26.615: %OSPF-5-ADJCHG: Process 1, Nbr 10.2.2.2 on Serial0/0/0 from LOADING to FULL, Loading Done
+
+
+
+Issue the end command to exit configuration mode.
+
+
+
+R1(config-if)#end
+
+R1#
+
+
+
+You successfully configured NTP authentication on R1.
+
+6.3.6
+
+
+
+Lab - Basic Device Configuration and OSPF Authentication	In this lab, you will complete the following objectives:
+
+
+
+Part 1: Configure basic device settings.
+
+Part 2: Secure the control plane.
+
+6.3.7
+
+
+
+Packet Tracer - Configure OSPF Authentication	In this Packet Tracer activity, you will configure OSPF MD5 authentication.
+
+Secure Management and Reporting
+
+
+
+6.4.1
+
+
+
+Types of Management Access	In a small network, managing and monitoring a small number of network devices is a straightforward operation. However, in a large enterprise with hundreds of devices, monitoring, managing, and processing log messages can be challenging. From a reporting standpoint, most networking devices can send log data that can be invaluable when troubleshooting network problems or security threats. This data can be viewed in real time, on demand, and in scheduled reports.
+
+
+
+When logging and managing information, the information flow between management hosts and the managed devices can take two paths:
+
+
+
+In-band - Information flows across an enterprise production network, the internet, or both, using regular data channels.
+
+
+
+Out-of-band (OOB) - Information flows on a dedicated management network on which no production traffic resides.
+
+
+
+For example, the network in the figure has two network segments separated by a Cisco IOS router that is providing firewall services to protect the management network. The connection to the production network allows management hosts to access the internet and provides limited in-band management traffic. In-band management occurs only when OOB management is not possible or available. If in-band management is required, then that traffic should be sent securely using a private encrypted tunnel or VPN tunnel.
+
+
+
+In-Band Management
+
+
+
+Production NetworkProtected Management Network(Behind Firewall)Configuration and management traffic sent to/from devices via an Ethernet connection is in-band configuration management. Stateful Packet Filtering and encryption is required.
+
+
+
+The figure below shows more detail for the protected management network. This is where the management hosts and terminal servers reside. When placed within the management network, terminal servers offer OOB direct console connections over the manag
+
+6.4.2
+
+
+
+Out-of-Band and In-Band Access	As a general rule, for security purposes, OOB management is appropriate for large enterprise networks. However, it is not always desirable. The decision to use OOB management depends on the type of management applications running and the protocols being monitored. For example, consider a situation in which two core switches are managed and monitored using an OOB network. If a critical link between these two core switches fails on the production network, the application monitoring those devices may never determine that the link has failed and never alert the administrator. This is because the OOB network makes all devices appear to be attached to a single OOB management network. The OOB management network remains unaffected by the downed link. With management applications such as these, it is preferable to run the management application in-band in a secure fashion.
+
+
+
+OOB management guidelines are :
+
+
+
+Provide the highest level of security.
+
+Mitigate the risk of passing insecure management protocols over the production network.
+
+
+
+In-band management is recommended in smaller networks as a means of achieving a more cost-effective security deployment. In such architectures, management traffic flows in-band in all cases. It is made as secure as possible using secure management protocols, for example using SSH instead of Telnet. Another option is to create secure tunnels, using protocols such as IPsec, for management traffic. If management access is not necessary at all times, temporary holes can be placed in a firewall while management functions are performed. This technique should be used cautiously, and all holes should be closed immediately when management functions are completed.
+
+
+
+In-band management guidelines are:
+
+
+
+Apply only to devices that need to be managed or monitored.
+
+Use IPsec, SSH, or SSL when possible.
+
+Decide whethe
+
+Network Security Using Syslog
+
+
+
+6.5.1
+
+
+
+Introduction to Syslog	Like a Check Engine light on your car dashboard, the components in your network can tell you if there is something wrong. The syslog protocol was designed to ensure that you can receive and understand these messages. When certain events occur on a network, networking devices have trusted mechanisms to notify the administrator with detailed system messages. These messages can be either non-critical or significant. Network administrators have a variety of options for storing, interpreting, and displaying these messages. They can also be alerted to those messages that could have the greatest impact on the network infrastructure.
+
+
+
+The most common method of accessing system messages is to use a protocol called syslog.
+
+
+
+Syslog is a term used to describe a standard. It is also used to describe the protocol developed for that standard. The syslog protocol was developed for UNIX systems in the 1980s but was first documented as RFC 3164 by IETF in 2001.
+
+
+
+Many networking devices support syslog, including routers, switches, application servers, firewalls, and other network appliances. The syslog protocol allows networking devices to send their system messages across the network to syslog servers.
+
+
+
+Specifically, syslog uses UDP port 514 to send event notification messages across IP networks to event message collectors. For example, the figure displays a router (R1) and a switch (S1) sending system messages to a syslog server.
+
+
+
+R1S1
+
+Syslog ServerSystem MessagesSystem Messages
+
+
+
+There are several syslog server software packages for Windows and UNIX available. Many of them are freeware.
+
+
+
+The syslog logging service provides three primary functions, as follows:
+
+
+
+The ability to gather logging information for monitoring and troubleshooting
+
+The ability to select the type of logging information that is captured
+
+The ability to specify the des
+
+6.5.2
+
+
+
+Syslog Operation	On Cisco network devices, the syslog protocol starts by sending system messages and debug output to a local logging process that is internal to the device. How the logging process manages these messages and outputs is based on device configurations. For example, syslog messages may be sent across the network to an external syslog server. Messages on the syslog server can then be filtered without needing to access the actual device. Log messages and outputs stored on the external server can be pulled into various reports for easier reading.
+
+
+
+Alternatively, syslog messages may be sent to an internal buffer. Messages sent to the internal buffer are only viewable through the CLI of the device.
+
+
+
+Finally, the network administrator may specify that only certain types of system messages be sent to various destinations. For example, the device may be configured to forward all system messages to an external syslog server. However, debug-level messages are forwarded to the internal buffer and are only accessible by the administrator from the CLI.
+
+
+
+As shown in the figure, popular destinations for syslog messages include the:
+
+
+
+Logging buffer (RAM inside a router or switch)
+
+Console line
+
+Terminal line
+
+Syslog server
+
+
+
+Logging BufferConsole LineTerminal LineSyslog Server
+
+
+
+It is possible to remotely monitor system messages by viewing the logs on a syslog server, or by accessing the device through Telnet, SSH, or through the console port.
+
+6.5.3
+
+
+
+Syslog Message Format	Cisco devices produce syslog messages as a result of network events. Every syslog message contains a severity level and a facility.
+
+
+
+The smaller numerical levels are the more critical syslog alarms. The severity level of the messages can be set to control where each type of message is displayed (i.e. on the console or the other destinations). The complete list of syslog levels is shown in the table. On cards 63-70.
+
+
+
+Each syslog level has its own meaning: On cards 71-74.
+
+Emergency	Level 0 
+
+
+
+System Unusable
+
+Alert	Level 1
+
+
+
+Immediate Action Needed
+
+Critical	Level 2
+
+
+
+Critical Condition
+
+Error	Level 3
+
+
+
+Error Condition
+
+Warning	Level 4
+
+
+
+Warning Condition
+
+Notification	Level 5
+
+
+
+Normal, but Significant Condition
+
+Informational	Level 6
+
+
+
+Informational Message
+
+Debugging	Level 7
+
+
+
+Debugging Message
+
+Emergency Level 0 - Warning Level 4	These messages are error messages about software or hardware malfunctions; these types of messages mean that the functionality of the device is affected. The severity of the issue determines the actual syslog level applied.
+
+Notification Level 5	This notifications level is for normal, but significant events. For example, interface up or down transitions, and system restart messages are displayed at the notifications level.
+
+Informational Level 6	This is a normal information message that does not affect device functionality. For example, when a Cisco device is booting, you might see the following informational message: %LICENSE-6-EULA_ACCEPT_ALL: The Right to Use End User License Agreement is accepted.
+
+Debugging Level 7	This level indicates that the messages are output generated from issuing various debug commands.
+
+6.5.4
+
+
+
+Syslog Facilities	In addition to specifying the severity, syslog messages also contain information on the facility. Syslog facilities are service identifiers that identify and categorize system state data for error and event message reporting. The logging facility options that are available are specific to the networking device. For example, Cisco 2960 Series switches running Cisco IOS Release 15.0(2) and Cisco 1941 routers running Cisco IOS Release 15.2(4) support 24 facility options that are categorized into 12 facility types.
+
+
+
+Some common syslog message facility codes reported on Cisco IOS routers include: On cards 76-80.
+
+
+
+By default, the format of syslog messages on the Cisco IOS Software is as follows:
+
+
+
+%facility-severity-MNEMONIC: description
+
+
+
+For example, sample output on a Cisco switch for an EtherChannel link changing state to up is:
+
+
+
+%LINK-3-UPDOWN: Interface Port-channel1, changed state to up
+
+
+
+Here the facility is LINK and the severity level is 3, with a MNEMONIC of UPDOWN.
+
+
+
+The most common messages are link up and down messages, and messages that a device produces when it exits from configuration mode. If ACL logging is configured, the device generates syslog messages when packets match a parameter condition.
+
+IF	Identifies that the syslog message was generated by an interface.
+
+IP	Identifies that the syslog message was generated by IP.
+
+OSPF	Identifies that the syslog message was generated by the OSPF routing protocol.
+
+SYS	Identifies that the syslog message was generated by the device operating system.
+
+IPSEC	Identifies that the syslog message was generated by the IP Security encryption protocol.
+
+6.5.5
+
+
+
+Configure Syslog Timestamps	By default, log messages are not timestamped. In the example, the R1 GigabitEthernet 0/0/0 interface is shutdown. The message logged to the console does not identify when the interface state was changed. Log messages should be timestamped so that when they are sent to another destination, such as a Syslog server, there is record of when the message was generated.
+
+
+
+Use the command service timestamps log datetime to force logged events to display the date and time. As shown in the command output, when the R1 GigabitEthernet 0/0/0 interface is reactivated, the log messages now contain the date and time.
+
+
+
+R1# configure terminal 
+
+R1(config)# interface g0/0/0
+
+R1(config-if)# shutdown
+
+%LINK-5-CHANGED: Interface GigabitEthernet0/0/0, changed state to administratively down
+
+%LINEPROTO-5-UPDOWN: Line protocol on Interface GigabitEthernet0/0/0, changed state to down
+
+R1(config-if)# exit
+
+R1(config)# service timestamps log datetime
+
+R1(config)# interface g0/0/0
+
+R1(config-if)# no shutdown
+
+*Mar 1 11:52:42: %LINK-3-UPDOWN: Interface GigabitEthernet0/0/0, changed state to down
+
+*Mar 1 11:52:45: %LINK-3-UPDOWN: Interface GigabitEthernet0/0/0, changed state to up
+
+*Mar 1 11:52:46: %LINEPROTO-5-UPDOWN: Line protocol on Interface GigabitEthernet0/0/0,
+
+changed state to up
+
+R1(config-if)#
+
+
+
+Note: When using the datetime keyword, the clock on the networking device must be set, either manually or through NTP, as previously discussed.
+
+6.5.6
+
+
+
+Check Your Understanding - Syslog Operation	Refer to the following syslog output to answer the questions.
+
+
+
+*Jun 12 17:46:01.619: %IFMGR-7-NO_IFINDEX_FILE: Unable to open nvram:/ifIndex-table No such file or directory
+
+1. Refer to the syslog output. What security level generated the message?	Debugging
+
+2. Refer to the syslog output. What is the mnemonic for this syslog message?	NO__IFINDEX__FILE
+
+3. Refer to the syslog output. What is the syslog reporting facility?	IFMGR
+
+6.5.7
+
+
+
+Syslog Systems	Syslog implementations always contain two types of systems:
+
+
+
+Syslog servers - Also known as log hosts, these systems accept and process log messages from syslog clients.
+
+
+
+Syslog clients - Routers or other types of equipment that generate and forward log messages to syslog servers.
+
+
+
+The topology in the figure identifies the syslog server at IP address 10.2.2.6. The rest of the servers and devices in the topology can be configured as syslog clients, which send syslog messages to the syslog server.
+
+
+
+Syslog Reference Topology
+
+
+
+R1G0/110.2.2.1G0/210.2.3.1209.165.200.225/29 G0/0
+
+Public WebServer10.2.2.3Mail Server10.2.2.4FTP/Web Server 10.2.3.2User10.2.3.3Syslog Server(Log Host)10.2.2.6Syslog ClientDMZ LAN 10.2.2.0/24Protected LAN10.2.3.0/24
+
+6.5.8
+
+
+
+Syslog Configuration	Configure system logging:
+
+
+
+Step 1. Set the destination logging host using the logging [host] command.
+
+
+
+Step 2. (Optional) Set the log severity (trap) level using the logging trap command.
+
+
+
+Step 3. (Optional) Set the source interface using the logging source-interface command.
+
+
+
+Step 4. (Optional) Enable logging to all enabled destinations with the logging on command.
+
+
+
+Click below to learn about the steps for configuring system logging.
+
+Step 1	Identify the destination syslog server using the logging host command
+
+
+
+hostname Specifies the name of the host you want to use as a syslog server.
+
+
+
+ip-address Specifies the IP address of the host you want to use as a syslog server.
+
+
+
+Router(config)# logging host [hostname | ip-address]
+
+
+
+The figure shows the syslog reference topology.
+
+
+
+R1G0/110.2.2.1G0/210.2.3.1209.165.200.225/29 G0/0
+
+Public WebServer10.2.2.3Mail Server10.2.2.4FTP/Web Server 10.2.3.2User10.2.3.3Syslog Server(Log Host)10.2.2.6SyslogClientDMZ LAN 10.2.2.0/24Protected LAN10.2.3.0/24
+
+
+
+The figure below shows a sample syslog configuration for R1. Use the show logging command to view logging configuration and buffered syslog messages.
+
+
+
+Sample Syslog Configuration
+
+
+
+R1(config)# logging 10.2.2.6
+
+R1(config)#
+
+*Sep 25 12:57:14.120: %SYS-6-LOGGINGHOST_STARTSTOP: Logging to host 10.2.2.6 port 514 started - CLI initiated
+
+R1(config)#
+
+R1(config)# logging trap informational
+
+R1(config)# logging source-interface lo0
+
+R1(config)# logging on
+
+R1(config)# exit
+
+R1#
+
+*Sep 25 12:58:29.591: %SYS-5-CONFIG_I: Configured from console by console
+
+R1#
+
+R1# show logging
+
+Syslog logging: enabled (0 messages dropped, 2 messages rate-limited, 0 flushes, 0 overruns, xml disabled, filtering disabled)
+
+
+
+<Output omitted>
+
+
+
+Trap logging: level informational, 83 message lines logged
+
+Logging to 10.2.2.6 (udp port 514, audit disabled,
+
+link up),
+
+7 message lines logged,
+
+0 message lines rate-limited,
+
+0 message lines dropped-by-MD,
+
+xml disabled, sequence number disabled
+
+filtering disabled
+
+Logging Source-Interface: VRF Name:
+
+Loopback0
+
+
+
+<Output omitted>
+
+Step 2	(Optional) Set the log severity (trap) level using the logging trap command
+
+
+
+Note: An ISR defaults to Level 7 (debugging).
+
+
+
+Router(config)# logging trap level
+
+
+
+The figure shows the syslog reference topology.
+
+
+
+R1G0/110.2.2.1G0/210.2.3.1209.165.200.225/29 G0/0
+
+Public WebServer10.2.2.3Mail Server10.2.2.4FTP/Web Server 10.2.3.2User10.2.3.3Syslog Server(Log Host)10.2.2.6SyslogClientDMZ LAN 10.2.2.0/24Protected LAN10.2.3.0/24
+
+
+
+The figure below shows a sample syslog configuration for R1. Use the show logging command to view logging configuration and buffered syslog messages.
+
+
+
+Sample Syslog Configuration
+
+
+
+R1(config)# logging 10.2.2.6
+
+R1(config)#
+
+*Sep 25 12:57:14.120: %SYS-6-LOGGINGHOST_STARTSTOP: Logging to host 10.2.2.6 port 514 started - CLI initiated
+
+R1(config)#
+
+R1(config)# logging trap informational
+
+R1(config)# logging source-interface lo0
+
+R1(config)# logging on
+
+R1(config)# exit
+
+R1#
+
+*Sep 25 12:58:29.591: %SYS-5-CONFIG_I: Configured from console by console
+
+R1#
+
+R1# show logging
+
+Syslog logging: enabled (0 messages dropped, 2 messages rate-limited, 0 flushes, 0 overruns, xml disabled, filtering disabled)
+
+
+
+<Output omitted>
+
+
+
+Trap logging: level informational, 83 message lines logged
+
+Logging to 10.2.2.6 (udp port 514, audit disabled,
+
+link up),
+
+7 message lines logged,
+
+0 message lines rate-limited,
+
+xml disabled, sequence number disabled
+
+filtering disabled
+
+Logging Source-Interface: VRF Name:
+
+Loopback0
+
+
+
+<Output omitted>
+
+Step 3	(Optional) Set the source interface using the logging source-interface command. This command specifies that syslog packets contain the IPv4 or IPv6 address of a specific interface (e.g., a loopback interface), regardless of which interface the packet uses to exit the router.
+
+
+
+interface-type Specifies the interface type.
+
+
+
+interface-number Specifies the interface number (for example, 0/1).
+
+
+
+Router(config)# logging source-interface interface-type interface-number
+
+
+
+The figure shows the syslog reference topology.
+
+
+
+R1G0/110.2.2.1G0/210.2.3.1209.165.200.225/29 G0/0
+
+Public WebServer10.2.2.3Mail Server10.2.2.4FTP/Web Server 10.2.3.2User10.2.3.3Syslog Server(Log Host)10.2.2.6SyslogClientDMZ LAN 10.2.2.0/24Protected LAN10.2.3.0/24
+
+
+
+The figure below shows a sample syslog configuration for R1. Use the show logging command to view logging configuration and buffered syslog messages.
+
+
+
+Sample Syslog Configuration
+
+
+
+R1(config)# logging 10.2.2.6
+
+R1(config)#
+
+*Sep 25 12:57:14.120: %SYS-6-LOGGINGHOST_STARTSTOP: Logging to host 10.2.2.6 port 514 started - CLI initiated
+
+R1(config)#
+
+R1(config)# logging trap informational
+
+R1(config)# logging source-interface lo0
+
+R1(config)# logging on
+
+R1(config)# exit
+
+R1#
+
+*Sep 25 12:58:29.591: %SYS-5-CONFIG_I: Configured from console by console
+
+R1#
+
+R1# show logging
+
+Syslog logging: enabled (0 messages dropped, 2 messages rate-limited, 0 flushes, 0 overruns, xml disabled, filtering disabled)
+
+
+
+<Output omitted>
+
+
+
+Trap logging: level informational, 83 message lines logged
+
+Logging to 10.2.2.6 (udp port 514, audit disabled, link up),
+
+7 message lines logged,
+
+0 message lines rate-limited,
+
+0 message lines dropped-by-MD,
+
+xml disabled, sequence number disabled
+
+filtering disabled
+
+Logging Source-Interface: VRF Name:
+
+Loopback0
+
+
+
+<Output omitted>
+
+Step 4	(Optional) Enable logging to all enabled destinations with the logging on command.
+
+
+
+Note: Syslog logging is enabled by default.
+
+
+
+Router(config)# logging on
+
+
+
+The figure shows the syslog reference topology.
+
+
+
+R1G0/110.2.2.1G0/210.2.3.1209.165.200.225/29 G0/0
+
+Public WebServer10.2.2.3Mail Server10.2.2.4FTP/Web Server 10.2.3.2User10.2.3.3Syslog Server(Log Host)10.2.2.6SyslogClientDMZ LAN 10.2.2.0/24Protected LAN10.2.3.0/24
+
+
+
+The figure below shows a sample syslog configuration for R1. Use the show logging command to view logging configuration and buffered syslog messages.
+
+
+
+Sample Syslog Configuration
+
+
+
+R1(config)# logging 10.2.2.6
+
+R1(config)#
+
+*Sep 25 12:57:14.120: %SYS-6-LOGGINGHOST_STARTSTOP: Logging to host 10.2.2.6 port 514 started - CLI initiated
+
+R1(config)#
+
+R1(config)# logging trap informational
+
+R1(config)# logging source-interface lo0
+
+R1(config)# logging on
+
+R1(config)# exit
+
+R1#
+
+*Sep 25 12:58:29.591: %SYS-5-CONFIG_I: Configured from console by console
+
+R1#
+
+R1# show logging
+
+Syslog logging: enabled (0 messages dropped, 2 messages rate-limited, 0 flushes, 0 overruns, xml disabled, filtering disabled)
+
+
+
+<Output omitted>
+
+
+
+Trap logging: level informational, 83 message lines logged
+
+Logging to 10.2.2.6 (udp port 514, audit disabled,
+
+link up),
+
+7 message lines logged,
+
+0 message lines rate-limited,
+
+0 message lines dropped-by-MD,
+
+xml disabled, sequence number disabled 
+
+filtering disabled
+
+Logging Source-Interface: VRF Name:
+
+Loopback0
+
+
+
+<Output omitted>
+
+NTP Configuration
+
+
+
+6.6.1
+
+
+
+Time and Calendar Services	Before you get really deep into network management, the one thing that will help keep you on track is ensuring that all of your components are set to the same time and date.
+
+
+
+The software clock on a router or switch starts when the system boots. It is the primary source of time for the system. It is important to synchronize the time across all devices on the network because all aspects of managing, securing, troubleshooting, and planning networks require accurate timestamping. When the time is not synchronized between devices, it will be impossible to determine the order of the events and the cause of an event.
+
+
+
+The date and time settings on a router or switch can be manually configured, as shown in the example.
+
+
+
+R1# clock set 16:01:00 sept 25 2020
+
+*Sep 25 16:01:00.000: %SYS-6-CLOCKUPDATE: System clock has been updated from 13:09:49 UTC Fri Sep 25
+
+2020 to 16:01:00 UTC Fri Sep 25 2020, configured from console by console.
+
+Sep 25 16:01:00.001: %PKI-6-AUTHORITATIVE_CLOCK: The system clock has been set.
+
+R1#
+
+
+
+Although manually setting the time is easy, it is not practical in most networks. As a network grows, it becomes difficult if not impossible to ensure that all infrastructure devices are operating with synchronized time. Even in a smaller network environment, the manual method is not ideal. If a router reboots, how will it get an accurate date and timestamp?
+
+
+
+A better and more scalable solution is to implement Network Time Protocol (NTP) which is documented in RFC 1305. NTP enables network devices (i.e., NTP clients) to synchronize their time settings with an NTP authoritative time source such as an NTP server. The NTP time source can be a device (e.g., a router) on the network that is selected as the private primary clock or it can be a publicly available NTP server on the internet.
+
+
+
+NTP source and clients open UDP por
+
+6.6.2
+
+
+
+NTP Operation	NTP networks use a hierarchical system of time sources. Each level in this hierarchical system is called a stratum. The stratum level is defined as the number of hop counts from the authoritative source.
+
+
+
+The figure displays a sample NTP network.
+
+
+
+Stratum 0Stratum 1Stratum 3Stratum 2
+
+
+
+The sample network consists of four stratum levels who acquire their times as follows:
+
+
+
+Stratum 1 server gets its time from the stratum 0 time source.
+
+Stratum 2 server gets its time from the stratum 1 server.
+
+Stratum 3 server gets its time from the stratum 2 server.
+
+
+
+On cards 94-96.
+
+Stratum 0	This identifies a device providing the most authoritative time source. Stratum 0 devices including atomic and GPS clocks are the most accurate authoritative time sources.
+
+
+
+Specifically, NTP stratum 0 devices are non-network high-precision timekeeping devices assumed to be accurate and with little or no delay associated with them. In the figure, they are represented by the clock icon.
+
+Stratum 1	NTP stratum 1 devices are network devices that are directly connected to the authoritative time sources. They function as the primary network time standard to stratum 2 devices.
+
+Stratum 2 and Lower	NTP stratum 2 servers are connected on a network to a stratum 1 device. Stratum 2 devices are NTP clients and synchronize their time by using the NTP packets from a stratum 1 server such as a router. They in turn can be NTP servers for stratum 3 devices.
+
+
+
+NTP stratum levels are based on a scale of 0 (highest stratum level) to 15 (lowest stratum level). For example, an NTP server in a low number stratum level is closer to the authorized time source than a server in a high number stratum level.
+
+
+
+The maximum stratum hop count is 15 (i.e., 0 - 15). Note that an NTP client that is not synchronized with a server is assigned a stratum 16 level.
+
+
+
+NTP servers in the same stratum level can be configured as peers to provide redundant time sources for clients or to synchronize each other.
+
+6.6.3
+
+
+
+Configure and Verify NTP	The figure shows the topology used to demonstrate NTP configuration and verification.
+
+
+
+R1S1209.165.200.225192.168.1.0/24
+
+NTP clientsNTP Server / clientNTP Server / clientInternetNTP Server
+
+
+
+Before NTP is configured on the network, the show clock command displays the current time on the software clock, as shown in the example. With the detail option, notice that the time source is user configuration. That means the time was manually configured with the clock command.
+
+
+
+R1# show clock detail
+
+20:55:10.207 UTC Fri Nov 15 2019
+
+Time source is user configuration
+
+
+
+In our topology, and internet NTP server is the authoritative time source. However, a local network device could be selected as the NTP authoritative time source using the ntp master [stratum] global configuration command.
+
+
+
+In the topology, R1 is an NTP client of the NTP server. Use the ntp server ip-address global config command to configure 209.165.200.225 as the NTP server for R1.
+
+
+
+To verify the time source is set to NTP, use the show clock detail command. Notice that now the time source is NTP.
+
+
+
+R1(config)# ntp server 209.165.200.225
+
+R1(config)# end
+
+R1# show clock detail
+
+21:01:34.563 UTC Fri Nov 15 2019
+
+Time source is NTP
+
+
+
+In the next example, the show ntp associations and show ntp status commands are used to verify that R1 is synchronized with the NTP server at 209.165.200.225. Notice that R1 is synchronized with a stratum 1 NTP server at 209.165.200.225, which is synchronized with a GPS clock. The show ntp status command displays that R1 is now a stratum 2 device that is synchronized with the NTP server at 209.165.220.225.
+
+
+
+Note: The highlighted st stands for stratum.
+
+
+
+R1# show ntp associations
+
+address ref clock st when poll reach delay offset disp
+
+*~209.165.200.225 .GPS. 1 61 64 377 0.481 7.480 4.261
+
+* sys.peer, # selected, + candidate, - outlyer, x falseticker
+
+6.6.4
+
+
+
+Packet Tracer - Configure and Verify NTP	NTP synchronizes the time of day among a set of distributed time servers and clients. While there are a number of applications that require synchronized time, this lab will focus on the need to correlate events when listed in the system logs and other time-specific events from multiple network devices.
+
+SNMP Configuration
+
+
+
+6.7.1
+
+
+
+Introduction to SNMP	Now that your network is mapped and all of your components are using the same clock, it is time to look at how you can manage your network by using Simple Network Management Protocol (SNMP).
+
+
+
+SNMP was developed to allow administrators to manage nodes such as servers, workstations, routers, switches, and security appliances, on an IP network. It enables network administrators to monitor and manage network performance, find and solve network problems, and plan for network growth.
+
+
+
+SNMP defines how management information is exchanged between network management applications and management agents. It is an application layer protocol that provides a message format for communication between managers and agents. The SNMP system consists of three elements:
+
+
+
+SNMP manager
+
+SNMP agents (managed node)
+
+Management Information Base (MIB)
+
+
+
+To configure SNMP on a networking device, it is first necessary to define the relationship between the manager and the agent.
+
+
+
+The SNMP manager is part of a network management system (NMS). The SNMP manager runs SNMP management software.
+
+
+
+As shown in the figure, the SNMP manager can collect information from an SNMP agent by using the "get" action. It can change configurations on an agent by using the "set" action. In addition, SNMP agents can forward information directly to a network manager by using "traps".
+
+
+
+Managed NodeSNMP AgentSNMP AgentSNMP AgenttrapSNMP ManagersetgetManaged NodeManaged Node
+
+
+
+The SNMP agent and MIB reside on SNMP client devices. Network devices that must be managed, such as switches, routers, servers, firewalls, and workstations, are equipped with an SNMP agent software module. The MIB stores data and operational statistics about the device.
+
+
+
+The SNMP Manager sends a get request to SNMP agent to access stored data in the local MIB. Specifically, the SNMP manager polls the agents
+
+6.7.2
+
+
+
+SNMP Operation	SNMP agents that reside on managed devices collect and store information about the device and its operation. This information is stored by the agent locally in the MIB. The SNMP manager then uses the SNMP agent to access information within the MIB.
+
+
+
+There are two primary SNMP manager requests:
+
+
+
+get request - Used by the NMS to query the device for data.
+
+
+
+set request - Used by the NMS to change configuration variables in the agent device. A set request can also initiate actions within a device. For example, a set request can cause a router to reboot, send a configuration file, or receive a configuration file.
+
+
+
+The SNMP manager uses the get and set actions to perform the operations described in the table. On cards 101-105.
+
+
+
+The SNMP agent responds to SNMP manager requests as follows: On cards 106-107.
+
+
+
+The figure illustrates the use of an SNMP GetRequest to determine if interface G0/0/0 is up/up.
+
+
+
+The figure illustrates the use of an S N M P GetRequest to determine if interface G0/0/0 is up/up. A person at a computer desk says I want to check the MIB variable to find out if G0/0/0 is up/up. an S N M P GetRequest is sent to R 1s interface. R 1 retrieves the value of the requested MIB variable.
+
+1001 10101010 11101010101001010 01001000 0101 011011010111 00011011001 10101010001101 10001101 01101110 101010R1
+
+SNMP GETThe MIBG0/0/0I want to check the MIB variable to find out if G0/0/0 is up/up.
+
+get-request	Retrieves a value from a specific variable.
+
+get-next-request	Retrieves a value from a variable within a table; the SNMP manager does not need to know the exact variable name. A sequential search is performed to find the needed variable from within a table.
+
+get-bulk-request	Retrieves large blocks of data, such as multiple rows in a table, that would otherwise require the transmission of many small blocks of data. (Only works with SNMPv2 or later.)
+
+get-response	Replies to a get-request, get-next-request, and set-request sent by an NMS.
+
+set-request	Stores a value in a specific variable.
+
+Get an MIB variable	The SNMP agent performs this function in response to a GetRequest-PDU from the network manager. The agent retrieves the value of the requested MIB variable and responds to the network manager with that value.
+
+Set an MIB variable	The SNMP agent performs this function in response to a SetRequest-PDU from the network manager. The SNMP agent changes the value of the MIB variable to the value specified by the network manager. An SNMP agent reply to a set request includes the new settings in the device.
+
+6.7.3
+
+
+
+Management Information Base (MIB)	The MIB organizes variables hierarchically. MIB variables enable the management software to monitor and control the network device. Formally, the MIB defines each variable as an object ID (OID). OIDs uniquely identify managed objects in the MIB hierarchy. The MIB organizes the OIDs based on RFC standards into a hierarchy of OIDs, usually shown as a tree.
+
+
+
+The MIB tree for any given device includes some branches with variables common to many networking devices and some branches with variables specific to that device or vendor.
+
+
+
+RFCs define some common public variables. Most devices implement these MIB variables. In addition, networking equipment vendors, like Cisco, can define their own private branches of the tree to accommodate new variables specific to their devices.
+
+
+
+The figure shows portions of the MIB structure defined by Cisco. Note how the OID can be described in words or numbers to help locate a particular variable in the tree. OIDs belonging to Cisco, are numbered as follows: .iso (1).org (3).dod (6).internet (1).private (4).enterprises (1).cisco (9). Therefore, the OID is 1.3.6.1.4.1.9.
+
+
+
+The figure shows portions of the MIB structure defined by Cisco. At the top is .iso below is .org then dod, internet, private, enterprises and cisco. Cisco splits into two columns one has local variables at the top and interface group below it and the second column has cisco mgmt at the top and cisco flash group below it.
+
+iso (1)org (3)dod (6)internet (1)private (4)enterprises (1)cisco (9)local variables (2)interface group (2)cisco mgmt (9)cisco flash group (10)
+
+6.7.4
+
+
+
+SNMP Versions	There are several versions of SNMP: On cards 110-112.
+
+
+
+All versions use SNMP managers, agents, and MIBs. Cisco IOS software supports the above three versions. Version 1 is a legacy solution and is not often encountered in networks today. Therefore, this course focuses on versions 2c and 3.
+
+
+
+Both SNMPv1 and SNMPv2c use a community-based form of security. The community of managers that is able to access the MIB of the agent is defined by a community string.
+
+
+
+Unlike SNMPv1, SNMPv2c includes a bulk retrieval mechanism and more detailed error message reporting to management stations. The bulk retrieval mechanism retrieves tables and large quantities of information, minimizing the number of round-trips required. The SNMPv2c improved error-handling includes expanded error codes that distinguish different kinds of error conditions. These conditions are reported through a single error code in SNMPv1. Error return codes in SNMPv2c include the error type.
+
+
+
+Note: SNMPv1 and SNMPv2c offer minimal security features. Specifically, SNMPv1 and SNMPv2c can neither authenticate the source of a management message nor provide encryption. SNMPv3 is most currently described in RFCs 3410 to 3415. It adds methods to ensure the secure transmission of critical data between managed devices.
+
+
+
+SNMPv3 provides for both security models and security levels. A security model is an authentication strategy set up for a user and the group within which the user resides. A security level is the permitted level of security within a security model. A combination of the security level and the security model determine which security mechanism is used when handling an SNMP packet.
+
+
+
+There are available security models for SNMPv1, SNMPv2c, and SNMPv3. The table identifies the characteristics of the different combinations of security models and levels.
+
+
+
+Click each
+
+SNMPv1	This is the Simple Network Management Protocol, a Full Internet Standard, that is defined in RFC 1157.
+
+SNMPv2c	This is defined in RFCs 1901 to 1908. It uses a community-string-based Administrative Framework.
+
+SNMPv3	This is an interoperable standards-based protocol originally defined in RFCs 2273 to 2275. It provides secure access to devices by authenticating and encrypting packets over the network. It includes these security features: message integrity to ensure that a packet was not tampered with in transit, authentication to determine that the message is from a valid source, and encryption to prevent the contents of a message from being read by an unauthorized source.
+
+SNMPv1	Level
+
+
+
+noAuthNoPriv
+
+
+
+Authentication
+
+
+
+Community string
+
+
+
+Encryption
+
+
+
+No
+
+
+
+Result
+
+
+
+Uses a community string match for authentication.
+
+SNMPv2c	Level
+
+
+
+noAuthNoPriv
+
+
+
+Authentication
+
+
+
+Community string
+
+
+
+Encryption
+
+
+
+No
+
+
+
+Result
+
+
+
+Uses a community string match for authentication.
+
+SNMPv3 noAuthNoPriv	Level
+
+
+
+noAuthNoPriv
+
+
+
+Authentication
+
+
+
+Username
+
+
+
+Encryption
+
+
+
+No
+
+
+
+Result
+
+
+
+Uses a username match for authentication (an improvement over SNMPv2c).
+
+SNMPv3 authNoPriv	Level
+
+
+
+authNoPriv
+
+
+
+Authentication
+
+
+
+Message Digest 5 (MD5) or Secure Hash Algorithm (SHA)
+
+
+
+Encryption
+
+
+
+No
+
+
+
+Result
+
+
+
+Provides authentication based on the HMAC-MD5 or HMAC-SHA algorithms.
+
+SNMPv3 authPriv	Level
+
+
+
+authPriv (requires the cryptographic software image)
+
+
+
+Authentication
+
+
+
+MD5 or SHA
+
+
+
+Encryption
+
+
+
+Data Encryption Standard (DES) or Advanced Encryption Standard (AES)
+
+
+
+Result
+
+
+
+Provides authentication based on the HMAC-MD5 or HMAC-SHA algorithms. Allows specifying the User-based Security Model (USM) with these encryption algorithms:
+
+
+
+DES 56-bit encryption in addition to authentication based on the CBC-DES (DES-56) standard
+
+
+
+3DES 168-bit encryption
+
+
+
+AES 128-bit, 192-bit, or 256-bit encryption
+
+6.7.5
+
+
+
+SNMP Vulnerabilities	In any network topology, at least one manager node should run SNMP management software. Network devices that can be managed, such as switches, routers, servers, and workstations, are equipped with the SNMP agent software module. These agents are responsible for providing the SNMP manager access to a local MIB, which stores data about device operation.
+
+
+
+SNMP is vulnerable to attack precisely because SNMP agents can be polled with get requests and accept configuration changes with set requests, as shown in the figure. For example, a set request can cause a router to reboot, send a configuration file, or receive a configuration file. An SNMP agent can also be configured to send out traps or notifications. In SNMPv1 and SNMPv2c, these requests and notifications are not authenticated or encrypted.
+
+
+
+SNMP Operation
+
+
+
+In SNMPv1, asynchronous event reports are called "traps" while in later versions they are called notifications.The actions get and set are the vulnerabilities that open SNMP to an attack.Managed NodeSNMP AgentSNMP AgentSNMP AgentTrapSNMP ManagerSetGetManaged NodeManaged Node
+
+6.7.6
+
+
+
+SNMPv3	SNMPv3 authenticates and encrypts packets over the network to provide secure access to devices. This addressed the vulnerabilities of earlier versions of SNMP.
+
+
+
+SNMPv3 provides three security features: On cards 120-122.
+
+Message integrity and authentication	Ensures that a packet has not been tampered with in transit, and is from a valid source.
+
+Encryption	Scrambles the contents of a packet to prevent it from being seen by an unauthorized source.
+
+Access control	Restricts each principal to certain actions on specific portions of data.
+
+6.7.7
+
+
+
+SNMPv3 Security Configuration	SNMPv3 can be secured with only a few commands, as shown in the following steps.
+
+
+
+Note: A full discussion of the configuration options for SNMPv3 is beyond the scope of this course.
+
+
+
+Step 1. Configure an ACL that will permit access to authorized SNMP managers.
+
+
+
+Router(config)# ip access-list acl-name
+
+Router(config-std-nacl)# permit source_net
+
+
+
+Step 2. Configure an SNMP view with the snmp-server view command to identify the MIB OIDs that the SNMP manager will be able to read. Configuring a view is required to limit SNMP messages to read-only access.
+
+
+
+Router(config)# snmp-server view view-name oid-tree
+
+
+
+SNMPv3 can be secured with only a few commands, as shown in the figure.
+
+
+
+Step 3. Configure SNMP group features with the snmp-server group command:
+
+
+
+Configure a name for the group.
+
+Set the SNMP version to 3 with the v3 keyword.
+
+Require authentication and encryption with the priv keyword.
+
+Associate a view to the group and give it read only access with the read command.
+
+Specify the ACL configured in Step 1.
+
+
+
+Router(config)# snmp-server group group-name v3 priv read view-name access [acl-number | acl-name]
+
+
+
+Step 4. Configure SNMP group user features with the snmp-server user command:
+
+
+
+Configure a username and associate the user with the group name configured in Step 3.
+
+Set the SNMP version to 3 with the v3 keyword.
+
+Set the authentication type to either md5 or sha and configure an authentication password. SHA is preferred and should be supported by the SNMP management software.
+
+Require encryption with the priv keyword and configure an encryption password.
+
+
+
+Router(config)# snmp-server user username group-name v3 auth {md5 | sha} auth-password priv {des | 3des | aes {128 | 192 | 256}} priv-password
+
+6.7.8
+
+
+
+SNMPv3 Security Configuration Example	The figure shows an example configuration for securing SNMPv3.
+
+
+
+Step 1. A standard ACL is named PERMIT-ADMIN and is configured to permit only the 192.168.1.0/24 network. All hosts attached to this network will be allowed to access the SNMP agent running on R1.
+
+
+
+Step 2. An SNMP view is named SNMP-RO and is configured to include the entire iso tree from the MIB. On a production network, the network administrator would probably configure this view to include only the MIB OIDs that were necessary for monitoring and managing the network.
+
+
+
+Step 3. An SNMP group is configured with the name ADMIN. SNMP is set to version 3 with authentication and encryption required. The group is allowed read-only access to the view (SNMP-RO). Access for the group is limited by the PERMIT-ADMIN ACL.
+
+
+
+Step 4. An SNMP user, BOB, is configured as a member of the group ADMIN. SNMP is set to version 3. Authentication is set to use SHA, and an authentication password is configured. Although R1 supports up to AES 256 encryption, the SNMP management software only supports AES 128. So, the encryption is set to AES 128, and an encryption password is configured.
+
+
+
+192.168.1.0/24
+
+Protected Management Network
+
+
+
+R1(config)# ip access-list standard PERMIT-ADMIN
+
+R1(config-std-nacl)# permit 192.168.1.0 0.0.0.255
+
+R1(config-std-nacl)# exit
+
+R1(config)# snmp-server view SNMP-RO iso included
+
+R1(config)# snmp-server group ADMIN v3 priv read SNMP-RO access PERMIT-ADMIN
+
+R1(config)# snmp-server user BOB ADMIN v3 auth sha cisco12345 priv aes 128 cisco54321
+
+R1(config)# end
+
+R1#
+
+6.7.9
+
+
+
+Syntax Checker - SNMPv3 Security Configuration Example	Use this Syntax Checker to configure R1 with SNMPv3 authentication using an ACL.
+
+
+
+Configure a standard access list named PERMIT-ADMIN on R1 to permit only the 192.168.1.0/24 network. Exit from ACL configuration to continue.
+
+
+
+R1(config)#ip access-list standard PERMIT-ADMIN
+
+R1(config-std-nacl)#permit 192.168.1.0 0.0.0.255
+
+R1(config-std-nacl)#exit
+
+
+
+Using the snmp-server view command, configure an SNMP view named SNMP-RO to include the entire ISO tree from the MIB.
+
+
+
+R1(config)#snmp-server view SNMP-RO iso included
+
+
+
+Using the snmp-server group command, configure an SNMP group with the name ADMIN. Set SNMP to version 3 with authentication and encryption required. Allow read-only access to the view SNMP-RO, and limit access using the PERMIT-ADMIN ACL.
+
+
+
+R1(config)#snmp-server group ADMIN v3 priv read SNMP-RO access PERMIT-ADMIN
+
+
+
+Using the snmp-server user command, add an snmp user named BOB as a member of the ADMIN group. Set SNMP to version 3 and set authentication to use SHA with a password of cisco12345. Set the encryption to AES 128 with a password of cisco54321. After configuration is complete, use the end command to exit configuration mode.
+
+
+
+R1(config)#snmp-server user BOB ADMIN v3 auth sha cisco12345 priv aes 128 cisco54321
+
+R1(config)#end
+
+R1#
+
+
+
+You successfully configured SNMPv3 authentication using an ACL on R1.
+
+6.7.10
+
+
+
+SNMPv3 Verification	Verify most of the SNMPv3 security configuration by viewing the running configuration, as shown in in the figure. Notice that the snmp-server user configuration is hidden. Use the show snmp user command to view the user information.
+
+
+
+The figure shows a computer connected to a router with the words Protected Management Network 192.168.1.0 / 24
+
+192.168.1.0/24
+
+Protected Management Network
+
+
+
+R1# show run | include snmp
+
+snmp-server group ADMIN v3 priv read SNMP-RO access PERMIT-ADMIN
+
+snmp-server view SNMP-RO iso included
+
+R1# show snmp user
+
+
+
+User name: BOB
+
+Engine ID: 80000009030030F70DA30DA0
+
+storage-type: nonvolatile active
+
+Authentication Protocol: SHA
+
+Privacy Protocol: AES128
+
+Group-name: ADMIN
+
+
+
+R1#
+
+
+
+Verify that the SNMP manager can send get requests to R1 by using an SNMP management tool, such as the ManageEngine's free SNMP MIB Browser. Configure the tool with the user details, as shown in the figure. When a user is configured, use the SNMP management tool's features to test that the configured user can access the SNMP agent.
+
+
+
+Configure SNMP Manager Access to SNMP Agent
+
+
+
+In the figure below, the network administrator entered the OID for the IP addressing table. The get request returned all the addressing information for R1. The network administrator authenticated with the appropriate credentials.
+
+
+
+Configure SNMP Manager Get Request Example
+
+
+
+Verify that the data was encrypted by running a protocol analyzer, such as Wireshark, and capture the SNMP packets.
+
+
+
+Do an internet search to see Keith Barker's demonstration of configuring and verifying SNMPv3.
+
+
+
+Wireshark Capture of Encrypted SNMPv3 Packets
+
+6.7.11
+
+
+
+Lab - Configure Cisco IOS Resilience Management and Reporting	In this lab, you will complete the following objectives:
+
+
+
+Part 1: Configure basic device settings.
+
+Part 2: Configure SNMPv3 security using an ACL.
+
+Part 3: Configure a router as a synchronized time source for other devices using NTP.
+
+Part 4: Configure syslog support on a router.
+
+6.7.12
+
+
+
+Packet Tracer - Configure Cisco Devices for Syslog, NTP, and SSH Operations	In this Packet Tracer activity, you will complete the following objectives:
+
+
+
+Configure Syslog Service
+
+Generate Logged EventsPart
+
+Manually Set Switch ClocksPart
+
+Configure NTP ServicePart
+
+Verify Timestamped Logs
+
+6.8.1
+
+
+
+What Did I Learn in this Module?	Secure Cisco IOS Image and Configuration Files
+
+
+
+The Cisco IOS resilient configuration feature allows for faster recovery if someone maliciously or unintentionally reformats flash memory or erases the startup configuration file in nonvolatile random-access memory (NVRAM). The feature maintains a secure working copy of the router IOS image file and a copy of the running configuration file. These secure files cannot be removed by the user and are referred to as the primary bootset. The feature is only available on older routers that support a PCMCIA Advanced Technology Attachment (ATA) flash interface. Newer routers such as the ISR 4000 do not support this feature. To secure the IOS image and enable Cisco IOS image resilience, use the secure boot-image global configuration mode command. When enabled for the first time, the running Cisco IOS image is secured and a log entry is generated. To take a snapshot of the router running configuration and securely archive it in persistent storage, use the secure boot-config global configuration mode command. The router can be configured to boot the secure image from ROMmon mode. The configuration file can be copied from the secure location with secure boot-config restore command. The Secure Copy Protocol (SCP) feature provides a secure and authenticated method for copying router configuration or router image files to a remote location. SCP relies on SSH for secure communication and AAA for authentication and authorization. If a router has been compromised and the passwords changed to unknown values, a password recovery procedure exists for booting the router without its configuration so passwords can be changed to known values. This procedure may differ between different device models. Physical access to the router and ROMmon mode are required. It is possible to disable access to th
+
+6.8.2
+
+
+
+Module 6 - Device Monitoring and Management Quiz	
+
+1. What service or protocol does the Secure Copy Protocol rely on to ensure that secure copy transfers are from authorized users?	AAA
+
+2. When password recovery on a router is being performed and the settings in NVRAM have been bypassed, which step should be taken next?	Copy the contents of NVRAM to the RAM.
+
+3. Which protocol or service is used to automatically synchronize the software clocks on Cisco routers?	NTP
+
+4. A network engineer wants to synchronize the time of a router with an NTP server at the IPv4 address 209.165.200.225. The exit interface of the router is configured with an IPv4 address of 192.168.212.11. Which global configuration command should be used to configure the NTP server as the time source for this router?	ntp server 209.165.200.225
+
+5. What are three functions provided by the syslog service? (Choose three.)	to specify the destinations of captured messages
+
+
+
+to select the type of logging information that is captured
+
+
+
+to gather logging information for monitoring and troubleshooting
+
+6. Which service should be disabled on a router to prevent a malicious host from falsely responding to ARP requests with the intent to redirect the Ethernet frames?	proxy ARP
+
+7. What is the purpose of issuing the ip ospf message-digest-key key md5 password command and the area area-id authentication message-digest command on a router?	to configure OSPF MD5 authentication globally on the router
+
+8. Which service is enabled on a Cisco router by default that can reveal significant information about the router and potentially make it more vulnerable to attack?	CDP
+
+9. Which statement describes SNMP operation?	A set request is used by the NMS to change configuration variables in the agent device.
+
+10. When SNMPv1 or SNMPv2 is being used, which feature provides secure access to MIB objects?	community strings
+
+11. What are two reasons to enable OSPF routing protocol authentication on a network? (Choose two.)	to prevent redirection of data traffic to an insecure link
+
+
+
+to prevent data traffic from being redirected and then discarded
+
+12. What are SNMP trap messages?	unsolicited messages that are sent by the SNMP agent and alert the NMS to a condition on the network
+
+13. Which technology allows syslog messages to be filtered to different devices based on event importance?​	syslog severity levels
+
+14. What is a characteristic of the Cisco IOS Resilient Configuration feature?​	A snapshot of the router running configuration can be taken and securely archived in persistent storage.

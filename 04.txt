@@ -1,0 +1,1452 @@
+
+Secure the Edge Router
+
+
+
+4.1.1
+
+
+
+Secure the Network Infrastructure	Securing the network infrastructure is critical to overall network security. The network infrastructure includes routers, switches, servers, endpoints, and other devices.
+
+
+
+Consider a disgruntled employee casually looking over the shoulder of a network administrator while the administrator is logging into an edge router. It is a surprisingly easy way for an attacker to gain unauthorized access.
+
+
+
+If an attacker gains access to a router, the security and management of the entire network can be compromised. For example, an attacker can erase the startup configuration and is make the router reload in five minutes. When the router reboots, it will not have a startup configuration.
+
+
+
+To prevent unauthorized access to all infrastructure devices, appropriate security policies and controls must be implemented. Routers are a primary target for attacks because these devices act as traffic police, which direct traffic into, out of, and between networks.
+
+
+
+The edge router shown in the figure is the last router between the internal network and an untrusted network, such as the internet. All of an organization's internet traffic goes through an edge router, which often functions as the first and last line of defense for a network. The edge router helps to secure the perimeter of a protected network and implements security actions that are based on the security policies of the organization. For these reasons, securing network routers is imperative.
+
+
+
+The Edge Router
+
+
+
+InternetOrganizationuntrustededge routertrusted
+
+4.1.2
+
+
+
+Edge Router Security Approaches	The edge router implementation varies depending on the size of the organization and the complexity of the required network design. Router implementations can include a single router protecting an entire inside network or a router functioning as the first line of defense in a defense-in-depth approach. Simplified topologies for the three approaches are shown in the figure.
+
+
+
+R1R1R2R1R2
+
+InternetLAN 1192.168.2.0InternetLAN 1192.168.2.0FirewallInternetLAN 1192.168.2.0DMZFirewallSingle Router ApproachDefense-in-Depth ApproachDMZ Approach
+
+
+
+Single Router Approach
+
+
+
+In the figure, a single router connects the protected network or internal local area network (LAN), to the internet. All security policies are configured on this device. This is more commonly deployed in smaller site implementations, such as branch and small office, home office (SOHO) sites. In smaller networks, the required security features can be supported by Integrated Services Routers (ISRs) without impeding the router's performance capabilities.
+
+
+
+Defense-in-Depth Approach
+
+
+
+A defense-in-depth approach is more secure than the single router approach. It uses multiple layers of security prior to traffic entering the protected LAN. There are three primary layers of defense: the edge router, the firewall, and an internal router that connects to the protected LAN. The edge router acts as the first line of defense and is known as a screening router. After performing initial traffic filtering, the edge router passes all connections that are intended for the internal LAN to the second line of defense, which is the firewall.
+
+
+
+The firewall typically picks up where the edge router leaves off and performs additional filtering. It provides additional access control by tracking the state of the connections and acts as a checkpoint device. By default, the firewall denies the in
+
+4.1.3
+
+
+
+Three Areas of Router Security	Securing the edge router is a critical first step in securing the network. If there are other internal routers, they also must be securely configured. Three areas of router security must be maintained.
+
+
+
+Physical Security
+
+
+
+Provide physical security for the routers:
+
+
+
+Place the router and physical devices that connect to it in a secure locked room that is accessible only to authorized personnel, is free of electrostatic or magnetic interference, has fire suppression, and has temperature and humidity controls.
+
+
+
+Install an uninterruptible power supply (UPS) or diesel backup power generator. Use redundant power supplies in network devices if possible. This reduces the possibility of a network
+
+outage from power loss or failed power equipment.
+
+
+
+Operating System Security
+
+
+
+There are a few procedures involved in securing the features and performance of router operating systems:
+
+
+
+Equip routers with the maximum amount of memory possible. The availability of memory can help mitigate risks to the network from some denial of service (DoS) attacks while supporting the widest range of security services.
+
+
+
+Use the latest, stable version of the operating system that meets the feature specifications of the router or network device. Security and encryption features in an operating system are improved and updated over time, which makes it critical to have the most up-to-date version.
+
+
+
+Keep a secure copy of router operating system images and router configuration files as backups.
+
+
+
+Router Hardening
+
+
+
+Eliminate potential abuse of unused ports and services:
+
+
+
+Secure administrative control. Ensure that only authorized personnel have access and that their level of access is controlled.
+
+
+
+Disable unused ports and interfaces. Reduce the number of ways a device can be accessed.
+
+
+
+Disable unnecessary services. Similar to many computers, a router has servic
+
+4.1.4
+
+
+
+Secure Administrative Access	Securing administrative access is an extremely important security task. If an unauthorized person gains administrative access to a router, that person could alter routing parameters, disable routing functions, or discover and gain access to other systems within the network.
+
+
+
+Several important tasks are involved in securing administrative access to an infrastructure device:
+
+
+
+Restrict device accessibility - Limit the accessible ports, restrict the permitted communicators, and restrict the permitted methods of access.
+
+
+
+Log and account for all access - Record anyone who accesses a device, what happened during the access, and when the access occurred for auditing purposes.
+
+
+
+Authenticate access - Ensure that access is granted only to authenticated users, groups, and services. Limit the number of failed login attempts and the time allowed between logins.
+
+
+
+Authorize actions - Restrict the actions and views permitted by any particular user, group, or service.
+
+
+
+Present legal notification - Display a legal notice, which should be developed with company legal counsel, for different types of access to the device.
+
+
+
+Ensure the confidentiality of data - Protect locally stored and sensitive data from being viewed and copied. Consider the vulnerability of data in transit over a communication channel to sniffing, session hijacking, and man-in-the-middle (MITM) attacks.
+
+Restrict device accessibility	Limit the accessible ports, restrict the permitted communicators, and restrict the permitted methods of access.
+
+Log and account for all access	Record anyone who accesses a device, what happened during the access, and when the access occurred for auditing purposes.
+
+Authenticate access	Ensure that access is granted only to authenticated users, groups, and services. Limit the number of failed login attempts and the time allowed between logins.
+
+Authorize actions	Restrict the actions and views permitted by any particular user, group, or service.
+
+Present legal notification	Display a legal notice, which should be developed with company legal counsel, for different types of access to the device.
+
+Ensure the confidentiality of data	Protect locally stored and sensitive data from being viewed and copied. Consider the vulnerability of data in transit over a communication channel to sniffing, session hijacking, and man-in-the-middle (MITM) attacks.
+
+4.1.5
+
+
+
+Secure Local and Remote Access	A router can be accessed for administrative purposes locally or remotely:
+
+
+
+Local access - All network infrastructure devices can be accessed locally. Local access to a router usually requires a direct connection to a console port on the Cisco router, and using a computer that is running terminal emulation software, as shown in the figure. The administrator must have physical access to the router and use a console cable to connect to the console port. Local access is typically used for initial configuration of the device.
+
+
+
+Remote access - Administrators can also access infrastructure devices remotely, as shown in the figure. Although the aux port option is available, the most common remote access method involves allowing Telnet, SSH, HTTP, HTTPS, or SNMP connections to the router from a computer. The computer can be on the local network or a remote network. However, if network connectivity to the device is down, the only way to access it might be over telephone lines.
+
+
+
+Administrative Access Methods
+
+
+
+RouterconauxvtySerial ConnectionPC with Terminal Emulation SoftwareLocal AccessSSH ConnectionPC with Terminal Emulation SoftwareRoutervtyauxRemote Access Using SSHSerial ConnectionRouterModemPSTNauxvtyRemote Access Using Modem and Aux Port
+
+
+
+Some remote access protocols send data, including usernames and passwords, to the router in plaintext. If an attacker can collect network traffic while an administrator is remotely logging in to a router, the attacker can capture passwords or router configuration information. For this reason, it is preferable to allow only local access to the router. However, in some situations, remote access might still be necessary. Precautions should be taken when accessing the network remotely:
+
+
+
+Encrypt all traffic between the administrator computer and the router. For example, instead of using Telnet
+
+Configure Secure Administrative Access
+
+
+
+4.2.1
+
+
+
+Passwords	To protect network devices, it is important to use strong passwords. Here are standard guidelines to follow:
+
+
+
+Use a password length of at least eight characters, preferably 10 or more characters. A longer password is a more secure password.
+
+
+
+Make passwords complex. Include a mix of uppercase and lowercase letters, numbers, symbols, and spaces, if allowed.
+
+
+
+Avoid passwords based on repetition, common dictionary words, letter or number sequences, usernames, relative or pet names, biographical information, such as birthdates, ID numbers, ancestor names, or other easily identifiable pieces of information.
+
+
+
+Deliberately misspell a password. For example, Smith = Smyth = 5mYth or Security = 5ecur1ty.
+
+
+
+Change passwords often. If a password is unknowingly compromised, the window of opportunity for the threat actor to use the password is limited.
+
+
+
+Do not write passwords down and leave them in obvious places such as on the desk or monitor.
+
+
+
+The tables show examples of strong and weak passwords.
+
+
+
+Weak Password
+
+
+
+secret
+
+
+
+smith
+
+
+
+toyota
+
+
+
+bob1967
+
+
+
+Blueleaf23
+
+
+
+
+
+Strong Password
+
+
+
+b67n42d39c
+
+
+
+12^h u4@1p7
+
+
+
+
+
+Why it is Weak
+
+
+
+Simple dictionary password
+
+
+
+Maiden name of mother
+
+
+
+Make of a car
+
+
+
+Name and birthday of the user
+
+
+
+Simple words and numbers
+
+
+
+
+
+Why it is Strong
+
+
+
+Combines alphanumeric characters
+
+
+
+Combines alphanumeric characters, symbols, and includes a space
+
+
+
+On Cisco routers, leading spaces are ignored for passwords, but spaces after the first character are not. Therefore, one method to create a strong password is to use the space bar and create a phrase made of many words. This is called a passphrase. A passphrase is often easier to remember than a simple password. It is also longer and harder to guess.
+
+
+
+Password Managers
+
+
+
+Use a password manager to secure passwords for your online internet activity. Considered to be the best practice to s
+
+4.2.2
+
+
+
+Configure Passwords	When you initially connect to a device, you are in user EXEC mode. This mode is secured using the console.
+
+
+
+To secure user EXEC mode access, enter line console configuration mode using the line console 0 global configuration command, as shown in the example. The zero is used to represent the first (and in most cases the only) console interface. Next, specify the user EXEC mode password using the password password command. Finally, enable user EXEC access using the login command.
+
+
+
+Sw-Floor-1# configure terminal 
+
+Sw-Floor-1(config)# line console 0 
+
+Sw-Floor-1(config-line)# password cisco 
+
+Sw-Floor-1(config-line)# login 
+
+Sw-Floor-1(config-line)# end 
+
+Sw-Floor-1#
+
+
+
+Console access will now require a password before allowing access to the user EXEC mode.
+
+
+
+To have administrator access to all IOS commands including configuring a device, you must gain privileged EXEC mode access. It is the most important access method because it provides complete access to the device.
+
+
+
+To secure privileged EXEC access, use the enable secret password global config command, as shown in the example.
+
+
+
+Sw-Floor-1# configure terminal 
+
+Sw-Floor-1(config)# enable secret class 
+
+Sw-Floor-1(config)# exit 
+
+Sw-Floor-1#
+
+
+
+Virtual terminal (VTY) lines enable remote access using Telnet or SSH to the device. Many Cisco switches support up to 16 VTY lines that are numbered 0 to 15. Most routers support four VTY lines that are number 0 to 4. In this example, we are configuring an access layer switch.
+
+
+
+To secure VTY lines, enter line VTY mode using the line vty 0 15 global config command. Next, specify the VTY password using the password password command. Last, enable VTY access using the login command.
+
+
+
+An example of securing the VTY lines on a switch is shown.
+
+
+
+Sw-Floor-1# configure terminal 
+
+Sw-Floor-1(config)# line vty 0 15 
+
+Sw-Floor-1(config-line)# password cis
+
+4.2.3
+
+
+
+Encrypt Passwords	Strong passwords are only useful if they are secret. There are several steps that can be taken to help ensure that passwords remain secret on a Cisco router and switch including these:
+
+
+
+Encrypting all plaintext passwords
+
+
+
+Setting a minimum acceptable password length
+
+
+
+Deterring brute-force password guessing attacks
+
+
+
+Disabling an inactive privileged EXEC mode access after a specified amount of time.
+
+
+
+The startup-config and running-config files display most passwords in plaintext. This is a security threat because anyone can discover the passwords if they have access to these files.
+
+
+
+To encrypt all plaintext passwords, use the service password-encryption global config command as shown in the example.
+
+
+
+Sw-Floor-1# configure terminal 
+
+Sw-Floor-1(config)# service password-encryption 
+
+Sw-Floor-1(config)#
+
+
+
+The command applies weak encryption to all unencrypted passwords. This encryption applies only to passwords in the configuration file, not to passwords as they are sent over the network. The purpose of this command is to keep unauthorized individuals from viewing passwords in the configuration file.
+
+
+
+Use the show running-config command to verify that passwords are now encrypted.
+
+
+
+Sw-Floor-1(config)# end
+
+Sw-Floor-1# show running-config
+
+!
+
+(Output omitted)
+
+!
+
+line con 0
+
+password 7 094F471A1A0A
+
+login
+
+!
+
+line vty 0 4
+
+password 7 094F471A1A0A
+
+login
+
+line vty 5 15
+
+password 7 094F471A1A0A
+
+login
+
+!
+
+!
+
+end
+
+4.2.4
+
+
+
+Additional Password Security	As shown in the sample configuration, the service password-encryption global configuration command prevents unauthorized individuals from viewing plaintext passwords in the configuration file. This command encrypts all plaintext passwords. Notice in the example, that the password "cisco" has been encrypted as "094F471A1A0A".
+
+
+
+To ensure that all configured passwords are a minimum of a specified length, use the security passwords min-length length command in global configuration mode.
+
+
+
+Threat actors may use password cracking software to conduct a brute-force attack on a network device. This attack continuously attempts to guess the valid passwords until one works. Use the login block-for seconds attempts number within seconds global configuration command to deter this type of attack.
+
+
+
+Network administrators can become distracted and accidently leave a privileged EXEC mode session open on a terminal. This could enable an internal threat actor access to change or erase the device configuration. By default, Cisco routers will logout an EXEC session after 10 minutes of inactivity. However, you can reduce this setting using the exec-timeout minutes seconds line configuration command. This command can be applied online console, auxiliary, and vty lines.
+
+
+
+For example, the following commands configure:
+
+
+
+All plaintext passwords are encrypted.
+
+
+
+New configured passwords must be eight characters or more.
+
+
+
+If there are more than three failed VTY login attempts within 60 seconds, then lockout the VTY lines for 120 seconds.
+
+
+
+Set the router to automatically disconnect an inactive user on a VTY line if the line has been idle for 5 minutes and 30 seconds.
+
+
+
+R1(config)# service password-encryption
+
+R1(config)# security passwords min-length 8
+
+R1(config)# login block-for 120 attempts 3 within 60
+
+R1(config)# line vty 0 4
+
+R1(config-line)# passwo
+
+4.2.5
+
+
+
+Secret Password Algorithms	MD5 hashes are no longer considered secure because attackers can reconstruct valid certificates. This can allow attackers to spoof any website. The enable secret password command shown in the figure uses an MD5 hash by default. Therefore, it is now recommended that you configure all secret passwords using either type 8 or type 9 passwords. Type 8 and type 9 were introduced in Cisco IOS 15.3(3)M. Type 8 and type 9 use SHA encryption. Because type 9 is slightly stronger than type 8, it will be used throughout this course whenever it is allowed by the Cisco IOS.
+
+
+
+R1(config)# enable secret cisco12345
+
+R1(config)# do show run | include enable
+
+enable secret 5 $1$cam7$99EfzkvmJ5h1gEbryLVRy.
+
+R1(config)# enable secret ?
+
+0 Specifies an UNENCRYPTED password will follow
+
+5 Specifies a MD5 HASHED secret will follow
+
+8 Specifies a PBKDF2 HASHED secret will follow
+
+9 Specifies a SCRYPT HASHED secret will follow
+
+LINE The UNENCRYPTED (cleartext) 'enable' secret
+
+level Set exec level password
+
+
+
+R1(config)# line con 0
+
+R1(config-line)# password ?
+
+0 Specifies an UNENCRYPTED password will follow
+
+7 Specifies a HIDDEN password will follow
+
+LINE The UNENCRYPTED (cleartext) line password
+
+R1(config-line)#
+
+
+
+The figure shows that configuring type 9 encryption is not as easy as it may appear. You cannot simply enter enable secret 9 and the unencrypted password. To use this form of the command, you must paste in the encrypted password, which can be copied from another router configuration.
+
+
+
+R1(config)# enable secret 9 cisco12345
+
+ERROR: The secret you entered is not a valid encrypted secret.
+
+To enter an UNENCRYPTED secret, do not specify type 9 encryption.
+
+When you properly enter an UNENCRYPTED secret, it will be encrypted.
+
+
+
+R1(config)# enable secret 9
+
+$9$HZWdzLHwhPtZ3U$D9OlUDSGvBy.m8Tf9vCGDJRcYy8zIMbyRJgtxgRkwzY
+
+R1(config)#
+
+
+
+To enter an unencrypted passwor
+
+md5	Type 5; selects the message digest algorithm 5 (MD5) as the hashing algorithm.
+
+scrypt	Type 9; selects scrypt as the hashing algorithm.
+
+sha256	Type 8; selects Password-Based Key Derivation Function 2 (PBKDF2) with Secure Hash Algorithm, 256-bits (SHA-256) as the hashing algorithm.
+
+4.2.6
+
+
+
+Syntax Checker - Secure Administrative Access on R2	In this Syntax Checker activity, you will configure secure administrative access on R2.
+
+
+
+Encrypt all passwords
+
+
+
+R2(config)#service password-encryption
+
+
+
+Set the minimum password length to 10 characters.
+
+
+
+R2(config)#security passwords min-length 10
+
+
+
+Create the user account JR-ADMIN with a secret password of cisco12345 using the SCRYPT hashing algorithm.
+
+
+
+R2(config)#username JR-ADMIN algorithm-type scrypt secret cisco12345
+
+
+
+Create the user account ADMIN with a secret password of cisco54321 using the SCRYPT hashing algorithm.
+
+
+
+R2(config)#username ADMIN algorithm-type scrypt secret cisco54321
+
+
+
+Configure the console line using the following instructions:
+
+
+
+Set the executive timeout to 3 minutes on the console line.
+
+Set the console line to use the local database for authentication.
+
+After configuration, exit line configuration mode.
+
+
+
+R2(config)#line console 0
+
+R2(config-line)#exec-timeout 3 0
+
+R2(config-line)#login local
+
+R2(config-line)#exit
+
+
+
+Configure the vty lines using the following instructions:
+
+
+
+Set the executive timeout to 3 minutes on the VTY lines.
+
+Set the VTY lines to use the local database for authentication.
+
+
+
+R2(config)#line vty 0 4
+
+R2(config-line)#exec-timeout 3 0
+
+R2(config-line)#login local
+
+
+
+Return to privileged EXEC mode. Display the running-config and filter it to include only the lines with username to verify the user account configurations.
+
+
+
+R2(config-line)#end
+
+*Mar 3 08:25:09.868: %SYS-5-CONFIG_I: Configured from console by console
+
+R2#show running-config | include username
+
+username JR-ADMIN secret 9 $9$IznnuC6.5I0YmE$e8kvyaOBRuem54LJIhdAom8pQw3xGkGPeoEbNYU9BnY
+
+username ADMIN secret 9 $9$.9hhYsuBDAaF3.$k5fhqvneSfOa.0ms89TjQX1ant9W3l09zLJjAHAERaU
+
+R2#
+
+
+
+You successfully secured administrative access on R2.
+
+Configure Enhanced Security for Virtual Logins
+
+
+
+4.3.1
+
+
+
+Enhance the Login Process	Assigning passwords and local authentication does not prevent a device from being targeted for attack. The Cisco IOS login enhancements provide more security by slowing down attacks, such as dictionary attacks and DoS attacks. Enabling a detection profile allows you to configure a network device to react to repeated failed login attempts by refusing further connection requests (or login blocking). This block can be configured for a period of time, which is called a quiet period. Access control lists (ACLs) can be used to permit legitimate connections from addresses of known system administrators.
+
+
+
+Banners are disabled by default and must be explicitly enabled. Use the banner global configuration mode command to specify appropriate messages.
+
+
+
+Router(config)# banner { motd | exec | login } delimiter message delimiter
+
+
+
+Banners protect the organization from a legal perspective. Choosing the appropriate wording to place in banner messages is important and should be reviewed by legal counsel before being placed on network routers. Never use the word welcome or any other familiar greeting that may be misconstrued as an invitation to use the network. The following is an example of an appropriate banner.
+
+
+
+This equipment is privately owned and access is logged. Disconnect immediately if you are not an authorized user. Violators will be prosecuted to the fullest extent of the law. User Access Verification:
+
+
+
+Username:
+
+4.3.2
+
+
+
+Configure Login Enhancement Features	The Cisco IOS login enhancements commands, which are shown below, increase the security of virtual login connections.
+
+
+
+Router(config)# login block-for seconds attempts tries within seconds
+
+Router(config)# login quiet-mode access-class {acl-name | acl-number}
+
+Router(config)# login delay seconds
+
+Router(config)# login on-success log [every login]
+
+Router(config)# login on-failure log [every login]
+
+
+
+The figure shows an example configuration. The login block-for command can defend against DoS attacks by disabling logins after a specified number of failed login attempts. The login quiet-mode command maps to an ACL that identifies the permitted hosts. This ensures that only authorized hosts can attempt to login to the router. The login delay command specifies a number of seconds the user must wait between unsuccessful login attempts. The login on-success and login on-failure commands log successful and unsuccessful login attempts.
+
+
+
+These login enhancements do not apply to console connections. When dealing with console connections, it is assumed that only authorized personnel have physical access to the devices.
+
+
+
+Note: These login enhancements can only be enabled if the local database is used for authentication for local and remote access. If the lines are configured for password authentication only, then the enhanced login features are not enabled.
+
+
+
+R1(config)# login block-for 15 attempts 5 within 60
+
+R1(config)# ip access-list standard PERMIT-ADMIN
+
+R1(config-std-nacl)# remark Permit only Administrative hosts
+
+R1(config-std-nacl)# permit 192.168.10.10
+
+R1(config-std-nacl)# permit 192.168.11.10
+
+R1(config-std-nacl)# exit
+
+R1(config)# login quiet-mode access-class PERMIT-ADMIN
+
+R1(config)# login delay 10
+
+R1(config)# login on-success log
+
+R1(config)# login on-failure log
+
+R1(config)#
+
+Login block-for command	The login block-for command can defend against DoS attacks by disabling logins after a specified number of failed login attempts.
+
+Login quiet-mode command	The login quiet-mode command maps to an ACL that identifies the permitted hosts. This ensures that only authorized hosts can attempt to login to the router.
+
+Login delay command	The login delay command specifies a number of seconds the user must wait between unsuccessful login attempts.
+
+Login on-success and login on-failure commands	The login on-success and login on-failure commands log successful and unsuccessful login attempts.
+
+4.3.3
+
+
+
+Enable Login Enhancements	To help a Cisco IOS device provide DoS detection, use the login block-for command. All other login enhancement features are disabled until the login block-for command is configured.
+
+
+
+Specifically, the login block-for command monitors login device activity and operates in two modes:
+
+
+
+Normal mode - This is also known as watch mode. The router keeps count of the number of failed login attempts within an identified amount of time.
+
+
+
+Quiet mode - This is also known as the quiet period. If the number of failed logins exceeds the configured threshold, all login attempts using Telnet, SSH, and HTTP are denied for the time specified in the login block-for command.
+
+
+
+When quiet mode is enabled, all login attempts, including valid administrative access, are not permitted. However, to provide critical hosts, such as specific administrative hosts access at all times, this behavior can be overridden using an ACL. The ACL is created and identified using the login quiet-mode access-class command. Only the hosts identified in the ACL have access to the device during quiet mode.
+
+
+
+The example in the figure shows a configuration that uses an ACL that is named PERMIT-ADMIN. Hosts that match the PERMIT-ADMIN conditions are exempt from quiet mode.
+
+
+
+R1(config)# ip access-list standard PERMIT-ADMIN
+
+R1(config-std-nacl)# remark Permit only Administrative hosts
+
+R1(config-std-nacl)# permit 192.168.10.10
+
+R1(config-std-nacl)# permit 192.168.11.10
+
+R1(config-std-nacl)# exit
+
+R1(config)# login quiet-mode access-class PERMIT-ADMIN
+
+
+
+When implementing the login block-for command, a one-second delay between login attempts is automatically invoked. To make it more difficult for an attacker, the delay time between login attempts can be increased using the login delay seconds command, as shown in the figure. The command introduces a uniform delay between success
+
+Normal mode	This is also known as watch mode. The router keeps count of the number of failed login attempts within an identified amount of time.
+
+Quiet mode	This is also known as the quiet period. If the number of failed logins exceeds the configured threshold, all login attempts using Telnet, SSH, and HTTP are denied for the time specified in the login block-for command.
+
+4.3.4
+
+
+
+Log Failed Attempts	There are three commands that can be configured to help an administrator detect a password attack, as shown in the figure. Each command enables a device to generate syslog messages for failed or successful login attempts.
+
+
+
+The first two commands, login on-success log and login on-failure log, generate syslog messages for successful and unsuccessful login attempts. The number of login attempts before a logging message is generated can be specified using the [every login] syntax, where the default login value is 1 attempt. The valid range is from 1 to 65,535.
+
+
+
+Router(config)# login on-success log [every login]
+
+Router(config)# login on-failure log [every login]
+
+
+
+As an alternative to the login on-failure log command, the security authentication failure rate command can be configured to generate a log message when the login failure rate is exceeded.
+
+
+
+Router(config)# security authentication failure rate threshold-rate log
+
+
+
+Use the show login command to verify the login block-for command settings and current mode. In the figure, R1 was configured to block login hosts for 120 seconds if more than five login requests fail within 60 seconds. R1 also confirms that the current mode is normal and that there have been four login failures within the last 55 seconds because there are five seconds left in normal mode.
+
+
+
+R1# show login
+
+A login delay for 10 sec is applied.
+
+Quiet-Mode access list PERMIT-ADMIN is applied.
+
+
+
+Router enabled to watch for login Attacks.
+
+If more than 5 login failures occur in 60 sec or less,
+
+login will be disabled for 120 secs.
+
+
+
+Router presently in Normal-Mode.
+
+Current Watch Window
+
+Time remaining: 5 seconds.
+
+Login failures for current window: 4.
+
+Total login failures:4.
+
+
+
+The following two figures display examples of what occurs when the failed attempt threshold is exceeded.
+
+
+
+Failed Login Attempts
+
+
+
+Exceeding the Fa
+
+Show login failures command	The show login failures command displays additional information regarding the failed attempts, such as the IP address from which the failed login attempts originated.
+
+4.3.5
+
+
+
+Syntax Checker - Configure Enhanced Login Security on R2	Use the Syntax Checker to configure enhanced login security on R2.
+
+
+
+On R2, create a named standard access list called:
+
+
+
+Permit the host at IP address 192.168.10.10.
+
+Use the name PERMIT-ADMIN.
+
+After configuration, return to global configuration mode.
+
+
+
+R2(config)#ip access-list standard PERMIT-ADMIN
+
+R2(config-std-nacl)#permit 192.168.10.10
+
+R2(config-std-nacl)#exit
+
+
+
+Enhance the login process using the following instructions:
+
+
+
+Disable login for 15 seconds if more than 5 failed logins are attempted within 60 seconds.
+
+
+
+The host specified in the PERMIT-ADMIN ACL should never be denied login access.
+
+
+
+Specify a login delay of 10 seconds between failed login attempts.
+
+
+
+Generate Syslog messages for successful login attempts.
+
+
+
+Generate Syslog messages for failed login attempts.
+
+
+
+After configuration, exit global configuration mode.
+
+
+
+R2(config)#login block-for 15 attempts 5 within 60
+
+R2(config)#login quiet-mode access-class PERMIT-ADMIN
+
+R2(config)#login delay 10
+
+R2(config)#login on-success log
+
+R2(config)#login on-failure log
+
+R2(config)#exit
+
+R2#
+
+*Nov 30 16:14:32.495: %SYS-5-CONFIG_I: Configured from console by console
+
+
+
+Display the login settings.
+
+
+
+R2#show login
+
+A login delay of 10 seconds is applied.
+
+Quiet-Mode access list PERMIT-ADMIN is applied.
+
+All successful login is logged.
+
+All failed login is logged.
+
+
+
+Router enabled to watch for login Attacks.
+
+If more than 5 login failures occur in 60 seconds or less,
+
+logins will be disabled for 15 seconds.
+
+
+
+Router presently in Normal-Mode.
+
+Current Watch Window
+
+Time remaining: 15 seconds.
+
+Login failures for current window: 0.
+
+Total login failures: 0.
+
+
+
+R2#
+
+
+
+You successfully secured enhanced login security on R2.
+
+4.3.6
+
+
+
+Video - Configure Passwords and Enhanced Login Security	
+
+Configure SSH
+
+
+
+4.4.1
+
+
+
+Video - The Need for SSH	
+
+4.4.2
+
+
+
+Enable SSH	Telnet simplifies remote device access, but it is not secure. Data contained within a Telnet packet is transmitted unencrypted. For this reason, it is highly recommended to enable Secure Shell (SSH) on devices for secure remote access.
+
+
+
+It is possible to configure a Cisco device to support SSH using the following six steps:
+
+
+
+Step 1. Configure a unique device hostname. A device must have a unique hostname other than the default.
+
+
+
+Step 2. Configure the IP domain name. Configure the IP domain name of the network by using the global configuration mode command ip domain name name. In the example, router R1 is configured in the span.com domain. This information is used along with the bit value specified in the crypto key generate rsa general-keys modulus command to create an encryption key
+
+
+
+Step 3. Generate a key to encrypt SSH traffic. SSH encrypts traffic between source and destination. However, to do so, a unique authentication key must be generated by using the global configuration command crypto key generate rsa general-keys modulus bits. The modulus bits determines the size of the key and can be configured from 360 bits to 2048 bits. The larger the bit value, the more secure the key. However, larger bit values also take longer to encrypt and decrypt information. The minimum recommended modulus length is 1024 bits.
+
+
+
+Step 4. Verify or create a local database entry. Create a local database username entry using the username global configuration command. In the example, the parameter secret is used so that the password will be encrypted using MD5.
+
+
+
+Step 5. Authenticate against the local database. Use the login local line configuration command to authenticate the vty line against the local database.
+
+
+
+Step 6. Enable vty inbound SSH sessions. By default, no input session is allowed on vty lines. You can specify multiple input
+
+Show crypto key mypubkey rsa command	To verify SSH and display the generated keys in privileged EXEC mode.
+
+Crypto key zeroize rsa command	If there are existing key pairs, it is recommended that they are overwritten.
+
+4.4.3
+
+
+
+Enhance SSH Login Security	To verify the optional SSH command settings, use the show ip ssh command, as shown in the figure. You can also modify the default SSH timeout interval and the number of authentication tries. Use the ip ssh time-out seconds global configuration mode command to modify the default 120-second timeout interval. This configures the number of seconds that SSH can use to authenticate a user. After it is authenticated, an EXEC session starts and the standard exec-timeout configured for the vty applies.
+
+
+
+By default, a user logging in has three attempts to enter the correct password before being disconnected. To configure a different number of consecutive SSH retries, use the ip ssh authentication-retries integer global configuration mode command.
+
+
+
+R1# show ip ssh
+
+SSH Enabled - version 2.0
+
+Authentication methods:publickey,keyboard-interactive,password
+
+Authentication timeout: 120 secs; Authentication retries: 3
+
+(output omitted)
+
+
+
+R1# conf t
+
+Enter configuration commands, one per line. End with CNTL/Z.
+
+R1(config)# ip ssh time-out 60
+
+R1(config)# ip ssh authentication-retries 2
+
+R1(config)# ^Z
+
+R1#
+
+*Feb 16 21:23:51.237: %SYS-5-CONFIG_I: Configured from console by console
+
+R1# show ip ssh
+
+SSH Enabled - version 2.0
+
+Authentication methods:publickey,keyboard-interactive,password
+
+Authentication timeout: 60 secs; Authentication retries: 2
+
+(output omitted)
+
+show ip ssh command	To verify the optional SSH command settings and you can also modify the default SSH timeout interval and the number of authentication tries.
+
+ip ssh time-out seconds global configuration mode command	This command modifies the default 120-second timeout interval. This configures the number of seconds that SSH can use to authenticate a user. After it is authenticated, an EXEC session starts and the standard exec-timeout configured for the vty applies.
+
+ip ssh authentication-retries integer global configuration mode command	Use this command to configure a different number of consecutive SSH retries
+
+4.4.4
+
+
+
+Syntax Checker - Enable SSH on R2	Use the Syntax Checker to enable SSH on R2.
+
+
+
+Configure the following:
+
+
+
+Assign the domain name span.com.
+
+
+
+Generate the general RSA keys using the crypto key generate rsa general-keys modulus 1024 command.
+
+
+
+R2(config)#ip domain-name span.com
+
+R2(config)#crypto key generate rsa general-keys modulus 1024
+
+The name for the keys will be: R2.span.com
+
+
+
+% The key modulus size is 1024 bits
+
+% Generating 1024 bit RSA keys, keys will be non-exportable...
+
+[OK] (elapsed time was 1 seconds)
+
+
+
+*Feb 27 16:41:37.363: %SSH-5-ENABLED: SSH 1.99 has been enabled
+
+
+
+Create a local database entry for a user named Bob using algorithm-type SCRYPT hashing with a secret password of cisco54321.
+
+
+
+R2(config)#username Bob algorithm-type scrypt secret cisco54321
+
+
+
+Configure the vty lines 0-4 to use:
+
+
+
+The local database for login authentication.
+
+
+
+Enable SSH on the vty lines using the transport input ssh command.
+
+
+
+Exit from vty line configuration.
+
+
+
+R2(config)#line vty 0 4
+
+R2(config-line)#login local
+
+R2(config-line)#transport input ssh
+
+R2(config-line)#exit
+
+
+
+Configure SSH:
+
+
+
+Enable SSH version 2.
+
+
+
+Set the number of authentication retries to 2.
+
+
+
+Set the SSH timeout period of 1 minute.
+
+
+
+Issue the end command to exit configuration mode.
+
+
+
+R2(config)#ip ssh version 2
+
+R2(config)#ip ssh authentication-retries 2
+
+R2(config)#ip ssh time-out 60
+
+R2(config)#end
+
+
+
+Verify the SSH configuration using the show ip ssh command.
+
+
+
+R2#show ip ssh
+
+SH Enabled - version 2.0
+
+Authentication methods:publickey,keyboard-interactive,password
+
+Authentication timeout: 60 secs; Authentication retries: 2
+
+Minimum expected Diffie Hellman key size : 1024 bits
+
+IOS Keys in SECSH format(ssh-rsa, base64 encoded):
+
+ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAAAgQDNJV02ayJzPD/Ys/HKpy78XVR+QlnBaHaABMEOKGlj
+
+oC4DQf8Z2XRJTzORPrYUfk1FFFVku+ejsy0G+3LoCAUgSdfpg1X4c8DbJhvA1PwPgxPVPklS5yWS+URk
+
+ur4ijJl/cPksQpXQ8i26ye5SlLslV+3I+3
+
+4.4.5
+
+
+
+Connect a Router to an SSH-Enabled Router	To verify the status of the client connections, use the show ssh command. There are two different ways to connect to an SSH-enabled router.
+
+
+
+By default, when SSH is enabled, a Cisco router can act as an SSH server or SSH client. As a server, a router can accept SSH client connections. As a client, a router can connect via SSH to another SSH-enabled router shown in the following three steps.
+
+
+
+Router-to-Router SSH
+
+
+
+R1R2G0/1S/0/0/0G0/1S/0/0/0192.168.2.101
+
+
+
+In the following examples, the administrator on R1 uses the show ssh command to check for current SSH connections. Then another administrator logs into R1 from R2. The administrator on R1 checks again for current SSH connections.
+
+
+
+R1# show ssh
+
+%No SSHv2 server connections running.
+
+%No SSHv1 server connections running.
+
+R1#
+
+
+
+R2# ssh -l Bob 192.168.2.101
+
+
+
+Password:
+
+
+
+R1>
+
+
+
+R1# show ssh
+
+Connection Version Mode Encryption Hmac State Username
+
+0 2.0 IN aes128-cbc hmac-sha1 Session started Bob
+
+0 2.0 OUT aes128-cbc hmac-sha1 Session started Bob
+
+%No SSHv1 server connections running.
+
+R1#
+
+4.4.6
+
+
+
+Connect a Host to an SSH-Enabled Router	Connect using an SSH client running on a host as shown in the following four figures. Examples of these clients include PuTTY, OpenSSH, and TeraTerm.
+
+
+
+The procedure for connecting to a Cisco router varies depending on the SSH client application being used. Generally, the SSH client initiates an SSH connection to the router. The router SSH service prompts for the correct username and password combination. After the login is verified, the router can be managed as if the administrator was using a standard Telnet session.
+
+
+
+Host-to-Router SSH
+
+4.4.7
+
+
+
+Lab - Configure Secure Administrative Access	In this lab, you will complete the following objectives:
+
+
+
+Part 1: Configure Basic Device Settings
+
+
+
+Part 2: Configure and Encrypt Passwords on Routers R1 and R3
+
+
+
+Part 3: Configure Enhanced Username Password Security on Routers R1 and R3
+
+
+
+Part 4: Configure the SSH Server on Routers R1 and R3
+
+4.4.8
+
+
+
+Packet Tracer - Configure Secure Passwords and SSH	The network administrator has asked you to prepare RTA and SW1 for deployment. Before they can be connected to the network, security measures must be enabled.
+
+4.4.9
+
+
+
+Lab - Configure Network Devices with SSH	In this lab, you will complete the following objectives:
+
+
+
+Part 1: Configure Basic Device Settings
+
+
+
+Part 2: Configure the Router for SSH Access
+
+
+
+Part 3: Configure the Switch for SSH Access
+
+
+
+Part 4: SSH from the CLI on the Switch
+
+Secure Device Access Summary
+
+
+
+4.5.1
+
+
+
+What Did I Learn in this Module?	Secure the Edge Router
+
+
+
+Routers are a primary target for attacks because these devices act as traffic police, which direct traffic into, out of, and between networks. The edge router is the last router between the internal network and an untrusted network, such as the internet. Securing the router is imperative. The three approaches to this are the single router approach, defense-in-depth approach, and the DMZ approach. In the single router approach, all security is configured on this router. This is common for smaller sites such as SOHO sites. A defense-in-depth approach is more secure than the single router approach. It uses multiple layers of security prior to traffic entering the protected LAN. There are three primary layers of defense: the edge router, the firewall, and an internal router that connects to the protected LAN. Other security tools, such as intrusion prevention systems (IPSs), web security appliances (proxy servers), and email security appliances (spam filtering) can also be implemented. The DMZ approach includes an intermediate area, often called the demilitarized zone (DMZ). The DMZ can be set up between two routers, with an internal router connecting to the protected network and an external router connecting to the unprotected network. Alternatively, the DMZ can simply be an additional port off of a single router. The firewall serves as the primary protection for all devices in the DMZ. The three areas of router security that must be maintained are physical security, operating system security, and router hardening. Securing administrative access to prevent an unauthorized person from gaining access to an infrastructure device includes restricting device accessibility, logging and accounting for all access, authenticating access, authorizing actions, presenting legal notification, and ensuring the c
+
+4.5.2
+
+
+
+Module 4 - Secure Device Access Quiz	
+
+1. At what point in the enterprise network are packets arriving from the internet examined prior to entering the network?	Network edge
+
+2. What three configuration steps must be performed to implement SSH access to a router? (Choose three.)	A unique hostname
+
+
+
+A user account
+
+
+
+An IP domain name
+
+3. What is one difference between using Telnet or SSH to connect to a network device for management purposes?	Telnet sends a username and password in plain text, whereas SSH encrypts the username and password.
+
+4. Which three areas of router security must be maintained to secure an edge router at the network perimeter? (Choose three.)	Physical security 
+
+
+
+Router hardening 
+
+
+
+Operating system security
+
+5. What is a good password recommendation for a Cisco router?	Use one or more spaces within a multiword phrase.
+
+6. What is the purpose of using a banner message on a Cisco network device?	It can protect the organization from a legal perspective.
+
+7. A network administrator establishes a connection to a switch via SSH. What characteristic uniquely describes the SSH connection?	Remote access to a switch where data is encrypted during the session.
+
+8. What command will prevent all unencrypted passwords from displaying in plain text in a configuration file?	(config)# service password-encryption
+
+9. A network administrator is issuing the login block-for 180 attempts 2 within 30 command on a router. Which threat is the network administrator trying to prevent?	A user who is trying to guess a password to access the router.
+
+10. Which recommended security practice prevents attackers from performing password recovery on a Cisco IOS router for the purpose of gaining access to the privileged EXEC mode?	Locate the router in a secure locked room that is accessible only to authorized personnel.
+
+11. A company is planning to use a DMZ for their servers and is concerned about securing the network infrastructure. Which device should the network security team use for the edge router?	Firewall
+
+12. Which type of access is secured on a Cisco router or switch with the enable secret command?	Privileged EXEC
+
+13. What is a common security task performed when securing administrative access to a network infrastructure device?	Log and account for all access.

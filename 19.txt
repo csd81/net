@@ -1,0 +1,1430 @@
+
+Configure a Site-to-Site IPsec VPN
+
+
+
+19.1.1
+
+
+
+IPsec Negotiation	In order for an IPsec VPN tunnel to become operational, IPsec negotiation must first occur. The IPsec negotiation process to establish a VPN involves five steps, which include IKE Phase 1 and Phase 2.
+
+
+
+Click below to see learn about the 5 steps.
+
+Step 1	An Internet Security Association Key Management Protocol (ISAKMP) tunnel is initiated when host A sends "interesting" traffic to host B. Traffic is considered interesting when it travels between the peers and meets the criteria that are defined in an ACL.
+
+
+
+The figure shows Step 1 of the IPsec VPN Negotiation: Host A sends interesting traffic to Host B.
+
+10.0.1.3192.168.1.3R1R2R1R2
+
+Host AHost B
+
+Host A sends interesting traffic to Host B
+
+Step 2	IKE Phase 1 begins. The peers negotiate the ISAKMP SA policy. When the peers agree on the policy and are authenticated, a secure tunnel is created.
+
+
+
+The figure shows Step 2: R1 and R2 negotiate an IKE Phase 1 session.
+
+10.0.1.3192.168.1.3R1R2R1R2
+
+Host AHost BISAKMP SAISAKMP SAIKE Phase 1
+
+R1 and R2 negotiate an IKE Phase 1 session.
+
+Step 3	IKE Phase 2 begins. The IPsec peers use the authenticated secure tunnel to negotiate the IPsec SA policy. The negotiation of the shared policy determines how the IPsec tunnel is established.
+
+
+
+The figure shows Step 3: R1 and R2 negotiate an IKE Phase 2 session.
+
+10.0.1.3192.168.1.3R1R2R1R2
+
+Host AHost BIPsec SAIPsec SAIKE Phase 2
+
+R1 and R2 negotiate an IKE Phase 2 session.
+
+Step 4	The IPsec tunnel is created, and data is transferred between the IPsec peers based on the IPsec SAs.
+
+
+
+The figure shows Step 4: Information is exchanged via IPsec tunnel.
+
+10.0.1.3192.168.1.3R1R2R1R2
+
+Host AHost BIPsec Tunnel
+
+Information is exchanged through IPsec tunnel.
+
+Step 5	The IPsec tunnel terminates when the IPsec SAs are manually deleted, or when their lifetime expires.
+
+
+
+The figure shows Step 5: IPsec tunnel is terminated.
+
+10.0.1.3192.168.1.3R1R2R1R2
+
+Host AHost B
+
+
+
+IPsec tunnel is terminated.
+
+19.1.2
+
+
+
+Site-to-Site IPsec VPN Topology	Implementing a site-to-site VPN requires configuring settings for both IKE Phase 1 and Phase 2. In the phase 1 configuration, the two sites are configured with the necessary ISAKMP security associations to ensure that an ISAKMP tunnel can be created. In the phase 2 configuration, the two sites are configured with the IPsec security associations to ensure that an IPsec tunnel is created within the ISAKMP tunnel. Both tunnels will be created only when interesting traffic is detected.
+
+
+
+The topology in the figure for XYZCORP will be used in this section to demonstrate a site-to-site IPsec VPN implementation. Both routers are configured with IP addressing and static routing. An extended ping on R1 verifies that routing between the LANs is operational.
+
+
+
+R1R210.0.1.0/24192.168.1.0/2410.0.1.3192.168.1.3S0/0/0172.30.2.1S0/0/0172.30.2.2
+
+XYZCORPSite 1Site 2Internet
+
+
+
+The interface and default routing configurations for R1 and R2 are shown in the example.
+
+
+
+R1# show run
+
+<output omitted>
+
+!
+
+interface GigabitEthernet0/0
+
+ip address 10.0.1.1 255.255.255.0
+
+!
+
+interface Serial0/0/0
+
+ip address 172.30.2.1 255.255.255.0
+
+!
+
+ip route 192.168.1.0 255.255.255.0 Serial0/0/0
+
+!=========================================
+
+
+
+R2# show run
+
+
+
+<output omitted>
+
+!
+
+interface GigabitEthernet0/0
+
+ip address 192.168.1.1 255.255.255.0
+
+!
+
+interface Serial0/0/0
+
+ip address 172.30.2.2 255.255.255.0
+
+!
+
+ip route 10.0.1.0 255.255.255.0 Serial0/0/0
+
+!
+
+
+
+An extended ping on R1 verifies that routing between the LANs is operational, as shown in the example output.
+
+
+
+R1# ping 192.168.1.1 source 10.0.1.1
+
+Type escape sequence to abort.
+
+Sending 5, 100-byte ICMP Echos to 192.168.1.1, timeout is 2 seconds:
+
+Packet sent with a source address of 10.0.1.1
+
+!!!!!
+
+Success rate is 100 percent (5/5), round-trip min/avg/max = 1/2/4 ms
+
+R1#
+
+19.1.3
+
+
+
+IPsec VPN Configuration Tasks	Security Policy Requirements
+
+
+
+All XYZCORP VPNs should be implemented using the following security policy:
+
+
+
+Encrypt traffic with AES 256 and SHA.
+
+Authenticate with PSK.
+
+Exchange keys with DH group 14.
+
+ISAKMP tunnel lifetime is 1 hour.
+
+IPsec tunnel uses ESP with a 15-minute lifetime.
+
+
+
+Configuration Tasks:
+
+
+
+The configuration tasks required to meet this policy are:
+
+
+
+Task 1: Configure the ISAKMP Policy for IKE Phase 1
+
+Task 2: Configure the IPsec Policy for IPsec Phase 2
+
+Task 3: Configure a Crypto Map for the IPsec Policy
+
+Task 4: Apply the IPsec Policy
+
+Task 5: Verify that the IPsec Tunnel is Operational
+
+19.1.4
+
+
+
+Existing ACL Configurations	Although XYZCORP does not have an existing ACL configuration, this would not be the case in a production network. Perimeter routers typically implement a restrictive security policy, blocking all traffic except for traffic specifically allowed. Prior to implementing a site-to-site IPsec VPN, ensure that the existing ACLs do not block traffic necessary for IPsec negotiations. The ACL command syntax to permit ISAKMP, ESP, and AH traffic is shown here.
+
+
+
+Router(config)# ip access-list extended name
+
+Router(config-ext-nacl)# permit udp source wildcard destination wildcard eq isakmp
+
+Router(config-ext-nacl)# permit esp source wildcard destination wildcard
+
+Router(config-ext-nacl)# permit ahp source wildcard destination wildcard
+
+
+
+The example below demonstrates an ACL configuration that allows the traffic necessary for IPsec negotiations. R2 would have a similar configuration.
+
+
+
+R1(config)# ip access-list extended INBOUND
+
+R1(config-ext-nacl)# permit ip 192.168.1.0 0.0.0.255 10.0.1.0 0.0.0.255
+
+R1(config-ext-nacl)# permit icmp host 172.30.2.2 host 172.30.2.1
+
+R1(config-ext-nacl)# permit udp host 172.30.2.2 host 172.30.2.1 eq isakmp
+
+R1(config-ext-nacl)# permit esp host 172.30.2.2 host 172.30.2.1
+
+R1(config-ext-nacl)# permit ahp host 172.30.2.2 host 172.30.2.1
+
+R1(config-ext-nacl)# deny ip any any
+
+R1(config-ext-nacl)# exit
+
+R1(config)# interface serial0/0/0
+
+R1(config-if)# ip access-group INBOUND in
+
+19.1.5
+
+
+
+Handling Broadcast and Multicast Traffic	The XYZCORP topology uses static routing, so there is no multicast or broadcast traffic that needs to be routed through the tunnel. But what if XYZCORP decided to implement EIGRP or OSPF? These routing protocols use multicast addresses to exchange routing information with neighbors. IPsec only supports unicast traffic. To enable routing protocol traffic, the peers in a site-to-site IPsec VPN implementation would need to be configured with a Generic Routing Encapsulation (GRE) tunnel for the multicast traffic.
+
+
+
+GRE supports multiprotocol tunneling, as shown in the figure. It can encapsulate multiple OSI Layer 3 protocol packet types inside an IP tunnel. Adding an additional GRE header between the payload and the tunneling IP header provides the multiprotocol functionality. GRE also supports IP multicast tunneling. Routing protocols that are used across the tunnel enable dynamic exchange of routing information in the virtual network. GRE does not provide encryption. GRE configuration is beyond the scope of this course.
+
+
+
+Generic Routing Encapsulation
+
+
+
+GRE Tunnel(Carrier Protocol)IP Network(Transport Protocol)Original IP Packet(Passenger Protocol)IPGREIPTCPData
+
+19.1.6
+
+
+
+Check Your Understanding - Identify the IPsec Negotiation Steps	Check your understanding of the IPsec negotiation steps by ordering the steps using the drop down menus.
+
+Step Number
+
+
+
+2	IKE Phase 1 begins. The peers negotiate the ISAKMP SA policy. A secure tunnel is created when the peers agree on the policy and are authenticated.
+
+Step Number
+
+
+
+5	The IPsec tunnel terminates when the IPsec SAs are manually deleted, or when their lifetime expires.
+
+Step Number
+
+
+
+1	An ISAKMP tunnel is initiated when host A sends "interesting" traffic to host B.
+
+Step Number
+
+
+
+4	The IPsec tunnel is created and data is transferred between the IPsec peers based on the IPsec SAs.
+
+Step Number 
+
+
+
+3	IKE Phase 2 begins. The IPsec peers use the authenticated secure tunnel to negotiate the IPsec SA policy. The negotiation of the shared policy determines how the IPsec tunnel is established.
+
+ISAKMP Policy
+
+
+
+19.2.1
+
+
+
+The Default ISAKMP Policies	The first task is to configure the ISAKMP policy for IKE Phase 1. The ISAKMP policy lists the SAs that the router is willing to use to establish the IKE Phase 1 tunnel. The Cisco IOS comes with default ISAKMP policies already in place. To view the default policies, enter the show crypto isakmp default policy command, as shown in the example after the figure.
+
+
+
+R1R210.0.1.0/24192.168.1.0/2410.0.1.3192.168.1.3S0/0/0172.30.2.1S0/0/0172.30.2.2
+
+XYZCORPSite 1Site 2Internet
+
+
+
+R1# show crypto isakmp default policy
+
+
+
+Default IKE policy
+
+Default protection suite of priority 65507
+
+encryption algorithm: AES - Advanced Encryption Standard (128 bit keys).
+
+hash algorithm: Secure Hash Standard
+
+authentication method: Rivest-Shamir-Adleman Signature
+
+Diffie-Hellman group: #5 (1536 bit)
+
+lifetime: 86400 seconds, no volume limit
+
+Default protection suite of priority 65508
+
+encryption algorithm: AES - Advanced Encryption Standard (128 bit keys).
+
+hash algorithm: Secure Hash Standard
+
+authentication method: Pre-Shared Key
+
+Diffie-Hellman group: #5 (1536 bit)
+
+lifetime: 86400 seconds, no volume limit
+
+Default protection suite of priority 65509
+
+encryption algorithm: AES - Advanced Encryption Standard (128 bit keys).
+
+hash algorithm: Message Digest 5
+
+authentication method: Rivest-Shamir-Adleman Signature
+
+Diffie-Hellman group: #5 (1536 bit)
+
+lifetime: 86400 seconds, no volume limit
+
+Default protection suite of priority 65510
+
+encryption algorithm: AES - Advanced Encryption Standard (128 bit keys).
+
+hash algorithm: Message Digest 5
+
+authentication method: Pre-Shared Key
+
+Diffie-Hellman group: #5 (1536 bit)
+
+lifetime: 86400 seconds, no volume limit
+
+Default protection suite of priority 65511
+
+encryption algorithm: Three key triple DES
+
+hash algorithm: Secure Hash Standard
+
+authentication method: Rivest-Shamir-Adleman Signature
+
+Diffie-Hellman group: #2 (1024 bit)
+
+lifetime
+
+19.2.2
+
+
+
+Syntax to Configure a New ISAKMP Policy	To configure a new ISAKMP policy, use the crypto isakmp policy command, as shown in the figure. The only argument for the command is to set a priority for the policy (from 1 to 10000). Peers will attempt to negotiate using the policy with the lowest number (highest priority). Peers do not require matching priority numbers.
+
+
+
+When in ISAKMP policy configuration mode, the SAs for the IKE Phase 1 tunnel can be configured. Use the mnemonic HAGLE to remember the five SAs to configure:
+
+
+
+Hash
+
+Authentication
+
+Group
+
+Lifetime
+
+Encryption
+
+
+
+R1(config)# crypto isakmp policy ?
+
+<1-1000> Priority of protection suite
+
+
+
+R1(config)# crypto isakmp policy 1
+
+R1(config-isakmp)# ?
+
+
+
+ISAKMP commands:
+
+
+
+authentication Set authentication method for protection suite
+
+
+
+default Set a command to its defaults
+
+
+
+encryption Set encryption algorithm for protection suite
+
+
+
+exit Exit from ISAKMP protection suite configuration mode
+
+
+
+group Set the Diffie-Hellman group
+
+
+
+hash Set hash algorithm for protection suite
+
+
+
+lifetime Set lifetime for ISAKMP security association
+
+
+
+no Negate a command or set its defaults]]>
+
+19.2.3
+
+
+
+ISAKMP Policy Configuration	To meet the security policy requirements for XYZCORP, configure the ISAKMP policy with the following SAs:
+
+
+
+Hash is SHA
+
+Authentication is pre-shared key
+
+Group is 14
+
+Lifetime is 3600 seconds
+
+Encryption is AES
+
+
+
+The example shows the ISAKMP policy configuration. Use the show crypto isakmp policy command to verify the configuration. R2 has an equivalent configuration.
+
+
+
+R1(config)# crypto isakmp policy 1
+
+R1(config-isakmp)# encryption aes 256
+
+R1(config-isakmp)# hash sha
+
+R1(config-isakmp)# authentication pre-share
+
+R1(config-isakmp)# group 24
+
+R1(config-isakmp)# lifetime 3600
+
+R1(config-isakmp)# end
+
+R1# show crypto isakmp policy
+
+
+
+Global IKE policy
+
+Protection suite of priority 1
+
+encryption algorithm: AES - Advanced Encryption Standard (256 bit keys).
+
+hash algorithm: Secure Hash Standard
+
+authentication method: Pre-Shared Key
+
+Diffie-Hellman group: #24 (2048 bit, 256 bit subgroup)
+
+lifetime: 3600 seconds, no volume limit
+
+R1#
+
+19.2.4
+
+
+
+Pre-Shared Key Configuration	The XYZCORP security policy requires that a pre-shared key be used for authentication between the peers. The administrator can either specify a host name or an IP address for the peer. The command syntax is shown below.
+
+
+
+Router(config)# crypto isakmp key keystring address peer-address
+
+Router(config)# crypto isakmp key keystring hostname peer-hostname
+
+
+
+XYZCORP uses the key phrase cisco12345 and the IP address of the peer as shown in the examples after the figure.
+
+
+
+R1R210.0.1.0/24192.168.1.0/2410.0.1.3192.168.1.3S0/0/0172.30.2.1S0/0/0172.30.2.2
+
+XYZCORPSite 1Site 2Internet
+
+
+
+R1# conf t
+
+R1(config)# crypto isakmp key cisco12345 address 172.30.2.2
+
+R1(config)#
+
+
+
+R2# conf t
+
+R2(config)# crypto isakmp key cisco12345 address 172.30.2.1
+
+R2(config)#
+
+19.2.5
+
+
+
+Syntax Checker - Configuring a Pre-Shared Key	Use this Syntax Checker to configure the ISAKMP policy for R2.
+
+
+
+Configure the ISAKMP policy with priority 1 using the following SA parameters:
+
+
+
+Hash is SHA
+
+Authentication is pre-shared
+
+Diffie-Hellman Group is 24
+
+Lifetime is 3600 seconds
+
+Encryption is AES with a 256 bit key
+
+
+
+R2(config)#crypto isakmp policy 1
+
+R2(config-isakmp)#hash sha
+
+R2(config-isakmp)#authentication pre-share
+
+R2(config-isakmp)#group 24
+
+R2(config-isakmp)#lifetime 3600
+
+R2(config-isakmp)#encryption aes 256
+
+
+
+Configure the pre-shared ISAKMP key using cisco12345 for the key and 172.30.2.1 as the IP address of the peer.
+
+
+
+R2(config-isakmp)#crypto isakmp key cisco12345 address 172.30.2.1
+
+
+
+Use the do command within config mode to display the ISAKMP policy.
+
+
+
+R2(config-isakmp)#do show crypto isakmp policy
+
+
+
+Global IKE policy
+
+Protection suite of priority 1
+
+encryption algorithm: AES - Advanced Encryption Standard (256 bit keys).
+
+hash algorithm: Secure Hash Standard
+
+authentication method: Pre-Shared Key
+
+Diffie-Hellman group: #24 (2048 bit, 256 bit subgroup)
+
+lifetime: 3600 seconds, no volume limit
+
+
+
+R2(config-isakmp)#
+
+
+
+You have successfully configured the ISAKMP policy.
+
+IPsec Policy
+
+
+
+19.3.1
+
+
+
+Define Interesting Traffic	Although the ISAKMP policy for the IKE Phase 1 tunnel is configured, the tunnel does not yet exist. This is verified with the show crypto isakmp sa command in the figure below. Interesting traffic must be detected before IKE Phase 1 negotiations can begin. For the XYXCORP site-to-site VPN, interesting traffic is any permitted communications between the Site 1 and Site 2 LANs.
+
+
+
+R1R210.0.1.0/24192.168.1.0/2410.0.1.3192.168.1.3S0/0/0172.30.2.1S0/0/0172.30.2.2
+
+XYZCORPSite 1Site 2Internet
+
+
+
+R1# show crypto isakmp sa
+
+IPv4 Crypto ISAKMP SA
+
+dst src state conn-id status
+
+
+
+IPv6 Crypto ISAKMP SA
+
+
+
+R1#
+
+
+
+To define interesting traffic, configure each router with an ACL to permit traffic from the local LAN to the remote LAN, as shown in the following examples for R1 and R2. The ACL will be used in the crypto map configuration to specify what traffic will trigger the start of IKE Phase 1.
+
+
+
+R1# conf t
+
+R1(config)# access-list 101 permit ip 10.0.1.0 0.0.0.255 192.168.1.0 0.0.0.255
+
+R1(config)#
+
+
+
+R2# conf t
+
+R2(config)# access-list 102 permit ip 192.168.1.0 0.0.0.255 10.0.1.0 0.0.0.255
+
+R2(config)#
+
+19.3.2
+
+
+
+Configure IPsec Transform Set	The next step is to configure the set of encryption and hashing algorithms that will be used to transform the data sent through the IPsec tunnel. This is called the transform set. During IKE Phase 2 negotiations, the peers agree on the IPsec transform set to be used for protecting interesting traffic.
+
+
+
+Configure a transform set using the crypto ipsec transform-set command, as shown here. First, specify a name for the transform set (R1-R2, in the example).
+
+
+
+R1(config)# crypto ipsec transform-set ?
+
+WORD Transform set tag
+
+
+
+R1(config)# crypto ipsec transform-set R1-R2 ?
+
+ah-md5-hmac AH-HMAC-MD5 transform
+
+ah-sha-hmac AH-HMAC-SHA transform
+
+ah-sha256-hmac AH-HMAC-SHA256 transform
+
+ah-sha384-hmac AH-HMAC-SHA384 transform
+
+ah-sha512-hmac AH-HMAC-SHA512 transform
+
+comp-lzs IP Compression using the LZS compression algorithm
+
+esp-3des ESP transform using 3DES(EDE) cipher (168 bits)
+
+esp-aes ESP transform using AES cipher
+
+esp-des ESP transform using DES cipher (56 bits)
+
+esp-gcm ESP transform using GCM cipher
+
+esp-gmac ESP transform using GMAC cipher
+
+esp-md5-hmac ESP transform using HMAC-MD5 auth
+
+esp-null ESP transform w/o cipher
+
+esp-seal ESP transform using SEAL cipher (160 bits)
+
+esp-sha-hmac ESP transform using HMAC-SHA auth
+
+esp-sha256-hmac ESP transform using HMAC-SHA256 auth
+
+esp-sha384-hmac ESP transform using HMAC-SHA384 auth
+
+esp-sha512-hmac ESP transform using HMAC-SHA512 auth
+
+
+
+After the transform set is named, the encryption and hashing algorithm can be configured in either order. The examples show the tranform set configuration for R1 and R2.
+
+
+
+R1(config)# crypto ipsec transform-set R1-R2 esp-aes esp-sha-hmac
+
+R1(config)#
+
+
+
+R2(config)# crypto ipsec transform-set R1-R2 esp-aes esp-sha-hmac
+
+R2(config)#
+
+19.3.3
+
+
+
+Syntax Checker - Configure IPsec Transform Set	Use this Syntax Checker to configure the IPsec policy for R2.
+
+
+
+Configure the IPsec policy on R2. Create an extended access list 102 describing interesting traffic from 192.168.1.0/24 to 10.0.1.0/24.
+
+
+
+R2(config)#access-list 102 permit ip 192.168.1.0 0.0.0.255 10.0.1.0 0.0.0.255
+
+
+
+Configure the IPsec transform set named R1-R2 using the following instructions:
+
+
+
+Use esp-aes for encryption.
+
+Use esp-sha-hmac for the hash.
+
+
+
+R2(config)#crypto ipsec transform-set R1-R2 esp-aes esp-sha-hmac
+
+R2(config)#
+
+
+
+You have successfully configured the IPsec policy.
+
+Crypto Map
+
+
+
+19.4.1
+
+
+
+Syntax to Configure a Crypto Map	Now that the interesting traffic is defined, and an IPsec transform set is configured, it is time to bind those configurations with the rest of the IPsec policy in a crypto map. The syntax to start a crypto map set is shown below. The sequence number is important when configuring multiple crypto map entries. XYZCORP will only need one crypto map entry to match traffic and account for the remaining SAs. Although the ipsec-manual option is shown, its use is beyond the scope of this course.
+
+
+
+Router(config)# crypto map map-name seq-num { ipsec-isakmp | ipsec-manual }
+
+map-name	Identifies the crypto map set.
+
+seq-num	Sequence number you assign to the crypto map entry. Use the crypto map map-name seq-num command without any keyword to modify the existing crypto map entry or profile.
+
+ipsec-isakmp	Indicates that IKE will be used to establish the IPsec for protecting the traffic specified by this crypto map entry.
+
+ipsec-manual	Indicates that IKE will not be used to establish the IPsec SAs for protecting the traffic specified by this crypto map entry.
+
+	The available configurations for a crypto map entry when you are in crypto map configuration mode are shown below. The map name is R1-R2_MAP, and the sequence number is 10.
+
+
+
+R1(config)# crypto map R1-R2_MAP 10 ipsec-isakmp
+
+% NOTE: This new crypto map will remain disabled until a peer
+
+and a valid access list have been configured.
+
+R1(config-crypto-map)# ?
+
+Crypto Map configuration commands:
+
+default Set a command to its defaults
+
+description Description of the crypto map statement policy
+
+dialer Dialer related commands
+
+disable Disable this crypto-map-statement.
+
+exit Exit from crypto map configuration mode
+
+match Match values.
+
+no Negate a command or set its defaults
+
+qos Quality of Service related commands
+
+reverse-route Reverse Route Injection.
+
+set Set values for encryption/decryption
+
+19.4.2
+
+
+
+Crypto Map Configuration	To finish the configuration to meet the IPsec security policy for XYZCORP, complete the following:
+
+
+
+Step 1. Bind the ACL and the transform set to the map.
+
+Step 2. Specify the peer's IP address.
+
+Step 3. Configure the DH group.
+
+Step 4. Configure the IPsec tunnel lifetime.
+
+
+
+The crypto map configurations for R1 and R2 are shown below.
+
+
+
+R1(config)# crypto map R1-R2_MAP 10 ipsec-isakmp
+
+% NOTE: This new crypto map will remain disabled until a peer
+
+and a valid access list have been configured.
+
+R1(config-crypto-map)# match address 101
+
+R1(config-crypto-map)# set transform-set R1-R2
+
+R1(config-crypto-map)# set peer 172.30.2.2
+
+R1(config-crypto-map)# set pfs group24
+
+R1(config-crypto-map)# set security-association lifetime seconds 900
+
+R1(config-crypto-map)# exit
+
+R1(config)#
+
+
+
+R2(config)# crypto map R1-R2_MAP 10 ipsec-isakmp
+
+% NOTE: This new crypto map will remain disabled until a peer
+
+and a valid access list have been configured.
+
+R2(config-crypto-map)# match address 102
+
+R2(config-crypto-map)# set transform-set R1-R2
+
+R2(config-crypto-map)# set peer 172.30.2.1
+
+R2(config-crypto-map)# set pfs group24
+
+R2(config-crypto-map)# set security-association lifetime seconds 900
+
+R2(config-crypto-map)# exit
+
+R2(config)#
+
+
+
+Use the show crypto map command to verify the crypto map configuration, as shown below for R1. All the required SAs should be in place. Notice that the output shows that no interfaces are currently using the crypto map.
+
+
+
+R1# show crypto map
+
+Crypto Map IPv4 "R1-R2_MAP" 10 ipsec-isakmp
+
+Peer = 172.30.2.2
+
+Extended IP access list 101
+
+access-list 101 permit ip 10.0.1.0 0.0.0.255 192.168.1.0 0.0.0.255
+
+Security association lifetime: 4608000 kilobytes/900 seconds
+
+Responder-Only (Y/N): N
+
+PFS (Y/N): Y
+
+DH group: group24
+
+Mixed-mode : Disabled
+
+Transform sets={
+
+R1-R2: { esp-aes esp-sha-hmac } ,
+
+}
+
+Interfaces using crypto map R1-R2_MAP:
+
+
+
+R1#
+
+19.4.3
+
+
+
+Apply and Verify the Crypto Map	To apply the crypto map, enter interface configuration mode for the outbound interface and configure the crypto map map-name command. Below is the configuration for XYZCORP. Notice the show crypto map output now displays that the Serial 0/0/0 interface is using the crypto map. R2 is configured with the same command on its Serial 0/0/0 interface.
+
+
+
+R1(config)# interface serial0/0/0
+
+R1(config-if)# crypto map R1-R2_MAP
+
+R1(config-if)#
+
+*Mar 19 19:36:36.273: %CRYPTO-6-ISAKMP_ON_OFF: ISAKMP is ON
+
+R1(config-if)# end
+
+R1# show crypto map
+
+Crypto Map IPv4 "R1-R2_MAP" 10 ipsec-isakmp
+
+Peer = 172.30.2.2
+
+Extended IP access list 101
+
+access-list 101 permit ip 10.0.1.0 0.0.0.255 192.168.1.0 0.0.0.255
+
+Security association lifetime: 4608000 kilobytes/900 seconds
+
+Responder-Only (Y/N): N
+
+PFS (Y/N): Y
+
+DH group: group24
+
+Mixed-mode : Disabled
+
+Transform sets={
+
+R1-R2: { esp-aes esp-sha-hmac } ,
+
+}
+
+Interfaces using crypto map R1-R2_MAP:
+
+Serial0/0/0
+
+19.4.4
+
+
+
+Syntax Checker - Configure, Apply, and Verify the Crypto Map	Use this Syntax Checker to configure, apply, and verify a crypto map on R2.
+
+
+
+Configure the crypto map on R2 to bind the transform set and IPsec policy using the following parameters:
+
+
+
+Crypto map name is R1-R2_MAP.
+
+Sequence number is 10.
+
+Bind access list 102 and transform set R1-R2.
+
+Peer IP address is 172.30.2.1.
+
+Diffie-Hellman Group is group24.
+
+SA lifetime is 900 seconds.
+
+
+
+R2(config)#crypto map R1-R2_MAP 10 ipsec-isakmp
+
+% NOTE: This new crypto map will remain disabled until a peer
+
+and a valid access list have been configured.
+
+R2(config-crypto-map)#match address 102
+
+R2(config-crypto-map)#set transform-set R1-R2
+
+R2(config-crypto-map)#set peer 172.30.2.1
+
+R2(config-crypto-map)#set pfs group24
+
+R2(config-crypto-map)#set security-association lifetime seconds 900
+
+
+
+Apply the R1-R2_MAP to the s0/0/0 interface.
+
+
+
+R2(config-crypto-map)#interface s0/0/0
+
+R2(config-if)#crypto map R1-R2_MAP
+
+*Mar 19 19:36:36.273: %CRYPTO-6-ISAKMP_ON_OFF: ISAKMP is ON
+
+
+
+Use the do command in config mode to display the crypto map.
+
+
+
+R2(config-if)#do show crypto map
+
+Crypto Map IPv4 "R1-R2_MAP" 10 ipsec-isakmp
+
+Peer = 172.30.2.1
+
+Extended IP access list 102
+
+access-list 102 permit ip 192.168.1.0 0.0.0.255 10.0.1.0 0.0.0.255
+
+Security association lifetime: 4608000 kilobytes/900 seconds
+
+Responder-Only (Y/N): N
+
+PFS (Y/N): Y
+
+DH group: group24
+
+Mixed-mode : Disabled
+
+Transform sets={
+
+R1-R2: { esp-aes esp-sha-hmac } ,
+
+}
+
+Interfaces using crypto map R1-R2_MAP:
+
+Serial0/0/0
+
+
+
+R2(config-if)#
+
+
+
+You have successfully configured and applied the crypto map.
+
+IPsec VPN
+
+
+
+19.5.1
+
+
+
+Send Interesting Traffic	Now that both the ISAKMP and IPsec policies are configured, and the crypto map is applied to the appropriate outbound interfaces, test the two tunnels by sending interesting traffic across the link.
+
+
+
+Traffic from the LAN interface on R1 that is destined for the LAN interface on R2 is considered interesting traffic because it matches the ACLs configured on both routers. An extended ping from R1 will effectively test the VPN configuration. The extended ping command syntax and results are shown below. The first ping failed because it takes a few milliseconds to establish the ISAKMP and IPsec tunnels.
+
+
+
+R1# ping 192.168.1.1 source 10.0.1.1
+
+Type escape sequence to abort.
+
+Sending 5, 100-byte ICMP Echos to 192.168.1.1, timeout is 2 seconds:
+
+Packet sent with a source address of 10.0.1.1
+
+.!!!!
+
+Success rate is 80 percent (4/5), round-trip min/avg/max = 1/2/4 ms
+
+R1#
+
+19.5.2
+
+
+
+Verify the ISAKMP and IPsec Tunnels	Sending interesting traffic does not actually mean that the tunnels are established. R1 and R2 will route traffic between the two LANs even if the ISAKMP and IPsec policy configurations are wrong. To verify that tunnels have been established, use the show crypto isakmp sa and show crypto ipsec sa commands. In the output below, notice that the tunnel is active between the two peers, 172.30.2.1 and 172.30.2.2, and that they are using the R1-R2_MAP crypto map.
+
+
+
+R1# show crypto isakmp sa
+
+IPv4 Crypto ISAKMP SA
+
+dst src state conn-id status
+
+172.30.2.2 172.30.2.1 QM_IDLE 1005 ACTIVE
+
+
+
+IPv6 Crypto ISAKMP SA
+
+
+
+R1#
+
+
+
+
+
+R1# show crypto ipsec sa
+
+
+
+
+
+interface: Serial0/0/0
+
+Crypto map tag: R1-R2_MAP, local addr 172.30.2.1
+
+
+
+protected vrf: (none)
+
+local ident (addr/mask/prot/port): (10.0.1.0/255.255.255.0/0/0)
+
+remote ident (addr/mask/prot/port): (192.168.1.0/255.255.255.0/0/0)
+
+current_peer 172.30.2.2 port 500
+
+PERMIT, flags={origin_is_acl,}
+
+#pkts encaps: 4, #pkts encrypt: 4, #pkts digest: 4
+
+#pkts decaps: 4, #pkts decrypt: 4, #pkts verify: 4
+
+#pkts compressed: 0, #pkts decompressed: 0
+
+#pkts not compressed: 0, #pkts compr. failed: 0
+
+#pkts not decompressed: 0, #pkts decompress failed: 0
+
+#send errors 0, #recv errors 0
+
+
+
+local crypto endpt.: 172.30.2.1, remote crypto endpt.: 172.30.2.2
+
+plaintext mtu 1438, path mtu 1500, ip mtu 1500, ip mtu idb Serial0/0/0
+
+current outbound spi: 0xD3E56A5F(3555027551)
+
+PFS (Y/N): Y, DH group: group24
+
+
+
+inbound esp sas:
+
+spi: 0x5D620493(1566704787)
+
+transform: esp-aes esp-sha-hmac ,
+
+in use settings ={Tunnel, }
+
+conn id: 2019, flow_id: Onboard VPN:19, sibling_flags 80004040, crypto map: R1-R2_MAP
+
+sa timing: remaining key lifetime (k/sec): (4155730/802)
+
+IV size: 16 bytes
+
+replay detection support: Y
+
+Status: ACTIVE(ACTIVE)
+
+
+
+inbound ah sas:
+
+
+
+inbound pcp sas:
+
+
+
+outbound esp sas:
+
+spi: 0xD3E56A5F(3555027551)
+
+transform: esp-aes esp-sh
+
+19.5.3
+
+
+
+Syntax Checker - Verify the ISAKMP and IPsec Tunnels	Use this Syntax Check to verify the IPsec VPN from R2.
+
+
+
+Establish the tunnel on R2 by by pinging 10.0.1.1 with a source address of 192.168.1.1.
+
+
+
+R2#ping ip 10.0.1.1 source 192.168.1.1
+
+Type escape sequence to abort.
+
+Sending 5, 100-byte ICMP Echos to 10.0.1.1, timeout is 2 seconds:
+
+Packet sent with a source address of 192.168.1.1
+
+.!!!!
+
+Success rate is 80 percent (4/5), round-trip min/avg/max = 1/2/4 ms
+
+
+
+Display the ISAKMP tunnel status.
+
+
+
+R2#show crypto isakmp sa
+
+IPv4 Crypto ISAKMP SA
+
+dst src state conn-id status
+
+172.30.2.1 172.30.2.2 QM_IDLE 1005 ACTIVE
+
+
+
+IPv6 Crypto ISAKMP SA
+
+
+
+Display the IPsec tunnel status.
+
+
+
+
+
+R2#show crypto ipsec sa
+
+interface: Serial0/0/0
+
+Crypto map tag: R1-R2_MAP, local addr 172.30.2.2
+
+
+
+protected vrf: (none)
+
+local ident (addr/mask/prot/port): (192.168.1.0/255.255.255.0/0/0)
+
+remote ident (addr/mask/prot/port): (10.0.1.0/255.255.255.0/0/0)
+
+current_peer 172.30.2.1 port 500
+
+PERMIT, flags={origin_is_acl,}
+
+#pkts encaps: 4, #pkts encrypt: 4, #pkts digest: 4
+
+#pkts decaps: 4, #pkts decrypt: 4, #pkts verify: 4
+
+#pkts compressed: 0, #pkts decompressed: 0
+
+#pkts not compressed: 0, #pkts compr. failed: 0
+
+#pkts not decompressed: 0, #pkts decompress failed: 0
+
+#send errors 0, #recv errors 0
+
+
+
+local crypto endpt.: 172.30.2.2, remote crypto endpt.: 172.30.2.1
+
+plaintext mtu 1438, path mtu 1500, ip mtu 1500, ip mtu idb Serial0/0/0
+
+current outbound spi: 0xD3E56A5F(3555027551)
+
+PFS (Y/N): Y, DH group: group24
+
+
+
+inbound esp sas:
+
+spi: 0x5D620493(1566704787)
+
+transform: esp-aes esp-sha-hmac ,
+
+in use settings ={Tunnel, }
+
+conn id: 2019, flow_id: Onboard VPN:19, sibling_flags 80004040, crypto map: R1-R2_MAP
+
+sa timing: remaining key lifetime (k/sec): (4155730/802)
+
+IV size: 16 bytes
+
+replay detection support: Y
+
+Status: ACTIVE(ACTIVE)
+
+<output omitted>
+
+
+
+R2#
+
+
+
+You have successfully verified the IPsec VPN.
+
+19.5.4
+
+
+
+Video - Site-to-Site IPsec VPN Configuration	
+
+19.5.5
+
+
+
+Packet Tracer - Configure and Verify a Site-to-Site IPsec VPN	In this Packet Tracer, you will complete the following objectives:
+
+
+
+Verify connectivity throughout the network
+
+Configure router R1 to support to site-to-site IPsec VPN with R3
+
+19.5.6
+
+
+
+Lab - Configure a Site-to-Site VPN	In this lab, you will complete the following objectives:
+
+
+
+Configure basic device settings.
+
+Configure a site-to-site VPN using Cisco IOS.
+
+Implement Site-to-Site IPsec VPNs Summary
+
+
+
+19.6.1
+
+
+
+What Did I Learn in this Module?	Configure a Site-to-Site VPN
+
+
+
+IPsec negotiation to establish a VPN involves five steps, which include IKE Phase 1 and Phase 2. An ISAKMP tunnel is initiated when host A sends "interesting" traffic to host B. Traffic is considered interesting when it travels between the peers and meets the criteria that are defined in an ACL. IKE Phase 1 begins. The peers negotiate the ISAKMP SA policy. When the peers agree on the policy and are authenticated, and a secure tunnel is created. IKE Phase 2 begins. The IPsec peers use the authenticated secure tunnel to negotiate the IPsec SA policy. The negotiation of the shared policy determines how the IPsec tunnel is established. The IPsec tunnel is created, and data is transferred between the IPsec peers based on the IPsec SAs. The IPsec tunnel terminates when the IPsec SAs are manually deleted, or when their lifetime expires. Implementing a site-to-site VPN requires configuring settings for both IKE Phase 1 and Phase 2. In the Phase 1 configuration, the two sites are configured with the necessary ISAKMP security associations to ensure that an ISAKMP tunnel can be created. In the Phase 2 configuration, the two sites are configured with the IPsec security associations to ensure that an IPsec tunnel is created within the ISAKMP tunnel. Both tunnels will be created only when interesting traffic is detected. IPsec only supports unicast traffic. To enable multicast routing protocol traffic, the peers in a site-to-site IPsec VPN implementation would need to be configured with a Generic Routing Encapsulation (GRE) tunnel for the multicast traffic. GRE supports multiprotocol tunneling. It can encapsulate multiple OSI Layer 3 protocol packet types inside an IP tunnel. The addition of an additional GRE header between the payload and the tunneling IP header provides the multiprotocol functionality
+
+19.6.2
+
+
+
+Module 19 - Implement Site-to-Site IPsec VPNs Quiz	
+
+1. What is defined by an ISAKMP policy?	the security associations that IPsec peers are willing to use
+
+2. Which are the five security associations to configure in ISAKMP policy configuration mode?	Hash, Authentication, Group, Lifetime, Encryption
+
+3. What command or action will verify that a VPN tunnel has been established?	Issue a show crypto isakmp sa command
+
+4. What three protocols must be permitted through the company firewall for establishment of IPsec site-to-site VPNs? (Choose three.)
+
+SSH	ISAKMP
+
+
+
+AH
+
+
+
+ESP
+
+5. Refer to the exhibit. The ISAKMP policy for the IKE Phase 1 tunnel was configured, but the tunnel does not yet exist. Which action should be taken next before IKE Phase 1 negotiations can begin?​	Configure an ACL to define interesting traffic.
+
+6. What is negotiated in the establishment of an IPsec tunnel between two IPsec hosts during IKE Phase 1?	ISAKMP SA Policy
+
+7. A network analyst is configuring a crypto map and has just bound the ACL and the transform set to the map, and set the IPsec tunnel lifetime. What other step completes the configuration of the crypto map?	Configure the DH group.
+
+8. What is the first step in establishing an IPsec VPN?	detection of interesting traffic
+
+9. Refer to the exhibit. Given the partial output of the show version command on a router, if a network engineer wants to begin to configure an IPsec VPN, what would be the next step to take?	Configure the ISAKMP policy for IKE phase 1.
+
+10. Refer to the exhibit. How will traffic that does not match access list 101 be treated by the router?	It will be sent unencrypted.

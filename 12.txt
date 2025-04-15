@@ -1,0 +1,1388 @@
+
+IPS Signatures
+
+
+
+12.1.1
+
+
+
+IPS Signature Attributes	The network must be able to identify incoming malicious traffic in order to stop it. Fortunately, malicious traffic displays distinct characteristics or "signatures".
+
+
+
+Conceptually similar to the virus.dat file used by virus scanners, a signature is a set of rules that an IDS and an IPS use to detect typical intrusion activity. Signatures uniquely identify specific viruses, worms, protocol anomalies, and malicious traffic (e.g., a DoS attacks).
+
+
+
+A malicious packet flow has a specific type of activity and signature. IPS sensors must be tuned to look for matching signatures or abnormal traffic patterns. As sensors scan network packets, they use signatures to detect known attacks and respond with predefined actions. An IDS or IPS sensor examines the data flow using many different signatures. A sensor takes action when it matches a signature with a data flow, such as logging the event or sending an alarm to the IDS or IPS management software.
+
+
+
+Signatures also have three distinctive attributes:
+
+
+
+Type - Atomic or Composite
+
+Trigger - Also called the alarm
+
+Action - What the IPS will do
+
+Type	Atomic or Composite
+
+Trigger	Also called the alarm
+
+Action	What the IPS will do
+
+12.1.2
+
+
+
+Types of Signatures	Some threats can be identified in one packet while other threats may require many packets and their state information (i.e., IP addresses, port numbers, and more) to identify a threat.
+
+
+
+There are two types of signatures:
+
+
+
+Atomic Signature - This is the simplest type of signature because a single packet, activity, or event identifies an attack. The IPS does not need to maintain state information and traffic analysis can usually be performed very quickly and efficiently.
+
+
+
+Composite Signature - Also called a stateful signature because the IPS requires several pieces of data to match an attack signature. The IPS must also maintain state information, which is referred to as the event horizon. The length of an event horizon varies from one signature to the next.
+
+Atomic Signature	This is the simplest type of signature because a single packet, activity, or event identifies an attack. The IPS does not need to maintain state information and traffic analysis can usually be performed very quickly and efficiently.
+
+Composite Signature	Also called a stateful signature because the IPS requires several pieces of data to match an attack signature. The IPS must also maintain state information, which is referred to as the event horizon. The length of an event horizon varies from one signature to the next.
+
+12.1.3
+
+
+
+IPS Signature Alarms	The heart of any IPS signature is the signature alarm, which is often referred to as the signature trigger. The signature alarm (i.e., trigger) for an IPS sensor could be anything that can reliably signal an intrusion or security policy violation. A network-based IPS might trigger a signature action if it detects a packet with a payload containing a specific string that is going to a specific TCP port, for example.
+
+
+
+The IPS signature alarm is analogous to the alarm in a home security system. The triggering mechanism for a burglar alarm could be a motion detector. When the burgler alarm is enabled, the movement of an individual entering a room is detected. This triggers the alarm.
+
+
+
+These triggering mechanisms can be applied to atomic and composite signatures. The triggering mechanisms can be simple or complex. Every IPS incorporates signatures that use one or more of these basic triggering mechanisms to trigger signature actions.
+
+
+
+There are four general IPS signature trigger categories as listed in the table. (On cards 9-12).
+
+Pattern-Based Detection	Advantages
+
+
+
+Also known as signature-based detection.
+
+
+
+Simplest triggering mechanism as it searches for a specific and pre-defined atomic or composite pattern.
+
+
+
+A IPS sensor compares the network traffic to a database of known attacks, and triggers an alarm or prevents communication if a match is found.
+
+Anomaly-Based Detection	Advantages
+
+
+
+Also known as profile-based detection.
+
+
+
+Involves first defining a profile of what is considered normal network or host activity.
+
+
+
+This normal profile is usually defined by monitoring traffic and establishing a baseline.
+
+
+
+Once defined, any activity beyond a specified threshold in the normal profile will generate a signature trigger and action.
+
+Policy-Based Detection	Advantages
+
+
+
+Also known as behavior-based detection.
+
+
+
+Although similar to pattern-based detection, an administrator manually defines behaviors that are suspicious based on historical analysis.
+
+
+
+The use of behaviors enables a single signature to cover an entire class of activities without having to specify each individual situation.
+
+Honey Pot-Based Detection	Advantages
+
+
+
+Honey pot-based detection uses a server as a decoy server to attract attacks.
+
+
+
+The purpose of a decoy server is to lure attacks away from production devices.
+
+
+
+Allows administrators time to analyze incoming attacks and malicious traffic patterns to tune their sensor signatures.
+
+12.1.4
+
+
+
+IPS Signature Actions	When a signature detects the activity for which it is configured, the signature triggers one or more actions.
+
+
+
+Depending on the IPS sensor, various actions can be enabled. The table lists some actions that an IPS sensor may provide.
+
+
+
+Note: The available actions depend on the signature type and the platform. (On cards 14-18).
+
+Generate an alert	Specific Action
+
+
+
+Produce alert
+
+
+
+
+
+Description
+
+
+
+The IPS sends events as alerts.
+
+
+
+
+
+Specific Action
+
+
+
+Produce verbose alert
+
+
+
+
+
+Description
+
+
+
+The IPS sends a detailed event alert.
+
+Log the activity	Specific Action
+
+
+
+Log attacker packets
+
+
+
+
+
+Description
+
+
+
+Logs packets from the attacker IP address and sends an alert.
+
+
+
+
+
+Specific Action
+
+
+
+Log pair packets
+
+
+
+
+
+Description
+
+
+
+Logs packets from the victim and attacker IP addresses and sends an alert.
+
+
+
+
+
+Specific Action
+
+
+
+Log victim packets
+
+
+
+
+
+Description
+
+
+
+Logs packets from the victim IP address and sends an alert.
+
+Deny the activity	Specific Action
+
+
+
+Deny packet inline
+
+
+
+
+
+Description
+
+
+
+Terminates the packet.
+
+
+
+
+
+Specific Action
+
+
+
+Deny connection inline
+
+
+
+
+
+Description
+
+
+
+Terminates the current packet and future packets on this TCP flow.
+
+
+
+
+
+Specific Action
+
+
+
+Deny attacker inline
+
+
+
+
+
+Description
+
+
+
+Terminates the current packet and future packets from this attacker address for a specified period of time.
+
+Reset the TCP connection	Specific Action
+
+
+
+Reset TCP connection
+
+
+
+
+
+Description
+
+
+
+Sends TCP resets to hijack and terminate the TCP flow.
+
+Block future activity	Specific Action
+
+
+
+Request block connection
+
+
+
+
+
+Description
+
+
+
+Sends a request to a blocking device to block this connection.
+
+
+
+
+
+Specific Action
+
+
+
+Request block host
+
+
+
+
+
+Description
+
+
+
+Sends a request to a blocking device to block this attacker host.
+
+
+
+
+
+Specific Action
+
+
+
+Request SNMP trap
+
+
+
+
+
+Description
+
+
+
+Sends a request to the notification application component of the sensor to perform SNMP notification.
+
+12.1.5
+
+
+
+Evaluating Alerts	Triggering mechanisms can generate alarms that are false positives or false negatives. These alarms must be addressed when implementing an IPS sensor. True positives and true negatives are desirable and indicate the IPS is functioning properly. False positives and false negatives are undesirable and must be investigated.
+
+
+
+The table summarizes the following four types of alarms: (On cards 20-23).
+
+
+
+Alerts can be classified as follows: (On cards 24-27).
+
+True positive	Network Activity
+
+
+
+Attack traffic
+
+
+
+
+
+IPS Activity
+
+
+
+Alarm generated
+
+
+
+
+
+Outcome
+
+
+
+Ideal setting
+
+True negative	Network Activity
+
+
+
+Normal user traffic
+
+
+
+
+
+IPS Activity
+
+
+
+No alarm generated
+
+
+
+
+
+Outcome
+
+
+
+Ideal setting
+
+False positive	Network Activity
+
+
+
+Normal user traffic
+
+
+
+
+
+IPS Activity
+
+
+
+Alarm generated
+
+
+
+
+
+Outcome
+
+
+
+Tune alarm
+
+False negative	Network Activity
+
+
+
+Attack traffic
+
+
+
+
+
+IPS Activity
+
+
+
+No alarm generated
+
+
+
+
+
+Outcome
+
+
+
+Tune alarm
+
+True positive (Desirable)	This is used when the IPS generates an alarm because it detected known attack traffic. The alert has been verified to be an actual security incident and also indicates that the IPS rule worked correctly.
+
+True negative (Desirable)	This is used when the system is performing as expected. No alerts are issued because the traffic that is passing through the system is clear of threats.
+
+False positive (Undesirable)	This is used when an IPS generates an alarm after processing normal user traffic that should not have triggered an alarm. The IPS must be tuned to change these alarm types to true negatives. The alert does not indicate an actual security incident. Benign activity that results in a false positive is sometimes referred to as a benign trigger. False positives are costly because they must be investigated.
+
+False negative (Dangerous)	This is used when an IPS fails to generate an alarm and known attacks are not being detected. This means that exploits are not being detected by the security systems that are in place. These incidents could go undetected for a long time, and ongoing data loss and damage could result. The goal is for these alarm types to generate true positive alarms.
+
+12.1.6
+
+
+
+Check Your Understanding- IPS Signature Actions	Check your understanding of IPS signature actions by choosing the correct answer to the following questions.
+
+1. Which action logs the IP address from a malicious source only and sends an alert?	log attacker packets
+
+2. Which action terminates a malicious packet only?	deny packet inline
+
+3. Which action makes the IPS device send TCP resets to hijack and terminate a TCP flow?	reset TCP connection
+
+Cisco Snort IPS
+
+
+
+12.2.1
+
+
+
+IPS Service Options	Intrusion prevention services were available on the first-generation Integrated Services Routers (ISR G1) using the Cisco IOS IPS. Cisco IOS IPS monitored and prevented intrusions by comparing traffic against signatures of known threats and blocking the traffic when a threat was detected.
+
+
+
+Note: Support for Cisco IOS IPS discontinued in 2018. Therefore, IOS IPS is no longer recommended on branch routers.
+
+
+
+Organizations now have three options available to provide intrusion prevention services. (On cards 33-35).
+
+
+
+Cisco Firepower Next-Generation IPS (NGIPS) - These are dedicated in-line threat prevention appliances that provide industry leading effectiveness against both known and unknown threats.
+
+
+
+Cisco Snort IPS - This is an IPS service that can be enabled on a second generation ISR (ISR G2) (i.e., ISR 4000s). Note that Cisco 4000 ISRs no longer support Cisco IOS IPS.
+
+
+
+External Snort IPS Server - This is similar to the Cisco Snort IPS solution but requires a promiscuous port (i.e., a SPAN switch port) and an external Snort IDS/IPS.
+
+
+
+All three IPS services use Snort and receive rule updates from Cisco Talos.
+
+Cisco Firepower Next-Generation IPS (NGIPS)	These are dedicated in-line threat prevention appliances that provide industry leading effectiveness against both known and unknown threats.
+
+Cisco Snort IPS	This is an IPS service that can be enabled on a second generation ISR (ISR G2) (i.e., ISR 4000s). Note that Cisco 4000 ISRs no longer support Cisco IOS IPS.
+
+External Snort IPS Server	This is similar to the Cisco Snort IPS solution but requires a promiscuous port (i.e., a SPAN switch port) and an external Snort IDS/IPS.
+
+12.2.2
+
+
+
+NGIPS	NGIPSs are dedicated IPS appliances. They are built on Snort's core open technology and use vulnerability-focused IPS rules and embedded IP-, URL-, and DNS-based security intelligence provided by Cisco Talos.
+
+
+
+NGIPS features include the following:
+
+
+
+IPS rules that identify and block attack traffic targeted at network vulnerabilities.
+
+
+
+Tightly integrated defense against advanced malware by incorporating advanced analysis of network and endpoint activity.
+
+
+
+Sandboxing technology that uses hundreds of behavioral indicators to identify zero-day and evasive attacks.
+
+
+
+Also includes Application Visibility and Control (AVC), Cisco Advanced Malware Protection (AMP) for Networks, and URL Filtering.
+
+
+
+Note: Further discussion of NGIPS appliances is out of scope for this course.
+
+12.2.3
+
+
+
+Snort IPS	Snort is an open source network IPS that performs real-time traffic analysis and generates alerts when threats are detected on IP networks. It can also perform protocol analysis, content searching or matching, and detect a variety of attacks and probes (e.g., buffer overflows, stealth port scans, and more). Snort was inducted into the InfoWorld Open Source Hall of Fame as one greatest pieces of open source software ever.
+
+
+
+The Snort engine can now run as a virtual container service on Cisco 4000 ISRs and Cisco Cloud Services Router 1000v Series. It is ideal for smaller organizations looking for a cost-effective routing and threat defense solution. For instance, an ISR G2 can provide advanced routing capabilities and integrated threat defense security using Snort IPS.
+
+
+
+Snort IPS can be implemented with other security features integrated into the 4000 Series ISRs, such as VPN, zone-based Cisco IOS firewalls, and Cisco Cloud Web Security. This enables the ISR to provide comprehensive threat protection in a small footprint. This is crucial for small branch locations that need to address security for the local internet connection. Snort IPS integrated in an ISR is a cost-effective alternative for branch office locations because a separate firewall device is not required.
+
+
+
+Snort IPS on the 4000 Series ISR provides the following functionalities: (On cards 38-44).
+
+
+
+IDS and IPS mode - Configure threat detection or prevention mode. In prevention mode, attack traffic will be dropped.
+
+
+
+Three signature levels - Snort provides three levels of signature protection: connectivity (least secure), balanced (middle option), and security (most secure). The security level is the most secure as it enables the highest number of signatures to be verified.
+
+
+
+An allowed list - This provides the ability to turn off certain signatures and helps to a
+
+IDS and IPS mode	Configure threat detection or prevention mode. In prevention mode, attack traffic will be dropped.
+
+Three signature levels	Snort provides three levels of signature protection: connectivity (least secure), balanced (middle option), and security (most secure). The security level is the most secure as it enables the highest number of signatures to be verified.
+
+An allowed list	This provides the ability to turn off certain signatures and helps to avoid false positives such as legitimate traffic triggering an IPS action. Up to 1000 entries can be supported in the allowed list.
+
+Snort health monitoring	Cisco IOS Software keeps track of the health of the Snort engine that is running in the service container.
+
+Fail open and close	In the event of IPS engine failure, the router can be configured to block the traffic flow or to bypass IPS checking until the Snort engine recovers.
+
+Signature update	Automatic and manual updates are supported. Snort IPS can download the signature package directly from cisco.com or a local resource location over HTTP and HTTPS.
+
+Event logging	IPS logs can be sent to an independent log collector or included along with the router syslog stream. Sending IPS logs separately helps if the security event management tool is different from the regular syslog server.
+
+12.2.4
+
+
+
+Snort Components and Rules	Snort IPS for 4000 Series ISRs consists of two components: (On cards 46-47).
+
+
+
+Snort engine - This is the IPS detection and enforcement engine that is included in the Security (SEC) license for 4000 Series ISRs.
+
+
+
+Snort rule software subscriptions for signature updates - Snort rule sets to keep current with the latest threat protection are term-based subscriptions, available for one or three years.
+
+
+
+To address the rapidly evolving threat landscape, it is important to ensure that signatures are as up-to-date as possible.
+
+
+
+There are two types of term-based subscriptions: (On cards 48-49).
+
+
+
+Community Rule Set - Available for free, this subscription offers limited coverage against threats. The community rule set focuses on reactive response to security threats versus proactive research work. There is also a 30-day delayed access to updated signatures meaning that newest rule will be a minimum of 30 days old. In addition, there is no Cisco customer support available.
+
+
+
+Subscriber Rule Set - Available for a fee, this service provides the best protection against threats. It includes coverage of advance exploits by using the research work of the Cisco Talos security experts. The Subscriber Rule Set also provides the fastest access to updated signatures in response to a security incident or the proactive discovery of a new threat. This subscription is fully supported by Cisco.
+
+
+
+Note: Contact Cisco Support to obtain the subscriber rule set license.
+
+Snort engine	This is the IPS detection and enforcement engine that is included in the Security (SEC) license for 4000 Series ISRs.
+
+Snort rule software subscriptions for signature updates	Snort rule sets to keep current with the latest threat protection are term-based subscriptions, available for one or three years.
+
+Community Rule Set	Available for free, this subscription offers limited coverage against threats. The community rule set focuses on reactive response to security threats versus proactive research work. There is also a 30-day delayed access to updated signatures meaning that newest rule will be a minimum of 30 days old. In addition, there is no Cisco customer support available.
+
+Subscriber Rule Set	Available for a fee, this service provides the best protection against threats. It includes coverage of advance exploits by using the research work of the Cisco Talos security experts. The Subscriber Rule Set also provides the fastest access to updated signatures in response to a security incident or the proactive discovery of a new threat. This subscription is fully supported by Cisco.
+
+12.2.5
+
+
+
+ISR Container Applications	Routers were initially packet processing devices. However, over the years, they have evolved to perform many computing functions. Routers have acquired so much processing power that server applications can now be hosted inside the router using virtual machines called service containers.
+
+
+
+Applications such as Snort IPS can be uploaded and hosted on these routers. Service containers are supported on most IOS XE platforms. IOS XE is based on the Linux architecture and supports virtual machine hosting.
+
+
+
+The Snort engine runs as a Linux Service Container application on the ISR 4000 as shown in the figure. This provides it with dedicated computing resources that run independently of the data plane CPU load. It also makes it easier for the Snort engine to be regularly updated.
+
+
+
+Specifically, the Snort engine on the 4000 Series ISR runs as a container application. The 4000 Series ISR uses a multi-core CPU, and the Cisco IOS-XE has the ability to allocate these cores for control-plane or data-plane functions. Computing resources unused by control plane functions can be used for running other services. A Linux container infrastructure hosts these applications. Applications running in this container infrastructure can have a tighter integration with Cisco IOS Software.
+
+12.2.6
+
+
+
+Snort IPS Rule Alarms	In Snort IPS, signatures are configured using "rules". These rules serve as the signature alarms by comparing incoming traffic to the Snort rules. Traffic matching a rule header generates an action.
+
+
+
+A rule header is conceptually similar to an access control list (ACL) statement. It is a one line statement that identifies malicious traffic.
+
+
+
+The basic rule header command syntax is:
+
+
+
+[action] [protocol] [sourceIP] [sourceport] -> [destIP] [destport] ([Rule options])
+
+
+
+Note: The Rule options contain additional rule information.
+
+
+
+For example, the following sample header generates an alert whenever a TCP connection for the hosts/ports identified in the rule header variables are going to the identified destination hosts/ports variables:
+
+
+
+alert tcp $EXTERNAL_NET $HTTP_PORTS -> $HOME_NET any
+
+
+
+Refer to the figure for a detailed explanation of this example.
+
+12.2.7
+
+
+
+Snort IPS Rule Actions	Snort can be enabled in IDS mode or in IPS mode.
+
+
+
+Snort IDS mode can perform the following three actions:
+
+
+
+Alert - Generate an alert using the selected alert method.
+
+Log - Log the packet.
+
+Pass - Ignore the packet.
+
+
+
+Snort IPS mode can perform all the IDS actions plus the following:
+
+
+
+Drop - Block and log the packet.
+
+Reject - Block the packet, log it, and then send a TCP reset if the protocol is TCP or an ICMP port unreachable message if the protocol is UDP.
+
+Sdrop - Block the packet but do not log it.
+
+12.2.8
+
+
+
+Snort IPS Header Rule Options	A Snort rule header also contains rule options (fields) to provide additional information for the rule. Options are separated by semicolons (;) and the rule option keywords are separated from their arguments using colons (:).
+
+
+
+The figure displays sample rule options for the alert tcp $EXTERNAL_NET $HTTP_PORTS -> $HOME_NET any rule header.
+
+
+
+The table describes the common general rule and the detection rule options in the sample rule header.
+
+
+
+Note: These are just a few of the different types of rule options. For more examples, search the internet for "snort rule options" (On cards 54-64).
+
+msg:	This is a simple text string that provides a meaningful message to output when the rule matches.
+
+flow:	Specifies the direction of network traffic.
+
+content:	A detection rule option that allows the rule creator to set rules that search for specific content in the packet payload and trigger response based on that data. This option data can contain mixed text and binary data
+
+distance: / offset:	Detection rule keywords that allow the rule creator to specify where to start searching relative to the beginning of the payload or the beginning of a content match.
+
+within: / depth:	Detection rule keywords that allow the rule creator to specify how far forward to search relative to the end of a previous content match and, once that content match is found, how far to search for it.
+
+pcre	A detection rule keyword that allows rules to be written using "perl compatible regular expressions" which allows for more complex matches.
+
+byte_test	A detection rule keyword that allows a rule to test a number of bytes against a specific value in binary.
+
+metadata:	Allows a rule creator to embed additional information about the rule.
+
+reference:	Allows rules to include references to external sources of information.
+
+classtype:	Identifies the potential effect of what a successful attack would be.
+
+sid / rev	The signature ID (sid) is a unique identifier for each rule making them easy to identify. It should be used with the rev (revision) keyword to indicate the current version of the rule.
+
+12.2.9
+
+
+
+Snort IPS Operation	Packets arriving on Snort enabled interfaces are inspected as follows:
+
+
+
+1. Cisco IOS Software forwards the packets to be inspected to the Snort IPS engine using an internal virtual port group (VPG) interface.
+
+
+
+2. Snort IPS inspects the traffic and takes necessary action.
+
+Snort drops the packets associated with bad flows (IPS mode). 
+
+
+
+3. Good flow packets are returned back to the router for further processing.
+
+
+
+Packet exchange between the container applications and the IOS data plane is done using VPG interfaces. These routed interfaces are connected through the router back plane. The corresponding interface on the container side will appear as virtual Ethernet ports.
+
+
+
+Snort IPS requires two VPG interfaces: (On cards 66-67).
+
+
+
+Management interface - This is the interface that is used to source logs to the log collector and for retrieving signature updates from Cisco.com. For this reason, this interface requires a routable IP address.
+
+
+
+Data interface - This is the interface that is used to send user traffic between the Snort virtual container service and the router forwarding plane.
+
+
+
+In the figure, VPG0 is used for Snort management traffic while VPG1 is used for user traffic to be inspected. User traffic to be inspected is forwarded to the Snort engine using VPG1 as shown. Traffic is then inspected and either rejected (dropped) or forwarded back to the router as shown.
+
+Management interface	This is the interface that is used to source logs to the log collector and for retrieving signature updates from Cisco.com. For this reason, this interface requires a routable IP address.
+
+Data interface	This is the interface that is used to send user traffic between the Snort virtual container service and the router forwarding plane.
+
+12.2.10
+
+
+
+Check Your Understanding - Snort IPS	Check your understanding of Snort IPS by choosing the correct answer to the following questions.
+
+1. What are the three actions supported by Snort IDS? (Choose three.)	Alert
+
+
+
+Log
+
+
+
+Pass
+
+2. Which two options are components of Snort IPS that is running on an ISR 4000? (Choose two.)	Snort engine
+
+
+
+Snort rule set
+
+Configure Snort IPS
+
+
+
+12.3.1
+
+
+
+Snort IPS Configuration Steps	To deploy Snort IPS on supported devices, perform the following steps:
+
+
+
+Step 1. Download the Snort OVA file.
+
+Step 2. Install the OVA file.
+
+Step 3. Configure Virtual Port Group interfaces.
+
+Step 4. Activate the virtual services.
+
+Step 5. Configure Snort specifics.
+
+Step 6. Enable IPS globally or on desired interfaces.
+
+Step 7. Verify Snort IPS.
+
+
+
+Note: The Snort IPS functionality is available only in security K9-licensed IOS XE version. The security license tis required to enable the service. This feature is available in Cisco IOS XE Release 3.16.1S, 3.17S, and later releases.
+
+12.3.2
+
+
+
+Step 1. Download the Snort OVA File	An Open Virtualization Archive (OVA) is a file that contains a compressed, installable version of a virtual machine. The Snort service OVA file is not bundled with the Cisco IOS XE Release images installed on the router. However, if the OVA file is be preinstalled in the flash of the router, it is recommended that the latest OVA file be downloaded from Cisco.com.
+
+
+
+For example, in the figure, the user is downloading the OVA file for an ISR 4321 router using IOS Fuji-16.9.6.
+
+
+
+Note: CCO access is required to download files from Cisco.com.
+
+12.3.3
+
+
+
+Step 2. Install the Snort OVA File	The OVA file must be downloaded and saved in a file location available to the ISR router (e.g., Flash).
+
+
+
+To install the OVA file, use the virtual-service install name virtual-service-name package file-url media file-system privilege EXEC command. The length of the name is 20 characters and the complete path to the OVA file must be specified.
+
+
+
+An example configuration is shown below.
+
+
+
+R1# virtual-service install name MYIPS package flash:iosxe-utd.16.09.06.1.0.10_SV29130_XE_16_9.ova Installing package 'bootflash:/iosxe-utd.16.09.06.1.0.10_SV29130_XE_16_9.ova' for virtual-service 'MYIPS'. Once the install has finished, the VM may be activated. Use 'show virtual-service list' for progress.
+
+
+
+R1# 
+
+*Oct 5 08:07:45.953: %VMAN-5-PACKAGE_SIGNING_LEVEL_ON_INSTALL: R0/0: vman: Package 'iosxe-utd.16.09.06.1.0.10_SV29130_XE_16_9.ova' for service container 'MYIPS' is 'Cisco signed', signing level cached on original install is 'Cisco signed'
+
+
+
+R1#
+
+
+
+During the OVA file installation, the security license is checked and an error is reported if the license is not present. Therefore, the Cisco IOS XE image must be enabled with the security license. In the output, you can see that the OVA is Cisco signed.
+
+
+
+Use the show virtual-service list command to display the status of the installation of all applications installed on the virtual service container.
+
+12.3.4
+
+
+
+Step 3. Configure Virtual Port Group Interfaces	Two VirtualPortGroup (VPG) interfaces must then be configured along with their guest IP addresses.
+
+
+
+In our example, the VPG interfaces will be configured as follows:
+
+
+
+VGP0 - This is for management traffic to exchange information with IPS servers. The guest IP address needs to be routable to connect to the signature update server and external log server. It is also used to log traffic to log collectors.
+
+
+
+VPG1 - This is for user traffic marked for inspections. This should not be routable and therefore use a non-routable private IP address.
+
+
+
+Note: Be sure to provide proper NAT and routing to enable the management VPG to reach the log server as well as cisco.com to retrieve signature update files.
+
+
+
+The following is a sample configuration of VPG0 and VPG1.
+
+
+
+R1# configure terminal
+
+R1(config)# interface VirtualPortGroup0
+
+R1(config-if)# description Management interface
+
+R1(config-if)# ip address 209.165.201.1 255.255.255.252
+
+R1(config-if)# exit
+
+R1(config)#
+
+*Oct 5 08:13:10.970: %LINEPROTO-5-UPDOWN: Line protocol on Interface VirtualPortGroup0, changed state to up
+
+R1(config)# interface VirtualPortGroup1
+
+R1(config-if)# description Data interface
+
+R1(config-if)# ip address 192.168.0.1 255.255.255.252
+
+R1(config-if)# exit
+
+R1(config)#
+
+*Oct 5 08:13:12.921: %LINEPROTO-5-UPDOWN: Line protocol on Interface VirtualPortGroup1, changed state to up
+
+R1#
+
+12.3.5
+
+
+
+Step 4. Activate Virtual Services	The next step is to configure guest IPs on the same subnet for the container side and activate the virtual service as shown in the output.
+
+
+
+R1(config)# virtual-service MYIPS
+
+R1(config-virt-serv)# vnic gateway VirtualPortGroup0
+
+R1(config-virt-serv-vnic)# guest ip address 209.165.201.2
+
+R1(config-virt-serv-vnic)# exit
+
+R1(config-virt-serv)# vnic gateway VirtualPortGroup1
+
+R1(config-virt-serv-vnic)# guest ip address 192.168.0.2
+
+R1(config-virt-serv-vnic)# exit
+
+R1(config-virt-serv)# activate
+
+
+
+The virtual-service virtual-service-name command configures the logical name, MYIPS in the example, that is used to identify the virtual container service.
+
+
+
+The vnic gateway VirtualPortGroup interface-number command creates a virtual network interface card (vNIC) gateway interface for the virtual container service. It also maps the vNIC gateway interface to the virtual port group, and enters the virtual-service vNIC configuration mode.
+
+
+
+The guest ip address ip-address command configures a guest vNIC address for the vNIC gateway interface.
+
+
+
+Finally, the activate command activates the application installed in a virtual container service.
+
+12.3.6
+
+
+
+Step 5. Configure Snort Specifics	Next is to configure how Snort is to be deployed (i.e. IPS or IDS mode), where the Snort logs should be sent, the policy and profile to configure for Snort, and more.
+
+
+
+Refer to the sample command output.
+
+
+
+R1(config)# utd engine standard
+
+R1(config-utd-eng-std)# logging host 10.10.10.254
+
+R1(config-utd-eng-std)# logging syslog
+
+R1(config-utd-eng-std)#
+
+R1(config-utd-eng-std)# threat-inspection
+
+R1(config-utd-engstd-insp)# threat protection
+
+R1(config-utd-engstd-insp)# policy balanced
+
+R1(config-utd-engstd-insp)#
+
+R1(config-utd-engstd-insp)# signature update occur-at daily 0 0
+
+R1(config-utd-engstd-insp)# signature update server cisco username Bob password class
+
+R1(config-utd-engstd-insp)# logging level warning
+
+R1(config-utd-engstd-insp)#
+
+R1(config-utd-engstd-insp)# exit
+
+R1(config-utd-eng-std)# exit
+
+R1(config)#
+
+
+
+The utd engine standard command configures the UTD standard engine and enters UTD standard engine configuration mode.
+
+
+
+The logging host and logging syslog commands enable the logging of emergency messages to a server.
+
+
+
+The threat-inspection command configures threat inspection for the Snort engine. From here you can specify which mode Snort will be in:
+
+
+
+threat protection - Snort will be in IPS mode.
+
+threat detection - Snort will be in IDS mode.
+
+
+
+The policy command specifies three security policies used by Snort and provided by Cisco Talos, as shown in the following help facility example.
+
+
+
+R1(config-utd-engstd-insp)# policy ?
+
+balanced Set the policy to balanced (this is the default option)
+
+connectivity Set the policy to connectivity (stresses on connectivity over security)
+
+security Set the policy to security (provide mode exhaustive coverage)
+
+
+
+R1(config-utd-engstd-insp)# policy
+
+
+
+The three policy settings in order from least protection to most protection are:
+
+
+
+connectivity - This provides the least protection as it prioriti
+
+12.3.7
+
+
+
+Step 6. Enable IPS Globally or on Desired Interfaces	Based on the organizational requirements, Snort can be enabled globally (i.e., on all the interfaces) or on selected interfaces.
+
+
+
+The example in the output enables UTD globally on all interfaces and defines what to do if the Snort engine fails.
+
+
+
+R1(config)# utd
+
+R1(config-utd)# all-interfaces
+
+R1(config-utd)#
+
+R1(config-utd)# engine standard
+
+R1(config-engine-std)# fail close
+
+R1(config-engine-std)# exit
+
+R1(config-utd)# exit
+
+R1(config)#
+
+
+
+The all-interfaces option configures unified threat defense (UTD) on all Layer 3 interfaces of the device.
+
+
+
+The engine standard command configures the Snort-based UTD engine and enters standard engine configuration mode. From this mode, we can specify how Snort will behave if there is a UTD engine failure.
+
+
+
+Specifically, Snort can be configured to:
+
+
+
+fail-open (default) - When there is a UTD engine failure, this option allows all of the IPS/IDS traffic through without being inspected.
+
+
+
+fail-close - If enabled, this option drops all the IPS/IDS traffic when there is an UTD engine failure. Therefore, no traffic will be allowed to leave.
+
+
+
+Alternatively, Snort could be enabled only on select interfaces as shown.
+
+
+
+Note: An error message will be displayed if the global configuration was first configured.
+
+
+
+R1(config)# interface G0/0/0
+
+R1(config-if)# utd enable
+
+R1(config-if)# exit
+
+R1(config)# interface G0/0/1
+
+R1(config-if)# utd enable
+
+R1(config-if)# exit
+
+R1(config)#
+
+
+
+You can also enable the UTD allowed list feature. This enables you to identify IPS signature IDs to be suppressed (not used).
+
+
+
+For example, when an IPS is incorrectly identifying normal user traffic as a threat (i.e., a false positive), we can add those signatures to an allowed list. The IPS will not use signatures in the allowlist.
+
+
+
+To do so, enter UTD allowed list configuration mode and identify signature IDs to be excluded from inspe
+
+12.3.8
+
+
+
+Step 7. Verify Snort IPS	After Snort IPS is implemented, it is necessary to verify the configuration to ensure correct operation.
+
+
+
+There are several show commands that can be used to verify the Snort IPS configuration and operation.
+
+
+
+show virtual-service list - The command displays an overview of resources that are utilized by the applications.
+
+
+
+show virtual-service detail - The command displays a list of resources that are committed to a specified application, including attached devices.
+
+
+
+show utd engine standard config - The command displays the UTD configuration.
+
+
+
+show utd engine standard status - The command displays the status of the UTD engine.
+
+
+
+show platform hardware qfp active feature utd stats - The command checks the data plane. It verifies increments for encap, decap, redirect, and reinject and displays a health of "Green".
+
+12.3.9
+
+
+
+Syntax Checker - Configure Snort IPS	In this Syntax Checker activity, you will complete Steps 2 - 6 to configure snort IPS:
+
+
+
+Step 2. Install the Snort OVA file.
+
+Step 3. Configure Virtual Port Group interfaces.
+
+Step 4. Activate the virtual services.
+
+Step 5. Configure Snort specifics.
+
+Step 6. Enable IPS globally or on desired interfaces.
+
+
+
+Step 1 is to download to Snort OVA file from cisco.com.
+
+
+
+Step 2: Install the OVA file iosxe-utd.16.09.06.1.0.10_SV29130_XE_16_9.ova in flash. Use the virtual service name MYIPS.
+
+
+
+R1#virtual-service install name MYIPS package flash:iosxe-utd.16.09.06.1.0.10_SV29130_XE_16_9.ova
+
+Installing package 'bootflash:/iosxe-utd.16.09.06.1.0.10_SV29130_XE_16_9.ova' for virtual-service 'MYIPS'. Once the install has finished, the VM may be activated. Use 'show virtual-service list' for progress.
+
+
+
+R1#
+
+*Oct 5 08:07:45.953: %VMAN-5-PACKAGE_SIGNING_LEVEL_ON_INSTALL: R0/0: vman: Package 'iosxe-utd.16.09.06.1.0.10_SV29130_XE_16_9.ova' for service container 'MYIPS' is 'Cisco signed', signing level cached on original install is 'Cisco signed'
+
+
+
+Step 3: Configure Virtual Port Group interfaces using the following specifications:
+
+
+
+Enter global configuration mode and then interface configuration mode for VirtualPortGroup0.
+
+Describe the interface as Management interface.
+
+Assign the IP address 209.165.201.1 255.255.255.252.
+
+Exit interface configuration mode.
+
+
+
+R1#configure terminal
+
+R1(config)#interface VirtualPortGroup0
+
+R1(config-if)#description Management interface
+
+R1(config-if)#ip address 209.165.201.1 255.255.255.252
+
+R1(config-if)#exit
+
+R1(config)#
+
+*Oct 5 08:13:10.970: %LINEPROTO-5-UPDOWN: Line protocol on Interface VirtualPortGroup0, changed state to up
+
+
+
+Enter interface configuration mode for VirtualPortGroup1.
+
+Describe the interface as Data interface.
+
+Assign the IP address 192.168.0.1 255.255.255.252.
+
+Exit interface configuration mode.
+
+
+
+R1(config)#i
+
+12.3.10
+
+
+
+Check Your Understanding - Implementing Snort IPS	Check your understanding of implementing Snort IPS by choosing the correct answer to the following questions.
+
+1. Which type of file contains a compressed, installable version of the Snort IPS virtual machine?	OVA
+
+2. Which Snort IPS interface statement is true?	Two virtual port group interfaces are required
+
+IPS Operation and Implementation Summary
+
+
+
+12.4.1
+
+
+
+What Did I Learn in this Module?	IPS Signatures
+
+
+
+IPS signatures have three attributes: type, trigger, and action. The signature type can be atomic or composite. The signature alarms can use pattern-based detection, anomaly-based detection, policy-based detection, or honey pot-based detection. The IPS signature actions include generate an alert, log the activity, deny the activity, reset the TCP connection, and block future activity. Triggering mechanisms can generate results such as true positive, true positive, false negatives, and false negatives.
+
+
+
+Cisco Snort IPS
+
+
+
+Intrusion protection is provided in modern Cisco networks using either dedicated NGIPS Firepower enabled devices, Snort IPS on ISR 4000 routers, or using an external Snort IPS server. Snort IPS on ISR device can provide both IDS or IPS services. It has predefined security levels (i.e., connectivity, balanced, and security). It can refer to a allowed list, provide feedback on the health of the Snort engine, offer fail-open and fail-close failover, and automated signature updates and logging. Snort IPS consists of a Snort engine and Snort rule set. There are community rules available for free and subscriber rules available for a fee. Snort IPS runs in a Linux service container VM supported by ISR 4000 routers. Snort IPS uses rules consisting of rule headers and rule options to identify malicious traffic.
+
+
+
+Configure Snort IPS
+
+
+
+To configure Snort IPS on an ISR 4000 device, you must download the latest OVA file, install it on the router, configure VPG interfaces, activate the virtual services, configure Snort IPS specifics, and enable UTD. After Snort is configured and activated, show commands allow verification of its operation.
+
+12.4.2
+
+
+
+Module 12 - IPS Operation and Implementation Quiz	
+
+1. Which IPS signature trigger category uses the simplest triggering mechanism and searches for a specific and pre-defined atomic or composite pattern?	Pattern-Based Detection
+
+2. What term describes a set of rules used by an IDS or IPS to detect typical intrusion activity?	signature
+
+3. Which type of alert is generated when an IPS incorrectly identifies normal network user traffic as attack traffic?	false positive
+
+4. What is a characteristic of the Snort subscriber rule set term-based subscription?	It is available for a fee.
+
+5. Which classification indicates that an alert is verified as an actual security incident?	true positive
+
+6. Which intrusion prevention service was available on first-generation ISR routers and is no longer supported by Cisco?	Cisco IOS IPS
+
+7. Which statement correctly describes the configuration of a Snort VPG interface?	The VPG0 interface must have a routable address with access to the internet.
+
+8. What are three actions that can be performed by Snort in IDS mode? (Choose three.)	alert
+
+
+
+pass
+
+
+
+log
+
+9. Which device is a dedicated inline threat prevention appliance that is effective against both known and unknown threats?
+
+Cisco ASA	Cisco FirePOWER NGIPS
+
+10. Which rule action will cause Snort IPS to block a packet without logging it?	Sdrop
+
+11. What is the source for IPS rule updates when using a Cisco intrusion prevention service?	Cisco Talos

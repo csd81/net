@@ -1,0 +1,3712 @@
+
+Basic ASA Firewall Configuration
+
+
+
+21.1.1
+
+
+
+Basic ASA Settings	The ASA command line interface (CLI) is a proprietary OS, which has a similar look and feel to the router IOS. For example, the ASA CLI contains command prompts similar to that of a Cisco IOS router, as shown in the figure. Also, like the IOS CLI, the ASA CLI also recognizes the following:
+
+
+
+Abbreviation of commands and keywords
+
+Use of the Tab key to complete a partial command
+
+Use of the help key (?) after a command to view additional syntax
+
+
+
+User EXEC mode ciscoasa> enable
+
+Password:
+
+Privileged EXEC mode ciscoasa#
+
+ciscoasa# configure terminal
+
+Global configuration mode ciscoasa (config) # 
+
+Interface configuration mode ciscoasa (config) # interface g1/1
+
+ciscoasa (config-if) # exit
+
+ciscoasa (config) #
+
+
+
+However, the ASA CLI also has different commands. The table contrasts common IOS router and ASA commands. (On cards 2-9).
+
+
+
+ASA CLI commands can be executed regardless of the current configuration mode prompt. The IOS command do is not required nor recognized. The following examples display some features unique to the ASA.
+
+the figure shows the a s a interface with the command show password encryption explaining that the a s a cli commands can be executed regardless of the current configuration mode prompt. the i o s do command is not required or recognized. The command help write is also shown explaining that the a s a help command provides a brief command description and syntax for certain commands. The More interrupter is shown explaining that to interrupt show command output, press the letter q. the i o s control + c does not work.
+
+
+
+ciscoasa# conf tciscoasa(config)# show password encryption Password Encryption: DisabledMaster key hash: Not set(saved)ciscoasa(config)# ciscoasa(config)# help write USAGE: write erase|terminal|standby write net [<tftp_ip>]:<filename> write [memory]DESCRIPTION:write Write config to net, flash,
+
+IOS Router Command
+
+
+
+enable secret password	Equivalent ASA Command
+
+
+
+enable password password
+
+IOS Router Command
+
+
+
+line vty 0 4
+
+password password
+
+login	Equivalent ASA Command
+
+
+
+passwd password
+
+IOS Router Command
+
+
+
+ip route	Equivalent ASA Command
+
+
+
+route if_name
+
+IOS Router Command
+
+
+
+show ip interface brief	Equivalent ASA Command
+
+
+
+show interface ip brief
+
+IOS Router Command
+
+
+
+show ip route	Equivalent ASA Command
+
+
+
+show route
+
+IOS Router Command
+
+
+
+show ip nat translations	Equivalent ASA Command
+
+
+
+show xlate
+
+IOS Router Command
+
+
+
+copy running-config startup-config	Equivalent ASA Command
+
+
+
+write [memory]
+
+IOS Router Command
+
+
+
+erase startup-config	Equivalent ASA Command
+
+
+
+write erase
+
+21.1.2
+
+
+
+ASA Default Configuration	The ASA 5506-X with FirePOWER Services ships with a default configuration that, in most instances, is sufficient for a basic SOHO deployment.
+
+
+
+Note: The ASA can be restored to its factory default configuration by using the configure factory-default global configuration mode command.
+
+
+
+The default hostname is ciscoasa. By default, the privileged EXEC and console line passwords are not configured. All interfaces are shutdown and unnamed. The default configuration is partially displayed in the example. These settings can be changed by:
+
+
+
+Manually using the CLI
+
+Interactively using the CLI Setup Initialization wizard
+
+Using the ASDM Startup wizard
+
+
+
+hostname ciscoasa
+
+enable password 8Ry2YjIyt7RRXU24 encrypted
+
+names
+
+no mac-address auto
+
+
+
+
+
+!
+
+interface GigabitEthernet1/1
+
+shutdown
+
+no nameif
+
+no security-level
+
+no ip address
+
+!
+
+interface GigabitEthernet1/2
+
+shutdown
+
+no nameif
+
+no security-level
+
+no ip address
+
+!
+
+<output omitted>
+
+
+
+
+
+interface Management1/1
+
+management-only
+
+shutdown
+
+no nameif
+
+no security-level
+
+no ip address
+
+!
+
+ftp mode passive
+
+pager lines 24
+
+icmp unreachable rate-limit 1 burst-size 1
+
+no asdm history enable
+
+arp timeout 14400
+
+no arp permit-nonconnected
+
+arp rate-limit 16384
+
+timeout xlate 3:00:00
+
+timeout pat-xlate 0:00:30
+
+timeout conn 1:00:00 half-closed 0:10:00 udp 0:02:00 sctp 0:02:00 icmp 0:00:02
+
+
+
+
+
+<output omitted>
+
+21.1.3
+
+
+
+ASA Interactive Setup Initialization Wizard	The ASA provides an interactive setup initialization wizard to simplify the initial configuration of the device. The wizard guides the administrator to configure basic settings using interactive prompts.
+
+
+
+The wizard is displayed when there is no startup configuration, or if the startup configuration is erased and the ASA is rebooted using the write erase and reload privileged EXEC commands.
+
+
+
+When the device is rebooted, the ASA wizard displays the prompt "Pre-configure Firewall now through interactive prompts [yes]?" To cancel and display the ASA default user EXEC mode prompt, enter no. Otherwise, enter yes or simply press Enter to accept the default [yes]. This initiates the wizard and the ASA interactively guides an administrator to configure the default settings.
+
+
+
+The following shows an example of an interactive configuration.
+
+
+
+Note: The security appliance displays the default values in brackets ([ ]) before prompting the user to accept or change them. To accept the default input, press Enter.
+
+
+
+Pre-configure Firewall now through interactive prompts [yes]? <Enter>
+
+Firewall Mode [Routed]: <Enter>
+
+Enable password [<use current password>]: cisco
+
+Allow password recovery [yes]? <Enter>
+
+Clock (UTC):
+
+Year [2021]:
+
+Month [Feb]:
+
+Day [9]:
+
+Time [11:21:11]:
+
+Management IP address: 192.168.1.1
+
+Management network mask: 255.255.255.0
+
+Host name: NETSEC-ASA
+
+Domain name: netsec.com
+
+IP address of host running Device Manager: 192.168.1.100
+
+
+
+The following configuration will be used:
+
+Enable password: cisco
+
+Allow password recovery: yes
+
+Clock (UTC): 11:21:11 Feb 9 2021
+
+Firewall Mode: Routed
+
+Management IP address: 192.168.1.1
+
+Management network mask: 255.255.255.0
+
+Host name: NETSEC-ASA
+
+Domain name: netsec.com
+
+IP address of host running Device Manager: 192.168.1.100
+
+
+
+Use this configuration and save to flash? [yes]<Enter>
+
+
+
+After the interactive
+
+Configure Management Settings and Services
+
+
+
+21.2.1
+
+
+
+Enter Global Configuration Mode	The default ASA user prompt of ciscoasa> is displayed when an ASA configuration is erased, the device is rebooted, and the user does not use the interactive setup wizard.
+
+
+
+To enter privileged EXEC mode, use the enable user EXEC mode command. Initially, an ASA does not have a password configured; therefore, when prompted, leave the enable password prompt blank and press Enter.
+
+
+
+The ASA date and time should be set either manually or by using Network Time Protocol (NTP). To set the date and time, use the clock set privileged EXEC command.
+
+
+
+Enter global configuration mode using the configure terminal privileged EXEC command. The first time that global configuration mode is accessed, a message pertaining to the Smart Call Home feature appears. This allows activation of the anonymous error reporting to Cisco regarding the status and health of device. Other Smart Call Home features are accessed in call-home configuration mode. These features offer proactive diagnostics and real-time alerts on select Cisco devices, which provides higher network availability and increased operational efficiency. To participate, a cisco.com ID is required, and the ASA device must be registered under a Cisco SMARTnet Service contract.
+
+
+
+Search the internet to learn more about Cisco Smart Call Home.
+
+
+
+An example of entering privileged EXEC and global configuration mode is shown below. A simple configuration is entered, and the anonymous Smart Call Home prompt is shown.
+
+
+
+ciscoasa> enable
+
+Password:
+
+ciscoasa#
+
+ciscoasa# clock set 12:00:00 1 April 2020
+
+ciscoasa#
+
+ciscoasa# configure terminal
+
+ciscoasa(config)#
+
+
+
+***************************** NOTICE *****************************
+
+
+
+Help to improve the ASA platform by enabling anonymous reporting, which allows Cisco to securely receive minimal error and health information from the device. To learn more about th
+
+21.2.2
+
+
+
+Configure Basic Settings	An ASA must be configured with basic management settings. The table displays the commands to accomplish this task. (On cards 14-19).
+
+
+
+The example displays a basic configuration on an ASA 5506-X.
+
+
+
+Like the IOS CLI, legal notification is provided using the banner motd command. However, the command is configured somewhat differently than the IOS version. To configure a banner with several lines, the banner motd must be entered multiple times. To remove a line(s), use the no banner motd message command.
+
+
+
+The privileged EXEC password is automatically encrypted using MD5. However, stronger encryption using AES should be enabled. To do so, a primary passphrase must be configured, and AES encryption must be enabled.
+
+
+
+ciscoasa(config)# hostname NETSEC-ASA
+
+NETSEC-ASA(config)# domain-name netsec.com
+
+NETSEC-ASA(config)# enable password Cisco#123
+
+NETSEC-ASA(config)#
+
+NETSEC-ASA(config)# banner motd 
+
+NETSEC-ASA(config)# banner motd Authorized access only!
+
+NETSEC-ASA(config)# banner motd You have logged into a secure device.
+
+NETSEC-ASA(config)# banner motd 
+
+NETSEC-ASA(config)# banner motd
+
+NETSEC-ASA(config)# exit
+
+NETSEC-ASA# exit
+
+
+
+Logoff
+
+
+
+
+
+Authorized access only!
+
+You have logged into a secure device.
+
+
+
+
+
+
+
+Type help or '?' for a list of available commands.
+
+NETSEC-ASA>
+
+
+
+The example displays a sample configuration for encrypting all user passwords.
+
+
+
+To change the Primary passphrase, use the key config-key password-encryption command. To determine if password encryption is enabled, use the show password encryption command.
+
+
+
+NETSEC-ASA> enable
+
+Password: *********
+
+NETSEC-ASA# show password encryption
+
+Password Encryption: Disabled
+
+Master k
+
+ASA Command
+
+
+
+hostname name	Specifies a hostname up to 63 characters.
+
+A hostname must start and end with a letter or digit, and have as interior characters only letters, digits, or a hyphen.
+
+ASA Command
+
+
+
+domain-name name	Sets the default domain name.
+
+ASA Command
+
+
+
+enable password password	Sets the enable password for privileged EXEC mode.
+
+Sets the password as a case-sensitive string of 3 to 32 alphanumeric and special characters (not including a question mark or a space).
+
+ASA Command
+
+
+
+banner motd message	Provides legal notification and configures the system to display a message-of-the-day banner when connecting to the ASA.
+
+ASA Command
+
+
+
+key config-key password-encryption
+
+[ new-pass [ old-pass ]]	Sets the passphrase between 8 and 128 character long.
+
+Used to generate the encryption key.
+
+ASA Command
+
+
+
+password encryption aes	Enables password encryption and encrypts all user passwords.
+
+21.2.3
+
+
+
+Syntax Checker - Configure Basic Settings on an ASA 5506-X	Use the Syntax Checker to configure the basic settings on an ASA 5506-X.
+
+
+
+Enter global configuration mode and configure the following basic settings:
+
+
+
+Hostname is NETSEC-ASA
+
+Domain is netsec.com
+
+Enable password is Cisco#123
+
+
+
+Note: The banner motd command will be entered for you.
+
+
+
+ciscoasa# configure terminal
+
+ciscoasa(config)#hostname NETSEC-ASA
+
+NETSEC-ASA(config)#domain-name netsec.com
+
+NETSEC-ASA(config)#enable password Cisco#123
+
+NETSEC-ASA(config)# banner motd 
+
+NETSEC-ASA(config)# banner motd Authorized access only!
+
+NETSEC-ASA(config)# banner motd You have logged into a secure device.
+
+NETSEC-ASA(config)# banner motd 
+
+NETSEC-ASA(config)# banner motd
+
+
+
+
+
+Change the passphrase to cisco123, encrypt the password with AES, and then exit global configuration mode.
+
+
+
+NETSEC-ASA(config)#key config-key password-encryption cisco123
+
+NETSEC-ASA(config)#password encryption aes
+
+NETSEC-ASA(config)#exit
+
+
+
+Verify the passphrase is encrypted.
+
+
+
+
+
+NETSEC-ASA#show password encryption
+
+Password Encryption: Enabled
+
+Master key hash: 0x45ebef8e 0x77a0f287 0x90247f80 0x2a184246 0xe85cbcc4(not saved)
+
+
+
+Save the configuration.
+
+
+
+
+
+NETSEC-ASA#write
+
+Building configuration...
+
+Cryptochecksum: c2cb4c42 66ed8038 c81a3d7f c5df996e
+
+
+
+6781 bytes copied in 0.260 secs
+
+
+
+[OK]
+
+NETSEC-ASA#
+
+
+
+You have successfully configured basic settings on the ASA 5506-X.
+
+21.2.4
+
+
+
+Configure Interfaces	The backplane of the ASA-5506-X is shown in the figure.
+
+
+
+The ASA-5506-X has eight Gigabit Ethernet interfaces that can be configured to carry traffic from different networks. The G1/1 interface is used by convention as the outside interface to the internet or other outside network. It is set to receive its IP address over DHCP by default, because it is assumed that the interface will be configured to an ISP that uses DHCP to address attached interfaces.
+
+
+
+The remaining interfaces, G1/2-G1/8, can be assigned to inside networks or DMZs. In addition, a Gigabit Ethernet port (labeled GE MGMT in the figure) is dedicated to in-band management of the ASA Fire POWER module. During configuration, it is designated as Management1/1. Configuration of the ASA FirePOWER module is beyond the scope of this course.
+
+
+
+In software versions 9.7 and later, individual ports can be combined into bridge groups that make them act like switch ports on the same logical network. In this way, multiple devices can be connected directly to the ASA 5506-X in the DMZ and inside logical networks. This is done by configuring the ports in bridged virtual interfaces (BVI). The BVI is then configurated with a name, security-level, IP address and mask, and other settings. In order to permit devices on different physical interfaces, the same-security-traffic permit inter-interface global configuration command must be configured. A drawback to using BVIs is that many commands, such as no shutdown, must be configured on the individual interfaces. In addition, if an access list is to be used on the BVI, the list must be grouped with each physical interface individually.
+
+
+
+The IP address of an interface can be configured using one of the following options: (On cards 22-24).
+
+
+
+The table lists the commands to configure an IP address on an interface. (On cards 25-27).
+
+Manually	Commonly used to assign an IP address and mask to the interface.
+
+DHCP	Used when an interface is connecting to an upstream device providing DHCP services. The interface can be a DHCP client and discover its IP address and DHCP-related information from the upstream device.
+
+PPPoE	Used when an interface is connecting to an upstream DSL device providing point-to-point connectivity over Ethernet services. The interface can be a PPPoE client and discover its IP address from an upstream PPPoE DSL device.
+
+Manually	ASA Command
+
+
+
+ip address ip-add netmask
+
+
+
+Description
+
+
+
+Assigns an IP address to the interface.
+
+Using DHCP	ASA Command
+
+
+
+ip address dhcp
+
+
+
+Description
+
+
+
+The interface will request an IP address configuration from the upstream device.
+
+
+
+
+
+ASA Command
+
+
+
+ip address dhcp setroute
+
+
+
+Description
+
+
+
+Used to have the interface request and install a default route to the upstream device.
+
+Using PPP0E	ASA Command
+
+
+
+ip address pppoe
+
+
+
+Description
+
+
+
+Interface configuration mode command that requests an IP address from the upstream device.
+
+
+
+
+
+ASA Command
+
+
+
+ip address pppoe setroute
+
+
+
+Description
+
+
+
+Same command but it also requests and installs a default route to the upstream device.
+
+ASA Command
+
+
+
+nameif if_name	Description
+
+
+
+Names the interface using a text string of up to 48 characters.
+
+The name is not case-sensitive.
+
+You can change the name by re-entering this command with a new value.
+
+Do not enter the no form, because that command causes all commands that refer to that name to be deleted.
+
+ASA Command
+
+
+
+security-level value	Description
+
+
+
+Sets the security level, where number is an integer between 0 (lowest) and 100 (highest).
+
+ASA Command
+
+
+
+no shutdown	Description
+
+
+
+Activate the interface.
+
+21.2.5
+
+
+
+Syntax Checker - Configure Outside, Inside, and DMZ Interfaces on an ASA 5506-X	Use the Syntax Checker to configure the outside, inside, and DMZ interfaces on an ASA 5506-X.
+
+
+
+Configure the OUTSIDE interface.
+
+
+
+Enter interface configuration mode for g1/1.
+
+Name the interface OUTSIDE.
+
+Configure level 0 for security.
+
+Configure the IP address 209.165.200.225 255.255.255.252.
+
+Activate the interface.
+
+
+
+
+
+NETSEC-ASA(config)#interface g1/1
+
+NETSEC-ASA(config-if)#nameif OUTSIDE
+
+INFO: Security level for "OUTSIDE" set to 0 by default.
+
+NETSEC-ASA(config-if)#security-level 0
+
+NETSEC-ASA(config-if)#ip address 209.165.200.225 255.255.255.252
+
+NETSEC-ASA(config-if)#no shutdown
+
+NETSEC-ASA(config-if)#exit
+
+
+
+Configure the INSIDE interface.
+
+
+
+Enter interface configuration mode for g1/2.
+
+Name the interface INSIDE.
+
+Configure level 100 for security.
+
+Configure the IP address 192.168.1.1 255.255.255.0.
+
+Activate the interface.
+
+Exit interface configuration mode.
+
+
+
+NETSEC-ASA(config)#interface g1/2
+
+NETSEC-ASA(config-if)#nameif INSIDE
+
+INFO: Security level for "INSIDE" set to 100 by default.
+
+NETSEC-ASA(config-if)#security-level 100
+
+NETSEC-ASA(config-if)#ip address 192.168.1.1 255.255.255.0
+
+NETSEC-ASA(config-if)#no shutdown
+
+NETSEC-ASA(config-if)#exit
+
+
+
+Configure the DMZ interface.
+
+
+
+Enter interface configuration mode for g1/3.
+
+Name the interface DMZ.
+
+Configure level 50 for security.
+
+Configure the IP address 192.168.2.1 255.255.255.0.
+
+Activate the interface.
+
+Exit interface configuration mode.
+
+
+
+
+
+NETSEC-ASA(config)#interface g1/3
+
+NETSEC-ASA(config-if)#nameif DMZ
+
+INFO: Security level for "DMZ" set to 0 by default.
+
+NETSEC-ASA(config-if)#security-level 50
+
+NETSEC-ASA(config-if)#ip address 192.168.2.1 255.255.255.0
+
+NETSEC-ASA(config-if)#no shutdown
+
+NETSEC-ASA(config-if)#exit
+
+
+
+Display brief output to verify the interfaces are up.
+
+
+
+
+
+NETSEC-ASA(config)#show interface ip brief
+
+show interface ip brief
+
+Interface IP-Address OK? Method Status Protocol
+
+Vir
+
+21.2.6
+
+
+
+Configure a Default Static Route	If an ASA is configured as a DHCP client, then it can receive and install a default route from the upstream device. Otherwise, a default static route must be configured using the route interface-name 0.0.0.0 0.0.0.0 next-hop-ip-address command. To verify the route entry, use the show route command.
+
+
+
+The example shows the configuration and verification of a default static route.
+
+
+
+NETSEC-ASA(config)# route OUTSIDE 0.0.0.0 0.0.0.0 209.165.200.226
+
+NETSEC-ASA(config)#
+
+NETSEC-ASA(config)# show route | begin Gateway
+
+Gateway of last resort is 209.165.200.226 to network 0.0.0.0
+
+
+
+S* 0.0.0.0 0.0.0.0 [1/0] via 209.165.200.226, OUTSIDE
+
+C 192.168.1.0 255.255.255.0 is directly connected, INSIDE
+
+L 192.168.1.1 255.255.255.255 is directly connected, INSIDE
+
+C 192.168.2.0 255.255.255.0 is directly connected, DMZ
+
+L 192.168.2.1 255.255.255.255 is directly connected, DMZ
+
+C 209.165.200.224 255.255.255.252 is directly connected, OUTSIDE
+
+L 209.165.200.225 255.255.255.255 is directly connected, OUTSIDE
+
+
+
+NETSEC-ASA(config)#
+
+21.2.7
+
+
+
+Syntax Checker - Configure a Default Static Route on an ASA 5506-X	Use the Syntax Checker to configure a default static route on an ASA 5506-X.
+
+
+
+Configure a default route to the OUTSIDE interface using 209.165.200.226 as the next-hop IP address.
+
+
+
+NETSEC-ASA(config)# route OUTSIDE 0.0.0.0 0.0.0.0 209.165.200.226
+
+
+
+Pipe the route table output to begin at the word Gateway.
+
+
+
+NETSEC-ASA(config)#show route | begin Gateway
+
+Gateway of last resort is 209.165.200.226 to network 0.0.0.0
+
+
+
+S* 0.0.0.0 0.0.0.0 [1/0] via 209.165.200.226, OUTSIDE
+
+C 192.168.1.0 255.255.255.0 is directly connected, INSIDE
+
+L 192.168.1.1 255.255.255.255 is directly connected, INSIDE
+
+C 192.168.2.0 255.255.255.0 is directly connected, DMZ
+
+L 192.168.2.1 255.255.255.255 is directly connected, DMZ
+
+C 209.165.200.224 255.255.255.252 is directly connected, OUTSIDE
+
+L 209.165.200.225 255.255.255.255 is directly connected, OUTSIDE
+
+
+
+NETSEC-ASA(config)#
+
+
+
+You have successfully configured a default static route on an ASA 5506-X.
+
+21.2.8
+
+
+
+Configure Remote Access Services	Telnet or SSH is required to manage the ASA 5506-X remotely, using the CLI. To enable the Telnet service, use the commands listed in the table.
+
+
+
+Note: The aaa authentication telnet console LOCAL command overrides the password set with the password command and authenticates the Telnet access against the local database. (On cards 35-39).
+
+
+
+The configuration in the example enables Telnet on an ASA 5506-X. In the example, only the inside host with IP address 192.168.1.3 would be permitted to access the ASA. The ASA will close the Telnet session if it is left idle for three minutes.
+
+
+
+NETSEC-ASA(config)# password cisco
+
+NETSEC-ASA(config)# telnet 192.168.1.3 255.255.255.255 INSIDE
+
+NETSEC-ASA(config)# telnet timeout 3
+
+NETSEC-ASA(config)#
+
+NETSEC-ASA(config)# show run telnet
+
+telnet 192.168.1.3 255.255.255.255 INSIDE
+
+telnet timeout 3
+
+NETSEC-ASA(config)#
+
+
+
+Telnet communications send everything in plaintext, including passwords. SSH traffic is encrypted in a tunnel which helps protect passwords and other sensitive configuration commands from interception. Therefore, for security reasons, remote access should always be enabled using SSH. To enable SSH access, use the commands that are listed in the table. To verify the SSH configuration, use the show ssh command. (On cards 40-46).
+
+
+
+In the example, SSH access is enabled on an ASA 5506-X. AAA authentication is enabled and references the local user database. The RSA crypto key is generated using 2048 bits. Two inside hosts and an outside host are being permitted to access the ASA and SSH version 2 is enabled.
+
+
+
+NETSEC-ASA(config)# username ADMIN password class
+
+NETSEC-ASA(config)# aaa authentication ssh console LOCAL
+
+NETSEC-ASA(config)# crypto key generate rsa modulus 2048
+
+WARNING: You have a RSA keypair already defined named <Default-RSA-Key>.
+
+
+
+Do you really want to replace them? [yes/no]
+
+ASA Command
+
+
+
+{passwd | password} 
+
+password	Description
+
+
+
+Sets the login password up to 80 characters in length for Telnet.
+
+ASA Command
+
+
+
+telnet {ipv4_add mask | ipv6_add/prefix} if_name	Description
+
+
+
+Identifies which inside host or network can Telnet to the ASA interface.
+
+Use the clear configure telnet command to remove the Telnet connection
+
+ASA Command
+
+
+
+telnet timeout minutes	Description
+
+
+
+By default, Telnet sessions left idle for five minutes are closed by the ASA.
+
+The command alters the default exec timeout of five minutes.
+
+ASA Command
+
+
+
+aaa authentication telnet console LOCAL	Description
+
+
+
+Configures Telnet to refer to the local database for authentication.
+
+The LOCAL keyword is case sensitive and is a predefined server tag.
+
+ASA Command
+
+
+
+clear configure telnet	Description
+
+
+
+Removes the Telnet connection from the configuration.
+
+ASA Command
+
+
+
+username name password password	Description
+
+
+
+Creates a local database entry.
+
+ASA Command
+
+
+
+aaa authentication ssh console LOCAL	Description
+
+
+
+Configures SSH to refer to the local database for authentication.
+
+The LOCAL keyword is case sensitive and is a predefined server tag.
+
+ASA Command
+
+
+
+crypto key generate rsa modulus modulus_size	Description
+
+
+
+Generates the RSA key required for SSH encryption.
+
+The modulus_size (in bits) can be 512, 768, 1024, 2048, 3072, or 4096.
+
+A value of at least 2048 is recommended.
+
+ASA Command
+
+
+
+ssh { ip_address mask | ipv6_address/prefix} if_name	Description
+
+
+
+Identifies which inside host or network can SSH to the ASA interface.
+
+Multiple commands can be in the configuration.
+
+If the if_name is not specified, SSH is enabled on all interfaces except the outside interface.
+
+Use the clear configure ssh command to remove the SSH connection.
+
+ASA Command
+
+
+
+ssh version version_number	Description
+
+
+
+(Optional) By default, the ASA allows both SSH Version 1 (less secure) and Version 2 (more secure).
+
+Enter this command in order to restrict the connections to a specific version.
+
+ASA Command
+
+
+
+ssh timeout minutes	Description
+
+
+
+Alters the default exec timeout of five minutes.
+
+ASA Command
+
+
+
+clear configure ssh	Description
+
+
+
+Removes the SSH connection from the configuration.
+
+21.2.9
+
+
+
+Syntax Checker - Enable SSH Remote Access to Use the Local Database on an ASA 5506-X	Use the Syntax Checker to enable SSH remote access using the local database on an ASA 5506-X.
+
+
+
+Enable SSH using the following requirements:
+
+
+
+Configure the user ADMIN to use the password class.
+
+Configure SSH to refer to the local database for authentication.
+
+Generate an RSA key with a modulus of 2048.
+
+Reply y to the prompt "Do you really want to replace them?"
+
+
+
+NETSEC-ASA(config)#username ADMIN password class
+
+NETSEC-ASA(config)#aaa authentication ssh console LOCAL
+
+NETSEC-ASA(config)#crypto key generate rsa modulus 2048
+
+WARNING: You have a RSA keypair already defined named <Default-RSA-Key>.
+
+
+
+Do you really want to replace them? [yes/no]:y
+
+Keypair generation process begin. Please wait...
+
+
+
+Allow the 192.168.1.3 and 192.168.1.4 hosts to SSH to the INSIDE interface.
+
+Allow the 172.16.1.3 host to SSH to the OUTSIDE interface.
+
+Configure SSH to use version 2
+
+
+
+NETSEC-ASA(config)#ssh 192.168.1.3 255.255.255.255 INSIDE
+
+NETSEC-ASA(config)#ssh 192.168.1.4 255.255.255.255 INSIDE
+
+NETSEC-ASA(config)#ssh 172.16.1.3 255.255.255.255 OUTSIDE
+
+NETSEC-ASA(config)#ssh version 2
+
+
+
+Enter the show ssh command to verify your configuration.
+
+
+
+NETSEC-ASA(config)#show ssh
+
+Idle Timeout: 5 minutes
+
+Version allowed: 2
+
+Cipher encryption algorithms enabled: aes256-ctr aes256-cbc aes192-ctr aes192-cbc aes128-ctr aes128-cbc
+
+Cipher integrity algorithms enabled: hmac-sha2-256
+
+
+
+
+
+Hosts allowed to ssh into the system:
+
+172.16.1.3 255.255.255.255 OUTSIDE
+
+192.168.1.3 255.255.255.255 INSIDE
+
+192.168.1.4 255.255.255.255 INSIDE
+
+NETSEC-ASA(config)#
+
+
+
+You have successfully enabled SSH remote access to use the local database on an ASA 5506-X.
+
+21.2.10
+
+
+
+Optional Lab - Configure ASA Basic Settings Using the CLI	In this lab, you will complete the following objectives:
+
+
+
+Part 1: Configure Basic Device Settings
+
+Part 2: Access the ASA Console and Use CLI Setup Mode to Configure Basic Settings
+
+Part 3: Configure Basic ASA Settings and Interface Security Levels
+
+
+
+Configure ASA Basic Settings Using the CLI
+
+21.2.11
+
+
+
+Configure Network Time Protocol Services	Network Time Protocol (NTP) services can be enabled on an ASA to obtain the date and time from an NTP server. To enable NTP, use the global configuration mode commands listed in the table.
+
+
+
+To verify the NTP configuration and status, use the show ntp status and show ntp associations commands. (On cards 50-53).
+
+
+
+The example shows how to enable NTP with authentication on an ASA 5506-X. The configuration assumes that the NTP server has been configured with an authentication key.
+
+
+
+NETSEC-ASA(config)# ntp authenticate
+
+NETSEC-ASA(config)# ntp trusted-key 1
+
+NETSEC-ASA(config)# ntp authentication-key 1 sha-256 cisco123
+
+NETSEC-ASA(config)# ntp server 192.168.1.254
+
+NETSEC-ASA(config)#
+
+ASA Command
+
+
+
+ntp authenticate	Description
+
+
+
+Enables authentication with an NTP server.
+
+ASA Command
+
+
+
+ntp trusted-key key_id	Description
+
+
+
+Specifies an authentication key ID to be a trusted key, which is required for authentication with an NTP server.
+
+ASA Command
+
+
+
+ntp authentication-key key_id md5 key	Description
+
+
+
+Sets a key to authenticate with an NTP server.
+
+ASA Command
+
+
+
+ntp server ip_address [ key key_id ]	Description
+
+
+
+Identifies an NTP server.
+
+21.2.12
+
+
+
+Syntax Checker - Enable NTP with Authentication on an ASA 5506-X	Use the Syntax Checker to enable NTP and configure authentication on an ASA 5506-X.
+
+
+
+Implement the following requirements to enable NTP:
+
+
+
+Enable authentication with an NTP server.
+
+Set the authentication key to 1.
+
+The key uses SHA-256 and the key cisco123.
+
+Specify NTP to use the server at 192.168.1.254
+
+
+
+NETSEC-ASA(config)#ntp authenticate
+
+NETSEC-ASA(config)#ntp trusted-key 1
+
+NETSEC-ASA(config)#ntp authentication-key 1 sha-256 cisco123
+
+NETSEC-ASA(config)#ntp server 192.168.1.254
+
+NETSEC-ASA(config)#
+
+
+
+You have successfully enabled NTP with authentication on an ASA 5506-X.
+
+
+
+The example enables the DHCP service for inside clients on an ASA 5506-X.
+
+
+
+Note: If the ASA outside interface was configured as a DHCP client, then the dhcpd auto_config OUTSIDE global configuration mode command can be used to pass the DHCP-obtained information to the DHCP inside clients.
+
+
+
+To verify DHCP settings, use the following commands: (On cards 61-63).
+
+
+
+To clear the DHCP bindings or statistics, use the clear dhcpd binding or clear dhcpd statistics command.
+
+
+
+NETSEC-ASA(config)# dhcpd address 10.0.0.1-10.0.1.255 INSIDE
+
+Warning, DHCP pool range is limited to 256 addresses, set address range as: 10.0.0.1-10.0.1.0
+
+Address range subnet 10.0.0.1 or 10.0.1.0 is not the same as INSIDE interface subnet 192.168.1.1
+
+NETSEC-ASA(config)# dhcpd address 192.168.1.10-192.168.1.250 INSIDE
+
+NETSEC-ASA(config)# dhcpd lease 1800
+
+NETSEC-ASA(config)#
+
+21.2.13
+
+
+
+Configure DHCP Services	An ASA can be configured to be a DHCP server to provide IP addresses and DHCP-related information to hosts. To enable an ASA as a DHCP server and provide DHCP services to hosts, use the commands listed in the table. (On cards 56-60).
+
+ASA Command
+
+
+
+dhcpd address IP_address1 [ -IP_address2 ] if_name	Description
+
+
+
+Creates a DHCP address pool in which IP_address1 is the start of the pool and IP_address2 is the end of the pool, separated by a hyphen.
+
+The address pool must be on the same subnet as the ASA interface.
+
+ASA Command
+
+
+
+dhcpd dns dns1 [ dns2 ]	Description
+
+
+
+(Optional) Specifies the IP address(es) of the DNS server(s).
+
+ASA Command
+
+
+
+dhcpd lease lease_length	Description
+
+
+
+(Optional) Changes the lease length granted to the client which is the amount of time in seconds that the client can use its allocated IP address before the lease expires.
+
+The lease_length defaults to 3600 seconds (1 hour) but can be a value from 0 to 1,048,575 seconds.
+
+ASA Command
+
+
+
+dhcpd domain domain_name	Description
+
+
+
+(Optional) Specifies the domain name assigned to the client.
+
+ASA Command
+
+
+
+dhcpd enable if_name	Description
+
+
+
+Enables the DHCP server service (daemon) on the interface (typically the inside interface) of the ASA.
+
+show dhcpd state	Displays the current DHCP state for inside and outside interfaces.
+
+show dhcpd binding	Displays the current DHCP bindings of inside users.
+
+show dhcpd statistics	Displays the current DHCP statistics.
+
+21.2.14
+
+
+
+Syntax Checker - Configure DHCP Services	Use the Syntax Checker to enable DHCP services on an ASA 5506-X.
+
+
+
+Implement the following requirements to configure DHCP services:
+
+
+
+Create a pool of inside addresses from 192.168.1.10 to 192.168.1.250 on the INSIDE interface.
+
+Set the lease length to 30 minutes (1800).
+
+
+
+NETSEC-ASA(config)#dhcpd address 192.168.1.10-192.168.1.250 INSIDE
+
+NETSEC-ASA(config)#dhcpd lease 1800
+
+NETSEC-ASA(config)#
+
+
+
+You have successfully configured DHCP services on an ASA 5506-X.
+
+Object Groups
+
+
+
+21.3.1
+
+
+
+Introduction to Objects and Object Groups	Objects are reusable components for use in configurations. Objects can be defined and used in Cisco ASA configurations in the place of inline IP addresses, services, names, and so on. Objects make it easy to maintain configurations because an object can be modified in one place and the change will be reflected in all other places that are referencing it. Without objects, the parameters for every feature would need to be modified instead of just once. For example, if a network object defines an IP address and subnet mask, and you want to change the address, you only need to change it in the object definition, not in every feature that refers to that IP address. The advantage is that when an object is modified, the change is automatically applied to all rules that use the specified object. Therefore, objects make it easy to maintain configurations.
+
+
+
+There are two types of objects that can be configured: (On cards 66-67). 
+
+
+
+Note: A network object is required to configure NAT in ASA image versions 8.3 and higher.
+
+
+
+Network object groups can contain multiple network objects as well as inline networks or hosts. Network object groups can include a mix of both IPv4 and IPv6 addresses. Objects can be attached or detached from one or more object groups when needed, ensuring that the objects are not duplicated, but can be re-used wherever needed. These objects can be used in NAT, access lists, and object groups. Network objects are a vital part of configuring NAT and can greatly simplify ACLs.
+
+
+
+The ASA supports objects and object groups, as shown in the output in the following example.
+
+
+
+NETSEC-ASA(config)# object ?
+
+
+
+configure mode commands/options:
+
+network Specifies a host, subnet or range IP addresses
+
+service Specifies a protocol/port
+
+NETSEC-ASA(config)#
+
+NETSEC-ASA(config)# object-group ?
+
+
+
+configure mode commands/options:
+
+icmp-ty
+
+Network object	A network object can contain a host, a network IP address, a range of IP addresses, or a fully qualified domain name (FQDN). A network object is configured using the object network command.
+
+Service object	Contains a protocol and optional source and/or destination port. A service object is configured using the object service command.
+
+21.3.2
+
+
+
+Configure Network Objects	To create a network object, use the object network object-name global configuration mode command. The prompt changes to network object configuration mode.
+
+
+
+Network objects can consist of the following:
+
+
+
+host - a host address
+
+fqdn - a fully-qualified domain name
+
+range - a range of IP addresses
+
+subnet - an entire IP network or subnet
+
+
+
+Commands available in network object configuration mode are shown in the table.
+
+
+
+Use the no form of any of these commands to remove a network object value. To erase all network objects, use the clear config object network command. This command clears all network objects. (On cards 69-74).
+
+
+
+The example displays a sample network object configuration. To verify, use the show running-config object command. Notice that the configuration of range overwrites the previous configuration of host.
+
+
+
+NetSec-ASA(config)# object network EXAMPLE-1
+
+NetSec-ASA(config-network-object)# host 192.168.1.3
+
+NetSec-ASA(config-network-object)# exit
+
+NetSec-ASA(config)# show run object
+
+object network EXAMPLE-1
+
+host 192.168.1.3
+
+NetSec-ASA(config)# object network EXAMPLE-1
+
+NetSec-ASA(config-network-object)# range 192.168.1.10 192.168.1.20
+
+NetSec-ASA(config-network-object)# exit
+
+NetSec-ASA(config)# show run object
+
+object network EXAMPLE-1
+
+range 192.168.1.10 192.168.1.20
+
+NetSec-ASA(config)#
+
+ASA Command
+
+
+
+attribute attribute-agent 
+
+attribute-type attribute-value	Defined and used to filter traffic associated with one or more virtual machines.
+
+ASA Command
+
+
+
+description	Enter a description of the object up to 200 characters in length.
+
+ASA Command
+
+
+
+fqdn	A fully-qualified domain name such as the name of a host, such as www.example.com. Specify v4 to limit the address to IPv4, and v6 for IPv6. If you do not specify an address type, IPv4 is assumed.
+
+ASA Command
+
+
+
+host ip-address	The IPv4 or IPv6 address of a single host.
+
+ASA Command
+
+
+
+range start_add end_add	A range of addresses. You can specify IPv4 or IPv6 ranges. Do not include masks or prefixes.
+
+ASA Command
+
+
+
+subnet {ipv4_add ipv4_mask | 
+
+ipv6_add/ipv6_prefix}	Assigns a network subnet to the named object.
+
+21.3.3
+
+
+
+Configure Service Objects	To create a service object, use the object service object-name global configuration mode command. The prompt changes to service object configuration mode. The service object can contain a protocol, ICMP, ICMPv6, TCP, or UDP port (or port ranges).
+
+
+
+The example displays service options available.
+
+
+
+NETSEC-ASA(config)# object service EXAMPLE-2
+
+NETSEC-ASA(config-service-object)#
+
+NETSEC-ASA(config-service-object)# service ?
+
+
+
+service-object mode commands/options:
+
+<0-255> Enter protocol number (0 - 255)
+
+ah
+
+eigrp
+
+esp
+
+gre
+
+icmp
+
+icmp6
+
+igmp
+
+igrp
+
+ip
+
+ipinip
+
+ipsec
+
+nos
+
+ospf
+
+pcp
+
+pim
+
+pptp
+
+sctp
+
+snp
+
+tcp
+
+udp
+
+
+
+configure mode commands/options:
+
+call-home Enable or disable Smart Call-Home
+
+internal Advanced settings (use only under Cisco supervision)
+
+password-recovery Password recovery configuration
+
+resetinbound Send reset to a denied inbound TCP packet
+
+resetoutbound Send reset to a denied outbound TCP packet
+
+resetoutside Send reset to a denied TCP packet to outside interface
+
+sw-reset-button Configure software reset button
+
+NETSEC-ASA(config-service-object)#
+
+
+
+The table provides an overview of common service options available. Optional keywords are used to identify source port or destination port, or both. Operators such as eq (equal), neq (not equal), lt (less than), gt (greater than), and range, support configuring a port for a given protocol. If no operator is specified, the default operator is eq.
+
+
+
+Use the no form of the command to remove a service object. To erase all service objects, use the clear config object service command. (On cards 76-80).
+
+
+
+The example displays a sample service object configuration. A service object name can only be associated with one protocol and port (or ports). If an existing service object is configured with a different protocol and port, the new configuration replaces the existing protocol and port with the new o
+
+ASA Command
+
+
+
+service protocol	Specifies an IP protocol name or number.
+
+ASA Command
+
+
+
+service tcp [source operator port] 
+
+[destination operator port]	Specifies that the service object is for the TCP protocol.
+
+ASA Command
+
+
+
+service udp [source operator port] 
+
+[destination operator port]	Specifies that the service object is for the UDP protocol.
+
+ASA Command
+
+
+
+service icmp [icmp-type [icmp_code]]	Specifies that the service object is for the ICMP protocol.
+
+ASA Command
+
+
+
+service icmp6 [icmp-type [icmp_code]]	Specifies that the service object is for the ICMPv6 protocol.
+
+21.3.4
+
+
+
+Object Groups	Objects can be grouped together to create an object group. By grouping like objects together, an object group can be used in an access control entry (ACE) instead of having to enter an ACE for each object separately.
+
+
+
+Note: A protocol object group can also be created. However, it is not recommended, and the use of a service object-group should be used instead.
+
+
+
+The following guidelines and limitations apply to object groups:
+
+
+
+Objects and object groups share the same name space.
+
+Object groups must have unique names.
+
+An object group cannot be removed or emptied if it is used in a command.
+
+The ASA does not support IPv6 nested object groups.
+
+
+
+There are five types of object groups. (On cards 82-86).
+
+Network	A network-based object group specifies a list of IP host, subnet, or network addresses.
+
+User	Locally created, as well as imported Active Directory user groups can be defined for use in features that support the identity firewall.
+
+Service	A service-based object group is used to group TCP, UDP, or TCP and UDP ports into an object. The ASA enables the creation of a service object group that can contain a mix of TCP services, UDP services, ICMP-type services, and any protocol, such as ESP, GRE, and TCP.
+
+ICMP-Type	The ICMP protocol uses unique types to send control messages (RFC 792). The ICMP-type object group can group the necessary types required to meet an organization's security needs, such as to create an object group called ECHO to group echo and echo-reply.
+
+Security	A security group object group can be used in features that support Cisco TrustSec by including the group in an extended ACL, which in turn can be used in an access rule.
+
+21.3.5
+
+
+
+Configure Common Object Groups	To configure a network object group, use the object-group network grp-name global configuration mode command. After entering the command, add network objects to the network group using the network-object and group-object commands.
+
+
+
+Note: A network object group cannot be used to implement NAT. A network object is required to implement NAT.
+
+
+
+To configure an ICMP object group, use the object-group icmp-type grp-name global configuration mode command. After entering the command, add ICMP objects to the ICMP object group using the icmp-object and group-object commands.
+
+
+
+The example displays a sample network object group configuration.
+
+
+
+NETSEC-ASA(config)# object-group network ADMIN-HOST
+
+NETSEC-ASA(config-network-object-group)# description Administrative hosts
+
+NETSEC-ASA(config-network-object-group)# network-object host 192.168.1.3
+
+NETSEC-ASA(config-network-object-group)# network-object host 192.168.1.4
+
+NETSEC-ASA(config-network-object-group)# exit
+
+NETSEC-ASA(config)# object-group network ALL-HOSTS
+
+NETSEC-ASA(config-network-object-group)# description All inside hosts
+
+NETSEC-ASA(config-network-object-group)# network-object 192.168.1.32 255.255.255.240
+
+NETSEC-ASA(config-network-object-group)# group-object ADMIN-HOST
+
+NETSEC-ASA(config-network-object-group)# exit
+
+NETSEC-ASA(config)# show run object-group
+
+object-group network ADMIN-HOST
+
+description Administrative host IP addresses
+
+network-object host 192.168.1.3
+
+network-object host 192.168.1.4
+
+object-group network ALL-HOSTS
+
+network-object 192.168.1.32 255.255.255.240
+
+group-object ADMIN-HOST
+
+NETSEC-ASA(config)#
+
+
+
+The example displays a sample ICMP-type object group configuration.
+
+
+
+NETSEC-ASA(config)# object-group icmp-type ICMP-ALLOWED
+
+NETSEC-ASA(config-icmp-object-group)# icmp-object echo
+
+NETSEC-ASA(config-icmp-object-group)# icmp-object time-exceeded
+
+NETSEC-ASA(config-icmp-object
+
+21.3.6
+
+
+
+Check Your Understanding - Object Groups	Check your understanding of the types of object groups by choosing the correct answer to the following questions.
+
+1. Which type of object group can contain a mix of services, such as TCP, and UDP, and can contain any protocol, such as ESP or GRE?	Service
+
+2. Which type of object group uses unique types to send control messages?	ICMP-type.
+
+3. Which type of object group can be used to control access with the identity firewall?	User
+
+4. Which type of object group is used in features that support Cisco TrustSec by including the group in an extended ACL which in turn can be used in an access rule?	Security
+
+5. Which type of object group is no longer recommended and should be replaced with a service object group?	Protocol
+
+6. Which type of object group specifies an FQDN, host, subnet, or range of IP addresses?	Network
+
+ASA ACLs
+
+
+
+21.4.1
+
+
+
+ASA ACLs	The Cisco ASA 5506-X provides basic traffic filtering capabilities with ACLs. ACLs control access in a network by preventing defined traffic from entering or exiting. In addition, an ACL can be used to select traffic to which a feature will apply, thereby performing a matching service rather than a control service.
+
+
+
+There are many similarities between ASA ACLs and IOS ACLs. For example, both are made up of ACEs, processed sequentially from the top down, and there is an implicit deny any at the bottom. Additionally, the rule of only one ACL per interface, per protocol, per direction, still applies.
+
+
+
+ASA ACLs differ from IOS ACLs in that they use a network mask (e.g., 255.255.255.0) instead of a wildcard mask (e.g. 0.0.0.255). Also most ASA ACLs are named instead of numbered.
+
+
+
+These are the similarities between ASA ACLs and IOS ACLs:
+
+
+
+ACLs are made up of one or more ACEs. ACEs are applied to a protocol, a source and destination IP address, a network, or the source and destination ports.
+
+ACLs are processed sequentially from top down.
+
+A criteria match will cause the ACL to be exited.
+
+There is an implicit deny any at the bottom.
+
+Remarks can be added per ACE or ACL.
+
+Only one access list can be applied per interface, per protocol, per direction.
+
+ACLs can be enabled/disabled based on time ranges.
+
+
+
+These the differences between ASA ACLs and IOS ACLs:
+
+
+
+The ASA uses a network mask (e.g., 255.255.255.0) and not a wildcard mask (e.g. 0.0.0.255).
+
+ACLs are always named instead of numbered.
+
+By default, interface security levels apply access control without an ACL configured.
+
+21.4.2
+
+
+
+Types of ASA ACL Filtering	ACLs on a security appliance can be used not only to filter packets that are passing through the appliance but also to filter packets destined for the appliance. (On cards 97-98).
+
+
+
+ASA devices differ from their router counterparts because of interface security levels. By default, security levels apply access control without an ACL configured. For instance, traffic from a more secure interface, such as security level 100, is allowed to access less secure interfaces, such as level 0. Traffic from a less secure interface is blocked from accessing more secure interfaces.
+
+
+
+For example, a host from the inside network with security level 100 can access the outside interface with security level 0 as shown below.
+
+
+
+G1/1G1/3G1/2
+
+More secure interfaces can access less secure interfaces.OutsideInsideDMZSecurity level: 50Web ServerSecurity level: 100InternetSecurity level: 0
+
+
+
+However, a host from an outside interface with security level 0 cannot access the inside higher-level interface, as shown below. Less secure interfaces are blocked from accessing more secure interfaces. If required, an ACL would have to be explicitly configured to permit traffic from a lower security level to a higher security level.
+
+The figure shows an a s a with 3 interfaces connected to outside, insid, and d m z.The outside interface name is outside with a security level of 0. The inside interface name is inside with a security level of 100. the dmz interface name is dmz with a security level of 50
+
+
+
+G1/1G1/3G1/2
+
+Less secure interfaces are blocked from accessing more secure interfaces.OutsideInsideDMZSecurity level: 50Web ServerSecurity level: 100InternetSecurity level: 0
+
+
+
+To allow connectivity between interfaces with the same security levels, the same-security-traffic permit inter-interface global configuration mode command is required. To enable traffic to
+
+Through-traffic filtering	Traffic that is passing through the security appliance from one interface to another interface. The configuration is completed in two steps. The first step is to set up an ACL. The second step is to apply that ACL to an interface.
+
+To-the-box-traffic filtering	Also known as a management access rule, to-the-box-traffic filtering applies to traffic that terminates at the ASA. They are created to filter traffic that is destined for the control plane of the ASA. They are completed in one step but require an additional set of rules to implement access control.
+
+21.4.3
+
+
+
+Types of ASA ACLs	The ASA supports five types of access lists: (On cards 100-104).
+
+
+
+Use the help access-list privileged EXEC command to display the syntax for all of the ACLs supported on an ASA platform.
+
+
+
+Note: The focus of this module is on extended ACLs.
+
+
+
+The tables below provide examples for the use of extended, standard, and IPv6 ACLs, respectively.
+
+
+
+The table provides examples of the uses of extended ACLs. (On cards 105-109).
+
+
+
+The table provides examples of uses of standard ACLs. (On cards 110-111).
+
+
+
+The table provides an example for the use of IPv6 ACLs. (On cards 112).
+
+Extended access list	The most common type of ACL. Contains one or more ACEs to specify source and destination addresses and protocol, ports (for TCP or UDP), or the ICMP type (for ICMP). They are used to filter traffic and to identify traffic that that should be handled by various features.
+
+Standard access list	Unlike IOS where a standard ACL identifies the source host/network, ASA standard ACLs are used to identify the destination IP addresses. They are typically only used for OSPF routes and can be used in a route map for OSPF redistribution. Standard access lists cannot be applied to interfaces to control traffic.
+
+EtherType access list	An EtherType ACL can be configured only if the security appliance is running in transparent mode.
+
+Webtype access list	Used for filtering for clientless SSL VPN traffic. These ACLs can deny access based on URLs or destination addresses.
+
+IPv6 access list	Used to determine which IPv6 traffic to block and which traffic to forward at router interfaces.
+
+ACL Use
+
+
+
+Control network access for IP traffic	The ASA does not allow any traffic from a lower security interface to a higher security interface unless it is explicitly permitted by an extended access list.
+
+ACL Use
+
+
+
+Identify traffic for AAA rules	AAA rules use access lists to identify traffic.
+
+ACL Use
+
+
+
+Identify addresses for NAT	Policy NAT lets you identify local traffic for address translation by specifying the source and destination addresses in an extended access list.
+
+ACL Use
+
+
+
+Establish VPN access	Extended access list can be used in VPN commands.
+
+ACL Use
+
+
+
+Identify traffic for Modular Policy Framework (MPF)	Access lists can be used to identify traffic in a class map, which is used for features that support MPF.
+
+
+
+Features that support MPF include TCP, general connection settings, and inspection.
+
+ACL Use
+
+
+
+Identify OSPF destination network in route maps	Standard access lists include only the destination address.
+
+It can be used to control the redistribution of OSPF routes.
+
+ACL Use
+
+
+
+VPN filters	Filter traffic for LAN-to-LAN (L2L), Cisco VPN Client, and the Cisco AnyConnect Secure Mobility Client traffic.
+
+ACL Use
+
+
+
+Control network access for IPv6 networks	Can be used to add and apply access lists to control traffic in IPv6 networks.
+
+21.4.4
+
+
+
+Syntax for Configuring an ASA ACL	The ACL configuration syntax options for the ASA can be a little overwhelming considering the number of parameters supported, as shown in the partial output of the help access-list command output shown in the example. These parameters not only give an administrator full control over what to inspect, but also provide full logging capabilities in order to analyze traffic flows at a later time.
+
+
+
+NETSEC-ASA(config)# help access-list
+
+
+
+USAGE:
+
+
+
+Extended access list:
+
+Use this to configure policy for IP traffic through the firewall
+
+
+
+[no] access-list <id> [line <line_num>] [extended] {deny | permit}
+
+{<protocol> | object-group {<service_obj_grp_id> |
+
+<protocol_obj_grp_id>} | object <service_object_name>}
+
+[user-group [<domain_nickname>\\]<user_group_name> |
+
+user [<domain_nickname>\]<user_name> |
+
+object-group-user < object_group_user_name>]
+
+[security-group {name <sgname> | tag <sgt>} |
+
+object-group-security <security_obj_grp_id>]
+
+{host <sip> | <sip> <smask> | <sip-prefix> |
+
+interface <ifc> | any | any4 | any6
+
+object-group <network_obj_grp_id> |
+
+object <network_obj_name>}
+
+[<operator> <port> [<port>] |
+
+object-group <service_obj_grp_id>]
+
+[security-group {name <sgname> | tag <sgt>} |
+
+object-group-security <security_obj_grp_id>]
+
+{host <dip> | <dip> <dmask> | <dip-prefix> |
+
+interface <ifc> | any | any4 |any6
+
+object-group <network_obj_grp_id> |
+
+object <network_obj_name>}
+
+[<operator> <port> [<port>] |
+
+object-group <service_obj_grp_id>]
+
+- More -
+
+
+
+
+
+There are many options that can be used with ACLs. However, for most needs, a more useful and condensed version of the syntax is shown below.
+
+
+
+access-list id extended {deny | permit} protocol {source_addr source_mask | any | host src_host | interface src_if_name} [operator port [port]] {dest_addr dest_mask} | any | host dst_host | interface dst_if_name}[operator port [port]]
+
+ACL name but could be
+
+Element
+
+
+
+ACL id	The name of the ACL. It can be any alphanumeric name up to 241 characters.
+
+Element
+
+
+
+Action	Can be permit or deny.
+
+Element
+
+
+
+Protocol number - Source	Can be IP for all traffic, or the name / IP protocol number (0-250) including icmp ( 1), tcp ( 6), udp ( 17), or a protocol object-group.
+
+Element
+
+
+
+Source	Identifies the source and can be any, a host, a network, or a network object group.
+
+For to-the-box-traffic filtering, the interface keyword is used to specify the source interface of the ASA.
+
+Element
+
+
+
+Source port operator	(Optional) Operand is used in conjunction with the source port.
+
+Valid operands include lt (less than), gt (greater than), eq (equal), neq (not equal), and range for an inclusive range.
+
+Element
+
+
+
+Source port	(Optional) Can be the actual TCP or UDP port number, select port names, or service object group.
+
+Element
+
+
+
+Destination	Identifies the destination and like the source, it can be any, a host, a network, or a network object group.
+
+For to-the-box-traffic filtering, the interface keyword is used to specify the destination interface of the ASA.
+
+Element
+
+
+
+Destination port operator	(Optional) Operand is used in conjunction with the destination port.
+
+Valid operands are the same as the source port operands.
+
+Element
+
+
+
+Destination port	(Optional) Can be the actual TCP or UDP port number, select port names, or service object group.
+
+Element 
+
+
+
+Log	Can set elements for syslog including severity level and log interval.
+
+Element
+
+
+
+Time range	(Optional) Specify a time range for the ACE.
+
+21.4.5
+
+
+
+Syntax for Applying an ASA ACL	After the ACL is configured, the next step is to apply it to an interface in either the inbound or the outbound direction. Applying an ACL is done in global configuration mode.
+
+
+
+The example displays the command syntax and parameter description for applying the ACL to an interface using the access-group command syntax. (On cards 126-133).
+
+
+
+ciscoasa(config)# access-group id { in | out } interface if_name [ per-user-override | control-plane ]
+
+
+
+To verify ACLs, use the show access-list and show running-config access-list commands.
+
+
+
+To erase a configured ACL, use the clear configure access-list id command.
+
+Syntax
+
+
+
+access-group	Keyword used to apply an ACL to an interface.
+
+Syntax
+
+
+
+id	The name of the actual ACL to be applied to an interface.
+
+Syntax
+
+
+
+in	The ACL will filter inbound packets.
+
+Syntax
+
+
+
+out	The ACL will filter outbound packets.
+
+Syntax
+
+
+
+interface	Keyword to specify the interface to which to apply the ACL.
+
+Syntax
+
+
+
+if_name	The name of the interface to which to apply an ACL.
+
+Syntax
+
+
+
+per-user-override	Option that allows downloadable ACLs to override the entries on the interface ACL.
+
+Syntax
+
+
+
+control-plane	Keyword to specify whether the applied ACL analyzes traffic destined to ASA for management purposes.
+
+21.4.6
+
+
+
+ASA ACL Examples	Click below for four ASA ACL examples with brief explanations.
+
+ACL Example #1	NETSEC-ASA(config)# access-list ACL-IN extended permit ip any any
+
+NETSEC-ASA(config)# access group ACL-IN in interface INSIDE
+
+
+
+ACL allows all hosts on the inside network to go through the ASA.
+
+By default, all other traffic is denied unless explicitly permitted.
+
+ACL Example #2	NETSEC-ASA(config)# access-list ACL-IN extended deny ip 192.168.1.0 255.255.255.0 209.165.201.0 
+
+255.255.255.224
+
+NETSEC-ASA(config)# access-list ACL-IN extended permit ip any any
+
+NETSEC-ASA(config)# access-group ACL-IN in interface INSIDE
+
+
+
+ACL prevents hosts on 192.168.1.0/24 from accessing the 209.165.201.0/27 network.
+
+Internal hosts are permitted access to all other addresses.
+
+All other traffic is implicitly denied.
+
+ACL Example #3	NETSEC-ASA(config)# access-list ACL-IN extended permit ip 192.168.1.0 255.255.255.0 209.165.201.0 
+
+255.255.255.224
+
+NETSEC-ASA(config)# access-group ACL-IN in interface INSIDE
+
+
+
+ACL allows hosts on 192.168.1.0/24 to access the 209.165.201.0/27 network.
+
+By default, all other traffic is denied unless explicitly permitted.
+
+ACL Example #4	NETSEC-ASA(config)# access-list ACL-IN extended deny tcp any host 209.165.201.29 eq www 
+
+NETSEC-ASA(config)# access-list ACL-IN extended permit ip any any 
+
+NETSEC-ASA(config)# access-group ACL-IN in interface INSIDE
+
+
+
+ACL prevents all inside hosts from accessing a web service at 209.165.201.29.
+
+Internal hosts are permitted to access all other services at 209.165.201.29.
+
+Internal hosts are permitted access to all other addresses.
+
+All other traffic is implicitly denied.
+
+21.4.7
+
+
+
+ACLs and Object Groups	Consider the sample topology in the figure in which access from two trusted, remote hosts, PC1 and PC2, should be allowed to the two internal for web and email servers. All other traffic attempting to pass through the ASA should be dropped and logged.
+
+
+
+The figure shows an ACL Reference Topology in which access from two trusted remote hosts should be allowed access to internal servers due to the a s a configuration which follows.
+
+.131.132209.165.202.128/27G1/2G1/3G1/1209.165.200.224/27209.165.201.1209.165.201.2PC1PC2
+
+Web and Email ServerWeb and Email ServerInsideOutsideInternet
+
+
+
+The ACL displayed in the example below would require two ACEs for each PC to accomplish the task. The implicit deny any drops and logs any packets that do not match email or web services. As shown in the example, ACLs should always be thoroughly documented using the remark command.
+
+
+
+NETSEC-ASA(config)# access-list ACL-IN remark Permit PC-1 -> Server A for HTTP / SMTP
+
+NETSEC-ASA(config)# access-list ACL-IN extended permit tcp host 209.165.201.1 host 209.165.202.131 eq http
+
+NETSEC-ASA(config)# access-list ACL-IN extended permit tcp host 209.165.201.1 host 209.165.202.131 eq smtp
+
+NETSEC-ASA(config)# access-list ACL-IN remark Permit PC-1 -> Server B for HTTP / SMTP
+
+NETSEC-ASA(config)# access-list ACL-IN extended permit tcp host 209.165.201.1 host 209.165.202.132 eq http
+
+NETSEC-ASA(config)# access-list ACL-IN extended permit tcp host 209.165.201.1 host 209.165.202.132 eq smtp
+
+NETSEC-ASA(config)# access-list ACL-IN remark Permit PC-2 -> Server A for HTTP / SMTP
+
+NETSEC-ASA(config)# access-list ACL-IN extended permit tcp host 209.165.201.2 host 209.165.202.131 eq http
+
+NETSEC-ASA(config)# access-list ACL-IN extended permit tcp host 209.165.201.2 host 209.165.202.131 eq smtp
+
+NETSEC-ASA(config)# access-list ACL-IN remark Permit PC-2 -> Server B for HTTP /
+
+21.4.8
+
+
+
+ACL Using Object Groups Examples	Object grouping is a way to group similar items together to reduce the number of ACEs. By grouping like objects together, object groups can be used in an ACL instead of having to enter an ACE for each object separately. Without object grouping, the security appliance configuration may contain thousands of lines of ACEs, which can become difficult to manage.
+
+
+
+The example displays a condensed ACL syntax to use with the object groups example on this page.
+
+
+
+The security appliance follows the multiplication factor rule when ACEs are defined. For example, if two outside hosts need to access two internal servers running HTTP and SMTP services, the ASA will have eight host-based ACEs. They should be calculated as follows:
+
+
+
+Number of ACEs = (2 outside hosts) x (2 internal servers) x (2 services) = 8
+
+
+
+Object grouping can cluster network objects into one group and outside hosts into another, as shown in the following syntax. The security appliance can also combine both TCP services into a service object group.
+
+
+
+ciscoasa(config)# access-list id extended { deny | permit } protocol object-group source_net-obj-grp_id object-group dest_net-obj-grp_id object-group service-obj-grp_id
+
+
+
+For example, consider the reference topology in the figure below. In the extended ACL example on the previous page, this topology required a total of nine ACL ACEs, the eight permit ACEs, and the implicit deny ACE. Creating the following objects can help simplify the actual ACL to one ACE. For example, the following object groups are created:
+
+
+
+Network object group named NET-HOSTS - Identifies two external hosts.
+
+Network object group named SERVERS - Identifies servers providing email and web services.
+
+Service object group HTTP-SMTP - Identifies SMTP and HTTP protocols.
+
+
+
+.131.132209.165.202.128/27G1/2G1/3G1/1209.165.200.224/27209.165.201.1209.165.201.2PC1PC2
+
+21.4.9
+
+
+
+Syntax Checker - Configure an ASA ACL Using Object Groups	Use the Syntax Checker to configure an ASA ACL using object groups.
+
+
+
+Configure a network object group named NET-HOSTS to match hosts 209.165.201.1 and 209.165.201.2. Then exit network object configuration mode.
+
+
+
+NETSEC-ASA(config)#object-group network NET-HOSTS
+
+NETSEC-ASA(config-network-object-group)# description OG matches PC-A and PC-B
+
+NETSEC-ASA(config-network-object-group)#network-object host 209.165.201.1
+
+NETSEC-ASA(config-network-object-group)#network-object host 209.165.201.2
+
+NETSEC-ASA(config-network-object-group)#exit
+
+
+
+Configure a network object group named SERVERS to match hosts 209.165.202.131 and 209.165.202.132. Then exit network object configuration mode.
+
+
+
+NETSEC-ASA(config)#object-group network SERVERS
+
+NETSEC-ASA(config-network-object-group)# description OG matches Web / Email Servers
+
+NETSEC-ASA(config-network-object-group)#network-object host 209.165.202.131
+
+NETSEC-ASA(config-network-object-group)#network-object host 209.165.202.132
+
+NETSEC-ASA(config-network-object-group)#exit
+
+
+
+Configure a tcp service object group named HTTP-SMTP match to match the smtp port, and then match to the www port. Exit network object configuration mode.
+
+
+
+NETSEC-ASA(config)#object-group service HTTP-SMTP tcp
+
+NETSEC-ASA(config-service-object-group)# description OG matches SMTP / WEB traffic
+
+NETSEC-ASA(config-service-object-group)#port-object eq smtp
+
+NETSEC-ASA(config-service-object-group)#port-object eq www
+
+NETSEC-ASA(config-service-object-group)#exit
+
+NETSEC-ASA(config)#
+
+NETSEC-ASA(config)# access-list ACL-IN remark Only permit PC-A / PC-B -> Internal Servers
+
+
+
+The remark for ACL-IN has already been configured for you. Now configure ACL-IN to permit tcp from NET-HOSTS to SERVERS using the HTTP-SMTP service policy.
+
+
+
+NETSEC-ASA(config)#access-list ACL-IN extended permit tcp object-group NET-HOSTS object-group SERVERS object-group H
+
+NAT Services on an ASA
+
+
+
+21.5.1
+
+
+
+ASA NAT Overview	Like IOS routers, the ASA supports Network Address Translation (NAT). NAT is typically used to translate private IP network addresses into public IP addresses.
+
+
+
+NAT can be deployed using one of the methods: (On cards 143-145).
+
+
+
+The figure illustrates how inside NAT and outside NAT flow.
+
+
+
+G1/3G1/2G1/1192.168.2.0/24.3192.168.1.0/27.3209.165.200.224/27209.165.201.2PC2
+
+DMZInsideOutsideInternetInside NATOutside NATInside NATOutsideNAT
+
+
+
+Specifically, the Cisco ASA supports the following common types of NAT: (On cards 146-149).
+
+
+
+These types of NAT are referred to as network object NAT because the configuration requires network objects to be configured.
+
+
+
+Note: Another ASA NAT feature is called Twice-NAT. Twice-NAT identifies both the source and destination address in a single rule (nat command). Twice-NAT is used when configuring remote-access IPsec and SSL VPNs. Twice-NAT is beyond the scope of the module and is not explored further.
+
+Inside NAT	The typical NAT deployment method is when a host from a higher-security interface has traffic destined for a lower-security interface and the ASA translates the internal host address into a global address. The ASA then restores the original inside IP address for return traffic.
+
+Outside NAT	This method is used when traffic from a lower-security interface that is destined for a host on the higher-security interface must be translated. This method may be useful to make an enterprise host located on the outside of the internal network appear as one from a known internal IP address.
+
+Bidirectional NAT	Indicates that both inside NAT and outside NAT are used together.
+
+Dynamic PAT	This is a many-to-one translation. This is also known as NAT with overload. Usually an inside pool of private addresses overloading an outside interface or outside address.
+
+Static NAT	This is a one-to-one translation. Usually an outside address mapping to an internal server.
+
+Policy NAT	Policy-based NAT is based on a set of rules. These rules can specify that only certain source addresses that are intended for specific destination addresses and/or specific ports will be translated.
+
+Identity NAT	A real address is statically translated to itself, essentially bypassing NAT. You might want to configure NAT this way when you want to translate a large group of addresses, but then want to exempt a smaller subset of addresses.
+
+21.5.2
+
+
+
+Configure Dynamic NAT	To configure network object dynamic NAT, two network objects are required:
+
+
+
+A network object identifying the pool of public IP addresses into which internal addresses are translated. These are identified using range or subnet network object commands.
+
+The second network object identifies the internal addresses to be translated and then binds the two objects together. These are identified using the range or subnet network object commands.
+
+
+
+The two network objects are then bound together using nat [(real_if_name,mapped_if_name)] dynamic mapped_obj [interface [ipv6]] [dns] network object command. The real_if_name is the prenat interface. The mapped_if_name is the postnat interface. Notice that there is no space after the comma in the command syntax.
+
+
+
+For example, the figure displays the NAT reference topology that will be used to configure dynamic NAT, dynamic PAT, and static NAT.
+
+
+
+In this dynamic NAT example, the inside hosts on the 192.168.1.0/27 network will be dynamically assigned a range of public IP addresses from 209.165.200.240 to 209.165.200.248.
+
+
+
+G1/3G1/2G1/1192.168.2.0/24.3192.168.1.0/27.3209.165.200.224/27209.165.201.2PC2
+
+DMZInsideOutsideInternetInside NATOutside NATInside NATOutsideNAT
+
+
+
+The example displays a sample dynamic NAT configuration to accomplish this task. The PUBLIC network object identifies the public IP addresses to be translated to while the DYNAMIC-NAT object identifies the internal addresses to be translated and is bound to the PUBLIC network object with the nat command.
+
+
+
+NETSEC-ASA(config)# object network PUBLIC
+
+NETSEC-ASA(config-network-object)# range 209.165.200.240 209.165.200.248
+
+NETSEC-ASA(config-network-object)# exit
+
+NETSEC-ASA(config)#
+
+NETSEC-ASA(config)# object network DYNAMIC-NAT
+
+NETSEC-ASA(config-network-object)# subnet 192.168.1.0 255.255.255.224
+
+NETSEC-ASA(config-network-object)# n
+
+21.5.3
+
+
+
+Syntax Checker - Configure Dynamic NAT on an ASA 5506-X	Use the Syntax Checker to configure dynamic NAT on an ASA 5506-X.
+
+
+
+Dynamic NAT configuration on a ASA requires the following:
+
+
+
+A network object defining the pool of public IP addresses.
+
+A network object defining the internal IP address to be translated.
+
+Binding the network objects together to begin the translation.
+
+
+
+Create a network object PUBLIC, and then assign it the IP address pool from 209.165.200.240 to 209.165.200.248. Exit network object configuration mode.
+
+
+
+NETSEC-ASA(config)#object network PUBLIC
+
+NETSEC-ASA(config-network-object)#range 209.165.200.240 209.165.200.248
+
+NETSEC-ASA(config-network-object)#exit
+
+
+
+Create a network object DYNAMIC-NAT
+
+Assign it the subnet 192.168.1.0 255.255.255.224.
+
+Use the nat command to specify the INSIDE and OUTSIDE interface and bind the PUBLIC network object for dynamic IP addresses.
+
+Exit network object configuration mode.
+
+
+
+NETSEC-ASA(config)#object network DYNAMIC-NAT
+
+NETSEC-ASA(config-network-object)#subnet 192.168.1.0 255.255.255.224
+
+NETSEC-ASA(config-network-object)#nat (INSIDE,OUTSIDE) dynamic PUBLIC
+
+NETSEC-ASA(config-network-object)#exit
+
+
+
+Complete the following to allow inside hosts to ping outside hosts:
+
+
+
+Enter policy map configuration mode for global_policy.
+
+Enter class configuration mode for the inspection_default class.
+
+In class configuration mode, configure an ACL named ICMPACL. The ACL should allow all ICMP traffic.
+
+Assign the ACL to match inbound traffic entering the OUTSIDE interface.
+
+
+
+NETSEC-ASA(config)#policy-map global_policy
+
+NETSEC-ASA(config-pmap)#class inspection_default
+
+NETSEC-ASA(config-pmap-c)#access-list ICMPACL extended permit icmp any any
+
+NETSEC-ASA(config)#access-group ICMPACL in interface OUTSIDE
+
+
+
+Assume host 192.168.1.3 has sent traffic to the outside. Enter the show xlate command to verify the internal private IP address was translated to a public IP
+
+21.5.4
+
+
+
+Configure Dynamic PAT	A variation of this configuration is called Dynamic PAT. This is when an actual external IP address is configured and overloaded instead of the ASA interface IP address.
+
+
+
+Only one network object is required when overloading the outside interface. To enable inside hosts to overload the outside address, use nat [(real_if_name,mapped_if_name)] dynamic interface command.
+
+
+
+The example displays a dynamic PAT configuration for the same reference topology.
+
+
+
+NETSEC-ASA(config)# object network INSIDE-NET
+
+NETSEC-ASA(config-network-object)# subnet 192.168.1.0 255.255.255.224
+
+NETSEC-ASA(config-network-object)# nat (INSIDE,OUTSIDE) dynamic interface
+
+NETSEC-ASA(config-network-object)# end
+
+NETSEC-ASA#
+
+
+
+After the inside host pings the outside host, verify the network address translation using the show xlate command. The example displays the resulting translation.
+
+
+
+NETSEC-ASA# show xlate
+
+1 in use, 1 most used
+
+Flags: D - DNS, e - extended, I - identity, I - dynamic, r - portmap,
+
+s - static, T - twice, N - net-to-net
+
+ICMP PAT from INSIDE:192.168.1.3/1 to OUTSIDE:209.165.200.226/1 flags ri idle
+
+0:00:02 timeout 0:00:30
+
+NETSEC-ASA#
+
+21.5.5
+
+
+
+Configure Static NAT	Static NAT is configured when an inside address is mapped to an outside address. For instance, static NAT can be used when a server must be accessible from the outside.
+
+
+
+To configure static NAT, use the nat [(real_if_name,mapped_if_name)] static mapped-inline-host-ip network object command.
+
+
+
+The figure displays the NAT reference topology that will be used to configure the DMZ interface and static NAT.
+
+
+
+.3G1/3G1/2G1/1192.168.1.0/27209.165.200.224/27209.165.201192.168.2.3
+
+DMZOutsideInsideInternet
+
+
+
+The example below displays the configuration that is used to enable static NAT. In this example, outside hosts can reach the internal server with the IP address 192.168.2.3 using the external IP address 209.165.200.227.
+
+
+
+An ACL is required for the translation to be successful.
+
+
+
+NETSEC-ASA(config)# object network DMZ-SERVER
+
+NETSEC-ASA(config-network-object)# host 192.168.2.3
+
+NETSEC-ASA(config-network-object)# nat (DMZ,OUTSIDE) static 209.165.200.227
+
+NETSEC-ASA(config-network-object)# exit
+
+NETSEC-ASA(config)#
+
+NETSEC-ASA(config)# access-list OUTSIDE-DMZ extended permit ip any host 192.168.2.3
+
+NETSEC-ASA(config)# access-group OUTSIDE-DMZ in interface OUTSIDE
+
+NETSEC-ASA(config)#
+
+NETSEC-ASA(config)# policy-map global_policy
+
+NETSEC-ASA(config-pmap)# class inspection_default
+
+NETSEC-ASA(config-pmap-c)# access-list ICMPACL extended permit icmp any any
+
+NETSEC-ASA(config)# access-group ICMPACL in interface DMZ
+
+NETSEC-ASA(config)#
+
+
+
+Use the show xlate and show nat detail commands to verify translations, as shown in the example. It may be necessary to use the clear nat counters command when testing NAT.
+
+
+
+NETSEC-ASA(config)# show xlate
+
+2 in use, 2 most used
+
+Flags: D - DNS, e - extended, I - identity, I - dynamic, r - portmap,
+
+s - static, T - twice, N - net-to-net
+
+NAT from DMZ:192.168.2.3 to OUTSIDE:209.165.200.227
+
+flags s idle 0:00:21 timeout
+
+21.5.6
+
+
+
+Syntax Checker - Configure Static NAT on an ASA 5506-X	Use the Syntax Checker to configure static NAT on an ASA 5506-X.
+
+
+
+To configure static NAT, you create a network object for the host you want to map to a public IP address.
+
+
+
+Create a network object DMZ-SERVER.
+
+Assign 192.168.2.3 to the network object.
+
+Use the nat command to statically assign 209.165.200.227 for packets coming in the DMZ interface and exiting the OUTSIDE interface.
+
+Exit network object configuration mode.
+
+
+
+NETSEC-ASA(config)#object network DMZ-SERVER
+
+NETSEC-ASA(config-network-object)#host 192.168.2.3
+
+NETSEC-ASA(config-network-object)#nat (DMZ,OUTSIDE) static 209.165.200.227
+
+NETSEC-ASA(config-network-object)#exit
+
+
+
+Configure an ACL OUTSIDE-DMZ that will permit any traffic to destination 192.168.2.3.
+
+Apply the ACL for inbound traffic on the OUTSIDE interface.
+
+
+
+NETSEC-ASA(config)#access-list OUTSIDE-DMZ extended permit ip any host 192.168.2.3
+
+NETSEC-ASA(config)#access-group OUTSIDE-DMZ in interface OUTSIDE
+
+NETSEC-ASA(config)# policy-map global_policy
+
+NETSEC-ASA(config-pmap)# class inspection_default
+
+NETSEC-ASA(config-pmap-c)# access-list ICMPACL extended permit icmp any any
+
+
+
+ACL ICMPACL is already configured. Assign the ACL to match inbound traffic entering the DMZ interface.
+
+
+
+NETSEC-ASA(config)#access-group ICMPACL in interface DMZ
+
+
+
+Assume an external host at 209.165.200.242 has sent traffic to the DMZ server at 192.168.2.3. Use the show xlat command to verify the internal private IP address was translated to a public IP address. Notice that the flag s indicates that the translation was static.
+
+
+
+NETSEC-ASA(config)#show xlate
+
+2 in use, 2 most used
+
+Flags: D - DNS, e - extended, I - identity, I - dynamic, r - portmap,
+
+s - static, T - twice, N - net-to-net
+
+NAT from DMZ:192.168.2.3 to OUTSIDE:209.165.200.227
+
+flags s idle 0:00:21 timeout 0:00:00
+
+
+
+NAT from INSIDE:192.168.1.3 to OUTSIDE:209.165.200.242 flags I idle
+
+AAA
+
+
+
+21.6.1
+
+
+
+AAA Review	Authentication, authorization, and accounting (AAA) provides an extra level of protection and user control. Using AAA only, authenticated and authorized users can be permitted to connect through the ASA.
+
+
+
+Authentication can be used alone or with authorization and accounting. Authorization always requires a user to be authenticated first. Accounting can be used alone, or with authentication and authorization.
+
+
+
+AAA is conceptually similar to using a credit card, as shown in the figure. Authentication controls access by requiring valid user credentials, which are usually a username and password. The ASA can authenticate all administrative connections to the ASA, including Telnet, SSH, console, ASDM using HTTPS, and privileged EXEC.
+
+
+
+Authorization controls access, per user, after users are authenticated. Authorization controls the services and commands that are available to each authenticated user. Without authorization enabled, authentication alone would provide the same access to services for all authenticated users. The ASA can authorize management commands, network access, and VPN access.
+
+
+
+Accounting tracks traffic that passes through the ASA, enabling administrators to have a record of user activity. Accounting information includes session start and stop times, usernames, the number of bytes that pass through the ASA for the session, the service used, and the duration of each session.
+
+
+
+The figure shows a credit card next to a credit card statement. There is a rectangle around the numbers on the credit card with the text, Authentication Who are you? A second rectangle is around the credit limit on the credit card statement with text, Authorization How much can you spend? A third rectangle is around the transaction portion of the credit card summary with the text Accounting What did you spend on it?
+
+AuthenticationWho ar
+
+21.6.2
+
+
+
+Local Database and Servers	Cisco ASA can be configured to authenticate using a local user database or an external server for authentication or both.
+
+
+
+Local AAA uses a local database for authentication. This method stores usernames and passwords locally on the ASA, and users authenticate against the local database. Local AAA is ideal for small networks that do not need a dedicated AAA server.
+
+
+
+Note: Unlike the ISR, ASA devices do not support local authentication without using AAA.
+
+
+
+Use the username name password password [privilege priv-level] command to create local user accounts. To erase a user from the local database, use the clear config username [name] command. To view all user accounts, use the show running-config username command.
+
+
+
+To configure a TACACS+ or RADIUS server, use the commands listed in the table. (On cards 157-158).
+
+
+
+To erase all AAA server configurations, use the clear config aaa-server command. To view all user accounts, use the show running-config aaa-server command.
+
+
+
+The example shows configuration of a AAA TACACS+ server on an ASA 5506-X.
+
+
+
+NETSEC-ASA(config)# username Admin password class privilege 15
+
+NETSEC-ASA(config)# show run username
+
+username Admin password ***** pbkdf2 privilege 15
+
+NETSEC-ASA(config)# aaa-server TACACS-SVR protocol tacacs+
+
+NETSEC-ASA(config-aaa-server-group)# aaa-server TACACS-SVR (DMZ) host 192.168.2.3
+
+NETSEC-ASA(config-aaa-server-host)# exit
+
+aaa-server TACACS-SVR protocol tacacs+
+
+NETSEC-ASA(config)#
+
+21.6.3
+
+
+
+AAA Configuration	To authenticate users who access the ASA CLI over a console (serial), SSH, HTTPS (ASDM), or Telnet connection, or to authenticate users who access privileged EXEC mode using the enable command, use the aaa authentication enable console command in global configuration mode. The command syntax is as follows:
+
+
+
+ciscoasa(config)# aaa authentication { serial | enable | telnet | ssh | http } console { LOCAL | server-group [ LOCAL ]}
+
+
+
+To erase all AAA parameters, use the clear config aaa command. To view all user accounts, use the show running-config username command.
+
+
+
+The example provides a sample AAA configuration that is then verified and tested.
+
+
+
+NETSEC-ASA(config)# aaa authentication serial console TACACS-SVR LOCAL
+
+NETSEC-ASA(config)# aaa authentication ssh console TACACS-SVR LOCAL
+
+NETSEC-ASA(config)# aaa authentication http console TACACS-SVR LOCAL
+
+NETSEC-ASA(config)# aaa authentication telnet console TACACS-SVR LOCAL
+
+NETSEC-ASA(config)# aaa authentication enable console TACACS-SVR LOCAL
+
+NETSEC-ASA(config)#
+
+NETSEC-ASA(config)# show run aaa
+
+aaa authentication serial console TACACS-SVR LOCAL
+
+aaa authentication ssh console TACACS-SVR LOCAL
+
+aaa authentication http console TACACS-SVR LOCAL
+
+aaa authentication telnet console TACACS-SVR LOCAL
+
+aaa authentication enable console TACACS-SVR LOCAL
+
+aaa authentication login-history
+
+NETSEC-ASA(config)# exit
+
+NETSEC-ASA# exit
+
+
+
+Logoff
+
+
+
+Username: Admin
+
+Password: *****
+
+
+
+Authorized access only!
+
+You have logged into a secure device.
+
+
+
+
+
+User Admin logged in to NETSEC-ASA
+
+Logins over the last 2 days: 4. Last login: 10:14:48 UTC Feb 11 2021 from console
+
+Failed logins since the last login: 0.
+
+Type help or '?' for a list of available commands.
+
+NETSEC-ASA>
+
+21.6.4
+
+
+
+Syntax Checker - Configure AAA on an ASA 5506-X	Use the Syntax Checker to configure and verify AAA services on an ASA 5506-X.
+
+
+
+Configure privilege level 15 for the user Admin with the password class.
+
+
+
+NETSEC-ASA(config)# username Admin password class privilege 15
+
+NETSEC-ASA(config)# show run username
+
+username Admin password ***** pbkdf2 privilege 15
+
+
+
+Name the AAA server TACACS-SVR and configure it to use tacacs+.
+
+Associate the server to the DMZ interface and specify the IP address 192.168.2.3.
+
+Exit AAA server host configuration mode.
+
+
+
+NETSEC-ASA(config)#aaa-server TACACS-SVR protocol tacacs+
+
+NETSEC-ASA(config-aaa-server-group)#aaa-server TACACS-SVR (DMZ) host 192.168.2.3
+
+NETSEC-ASA(config-aaa-server-host)#exit
+
+NETSEC-ASA(config)# show run aaa-server
+
+aaa-server TACACS-SVR protocol tacacs+
+
+aaa-server TACACS-SVR (DMZ) host 192.168.2.3
+
+NETSEC-ASA(config)#
+
+
+
+Configure AAA to use the LOCAL TACACS-SVR to authenticate users over a console (serial) connection. SSH, HTTP, and Telnet will be configured for you. Then configure AAA to authenticate users that attempt to access privilege EXEC mode.
+
+
+
+NETSEC-ASA(config)#aaa authentication serial console TACACS-SVR LOCAL
+
+NETSEC-ASA(config)# aaa authentication ssh console TACACS-SVR LOCAL
+
+NETSEC-ASA(config)# aaa authentication http console TACACS-SVR LOCAL
+
+NETSEC-ASA(config)# aaa authentication telnet console TACACS-SVR LOCAL
+
+NETSEC-ASA(config)#aaa authentication enable console TACACS-SVR LOCAL
+
+
+
+Use the show run aaa command to verify the AAA configuration.
+
+
+
+NETSEC-ASA(config)#show run aaa
+
+aaa authentication serial console TACACS-SVR LOCAL
+
+aaa authentication ssh console TACACS-SVR LOCAL
+
+aaa authentication http console TACACS-SVR LOCAL
+
+aaa authentication telnet console TACACS-SVR LOCAL
+
+aaa authentication enable console TACACS-SVR LOCAL
+
+aaa authentication login-history
+
+NETSEC-ASA(config)#
+
+
+
+Enter exit twice to log out of NETSEC-ASA. Then l
+
+Service Policies on an ASA
+
+
+
+21.7.1
+
+
+
+Overview of MPF	A Modular Policy Framework (MPF) configuration defines a set of rules for applying firewall features, such as traffic inspection and QoS, to the traffic that traverses the ASA. MPF allows granular classification of traffic flows, which enables the application of different advanced policies to different flows. MPF is used with hardware modules to redirect traffic granularly from the ASA to the modules that use Cisco MPF. MPF can be used for advanced application layer inspection of traffic by classifying at Layers 5 through 7. Rate limiting and QoS features can also be implemented using MPF.
+
+
+
+Cisco MPF uses three configuration objects to define modular, object-oriented, hierarchical policies.
+
+
+
+Click below to learn more about the three configuration objects that are used in MPF. (On cards 160-162).
+
+
+
+Although the MPF syntax is similar to the ISR IOS Cisco Modular QoS CLI (MQC) syntax or the Cisco Common Classification Policy Language (C3PL) syntax, the configurable parameters differ. The ASA platform provides more configurable actions as compared to an ISR for Cisco IOS ZPF. The ASA supports Layer 5 to Layer 7 inspections using a richer set of criteria for application-specific parameters. For instance, the ASA MPF feature can be used to match HTTP URLs and request methods, prevent users from surfing to specific sites during specific times, or even prevent users from downloading music (MP3) and video files via HTTP/FTP or HTTPS/SFTP.
+
+
+
+There are four steps to configure MPF on an ASA:
+
+
+
+Step 1. (Optional) Configure extended ACLs to identify granular traffic that can be specifically referenced in the class map. For example, ACLs can be used to match TCP traffic, UDP traffic, HTTP traffic, or all traffic to a specific server.
+
+
+
+Step 2. Configure the class map to identify traffic.
+
+
+
+Step 3. Configure a policy map to apply actions t
+
+Class Maps	What are we looking for?
+
+
+
+Classify traffic.
+
+Identify traffic on which to perform MPF.
+
+Create layer 3 and 4 class maps that can contain multiple match criteria.
+
+
+
+ciscoasa(config)# class-map class-name
+
+Policy Maps	What shall we do with it?
+
+
+
+Define actions
+
+Define a policy for the traffic at Layers 3 to 7.
+
+Create a policy map that can contain multiple class maps with associated actions.
+
+
+
+ciscoasa(config)# policy-map policy-name
+
+Service Policy	Where do we do it?
+
+
+
+Activate the policy map on interfaces.
+
+Create a service policy that applies a policy map to an interface or all interfaces.
+
+
+
+ciscoasa(config)# service-policy serv-name [ global | interface if-name ]
+
+21.7.2
+
+
+
+Configure Class Maps	Class maps are configured to identify Layer 3 and 4 traffic (also called layer 3/4). To create a class map and enter class-map configuration mode, use the class-map class-map-name global configuration mode command. The names "class-default" and any name that begins with "_internal" or "_default" are reserved. The class map name must be unique and can be up to 40 characters in length. The name should also be descriptive.
+
+
+
+Note: A variation of the class-map command is used for management traffic that is destined for the ASA. In this case, use the class-map type management class-map-name command.
+
+
+
+When in class-map configuration mode, a description explaining the purpose of the class map should be configured using the description command.
+
+
+
+Next, traffic to match should be identified using the match any (matches all traffic) or match access-list access-list-name commands to match traffic specified by an extended access list.
+
+
+
+Note: Unless otherwise specified, only include one match command in the class map.
+
+
+
+The example provides a sample class map configuration.
+
+
+
+NETSEC-ASA(config)# access-list UDP permit udp any any
+
+NETSEC-ASA(config)# access-list TCP permit tcp any any
+
+NETSEC-ASA(config)# access-list SERVER permit ip any host 10.1.1.1
+
+NETSEC-ASA(config)#
+
+NETSEC-ASA(config)# class-map ALL-TCP
+
+NETSEC-ASA(config-cmap)# description This class-map matches all TCP traffic
+
+NETSEC-ASA(config-cmap)# match access-list TCP
+
+NETSEC-ASA(config-cmap)# exit
+
+NETSEC-ASA(config)#
+
+NETSEC-ASA(config)# class-map ALL-UDP
+
+NETSEC-ASA(config-cmap)# description This class-map matches all UDP traffic
+
+NETSEC-ASA(config-cmap)# match access-list UDP
+
+NETSEC-ASA(config-cmap)# exit
+
+NETSEC-ASA(config)#
+
+NETSEC-ASA(config)# class-map ALL-HTTP
+
+NETSEC-ASA(config-cmap)# description This class-map matches all HTTP traffic
+
+NETSEC-ASA(config-cmap)# match port TCP
+
+21.7.3
+
+
+
+Define and Activate a Policy	Policy maps are used to bind class maps with actions. Use the policy-map policy-map-name global configuration mode command, to apply actions to the Layer 3 and 4 traffic. The policy map name must be unique and up to 40 characters in length. The name should also be descriptive.
+
+
+
+In policy-map configuration mode, config-pmap, use the following commands: (On cards 165-166).
+
+
+
+The maximum number of policy maps is 64. There can be multiple Layer (3/4) class maps in one policy map, and multiple actions can be assigned from one or more feature types to each class map.
+
+
+
+Note: The configuration includes a default Layer (3/4) policy map that the ASA uses in the default global policy. It is called global_policy and performs an inspection on the default inspection traffic. There can only be one global policy. Therefore, to alter the global policy, either edit it or replace it.
+
+
+
+These are the three most common commands available in policy map configuration mode: (On cards 167-169).
+
+
+
+Actions are applied to traffic bidirectionally or unidirectionally depending on the feature.
+
+
+
+To display information about the policy map configuration, use the show running-config policy-map command.
+
+
+
+Use the clear configure policy-map command in global configuration mode, to remove all policy maps.
+
+
+
+Configure the Service Policy
+
+
+
+To activate a policy map globally on all interfaces or on a targeted interface, use the service-policy policy-map-name [ global | interface intf ] global configuration mode command to enable a set of policies on an interface.
+
+
+
+The example configures the policy map. Its associated service policy is applied globally.
+
+
+
+NETSEC-ASA(config)# access-list TFTP-TRAFFIC permit udp any any eq 69
+
+NETSEC-ASA(config)#
+
+NETSEC-ASA(config)# class-map CLASS-TFTP
+
+NETSEC-ASA(config-cmap)# match access-list TFTP-TRAFFIC
+
+NETSEC-ASA(config-cmap)# exit
+
+NETSEC
+
+description	Add description text.
+
+class class-map-name	Identify a specific class map on which to perform actions.
+
+set connection	Sets connection values.
+
+inspect	Provides protocol inspection servers.
+
+police	Sets rate limits for traffic in this class.
+
+21.7.4
+
+
+
+Syntax Checker - Define and Activate a Policy on an ASA 5506-X	Use the Syntax Checker to define and activate a policy on an ASA 5506-X.
+
+
+
+Configure an ACL named TFTP-TRAFFIC to allow all inbound and outbound TFTP traffic. Use the port number instead of the keyword.
+
+
+
+NETSEC-ASA(config)#access-list TFTP-TRAFFIC permit udp any any eq 69
+
+
+
+Configure a class named CLASS-TFTP to match the TFTP-TRAFFIC ACL. Then exit class map configuration mode.
+
+
+
+NETSEC-ASA(config)#class-map CLASS-TFTP
+
+NETSEC-ASA(config-cmap)#match access-list TFTP-TRAFFIC
+
+NETSEC-ASA(config-cmap)#exit
+
+
+
+Configure a policy named POLICY-TFTP to use CLASS-TFTP to inspect TFTP traffic. The enter exit twice to return to global configuration mode.
+
+
+
+NETSEC-ASA(config)#policy-map POLICY-TFTP
+
+NETSEC-ASA(config-pmap)#class CLASS-TFTP
+
+NETSEC-ASA(config-pmap-c)#inspect tftp
+
+NETSEC-ASA(config-pmap-c)#exit
+
+NETSEC-ASA(config-pmap)#exit
+
+
+
+Configure the service policy to use POLICY-TFTP for all traffic (global).
+
+
+
+NETSEC-ASA(config)#service-policy POLICY-TFTP global
+
+
+
+You have successfully defined and activated a policy on an ASA 5506-X.
+
+21.7.5
+
+
+
+Packet Tracer - Configure ASA Basic Settings and Firewall Using the CLI	In this comprehensive Packet Tracer activity, you will complete the following objectives:
+
+
+
+Verify connectivity and explore the ASA.
+
+Configure basic ASA settings and interface security levels using the CLI.
+
+Configure routing, address translation, and inspection policy using the CLI.
+
+Configure DHCP, AAA, and SSH.
+
+Configure a DMZ, Static NAT, and ACLs.
+
+
+
+Configure ASA Basic Settings and Firewall Using the CLI
+
+Configure ASA Basic Settings and Firewall Using the CLI
+
+21.7.6
+
+
+
+Optional Lab - Configure ASA Network Services, Routing, and DMZ with ACLs Using CLI	In this comprehensive lab, you will complete the following objectives:
+
+
+
+Part 1: Configure Basic Device Settings
+
+Part 2: Configure Routing, Address Translation, and Inspection Policy Using the CLI
+
+Part 3: Configure DHCP, AAA, and SSH
+
+Part 4: Configure DMZ, Static NAT, and ACLs
+
+
+
+Configure ASA Network Services, Routing, and DMZ with ACLs Using CLI...
+
+ASA Firewall Configuration Summary
+
+
+
+21.8.1
+
+
+
+What Did I Learn in this Module?	Basic ASA Firewall Configuration
+
+
+
+The ASA command line interface (CLI) is a proprietary OS, which has a similar look and feel to the router IOS. For example, the ASA CLI contains command prompts similar to that of a Cisco IOS router. Also, like the IOS CLI, the ASA CLI also supports abbreviation of commands and keywords, use of the Tab key to complete a partial command, and use of the help key (?) after a command to view additional syntax. Many commands are similar to those in other versions of IOS, however many differences also exist.
+
+
+
+The ASA 5506-X with FirePOWER Services ships with a default configuration that, in most instances, is sufficient for a basic SOHO deployment. Configuration changes can be made manually using the CLI, interactively using the CLI Setup Initialization wizard, and by using the Adaptive Security Device Manager (ASDM) setup wizard.
+
+
+
+The ASA can be restored to its factory default configuration by using the configure factory-default global configuration mode command.
+
+
+
+Configure Management Services and Settings
+
+
+
+The ASA 5506-X is configured by entering privileged EXEC mode with the enable command and then using configure terminal to enter global configuration mode. When entering global configuration mode for the first time, you are offered the option of participating in the Cisco Smart Call Home program. When approved and other qualifications are met, the ASA will communicate with Cisco in order to send and receive proactive diagnostics and real-time alerts.
+
+
+
+The privileged EXEC password is automatically encrypted using MD5. However, stronger encryption using AES should be enabled. To do so, a primary passphrase must be configured, and AES encryption must be enabled. To change the primary passphrase, use the key config-key password-encryption command.
+
+
+
+The ASA 5506-X has eight Gigabit Ethernet i
+
+21.8.2
+
+
+
+Module 21 - ASA Firewall Configuration Quiz	
+
+1. Which two statements are true about ASA standard ACLs? (Choose two.)​	They identify only the destination host IP address.
+
+
+
+They are typically only used for OSPF routes.
+
+2. When dynamic NAT on an ASA is being configured, what two parameters must be specified by network objects? (Choose two.)	the pool of public global addresses
+
+
+
+a range of private addresses that will be translated
+
+3. Which command is used on an ASA to enable password encryption and encrypt all user passwords?	password encryption aes
+
+4. Which type of NAT would be used on an ASA where 10.0.1.0/24 inside addresses are to be translated only if traffic from these addresses is destined for the 198.133.219.0/24 network?	policy NAT
+
+5. A network administrator has deployed object groups in order to make ACLs easier to implement and understand. Which two objects would be part of a service object group? (Choose two.)	ICMP type
+
+
+
+top-level protocol
+
+6. What is a difference between ASA IPv4 ACLs and IOS IPv4 ACLs?	ASA ACLs use the subnet mask in defining a network, whereas IOS ACLs use the wildcard mask.
+
+7. Which object or object group is required to implement NAT on an ASA 5506-X device?	network object
+
+8. Which statement describes a feature of AAA in an ASA device?	Accounting can be used alone.
+
+9. What type of ACL is designed for use in the configuration of an ASA to support filtering for clientless SSL VPNs?	Webtype
+
+10. A network technician is attempting to resolve problems with the NAT configuration on an ASA. The technician generates a ping from an inside host to an outside host. Which command verifies that addresses are being translated on the ASA?	show xlate
+
+11. Which two types of objects can be configured on an ASA device? (Choose two.)	service 
+
+
+
+network
+
+12. Which option lists the four steps to configure the Modular Policy Framework on an ASA?	1) Configure extended ACLs to identify specific granular traffic. This step may be optional.
+
+2) Configure the class map to define interesting traffic.
+
+3) Configure a policy map to apply actions to the identified traffic.
+
+4) Configure a service policy to identify which interface should be activated for the service.
+
+13. Which statement is true about ASA CLI and IOS CLI commands?	Both CLIs recognize the Tab key to complete a partial command.
+
+Introduction to ASDM (Optional)
+
+
+
+21.9.1
+
+
+
+Overview of ASDM	The Cisco ASA can be configured and managed using either the command line interface (CLI) or by using the graphical user interface (GUI) Adaptive Security Device Manager (ASDM). The CLI is fast, but requires more time to learn. ASDM is intuitive and simplifies the ASA configuration.
+
+
+
+Specifically, Cisco ASDM is a Java-based GUI tool that facilitates the setup, configuration, monitoring, and troubleshooting of Cisco ASAs. The application hides the complexity of commands from administrators and allows streamlined configurations without requiring extensive knowledge of the ASA CLI. It works with SSL to ensure secure communication with the ASA. It also provides quick-configuration wizards and logging and monitoring functionality that is not available using the CLI.
+
+
+
+In order to access the advanced features of the Cisco ASA FirePOWER module that is included with the ASA 5506-X, Firepower Management Center (FMC) is recommended.
+
+
+
+Note: Cisco Adaptive Security Manager (ASDM) requires Java to be installed on the host that is used for ASDM configuration of the ASA. Because of changes to the Oracle Java License, we can no longer require download and installation of a Java runtime environment (JRE) in order to run the ASDM labs.
+
+21.9.2
+
+
+
+Prepare for ASDM	To enable access to the ASDM, the ASA requires some minimal configuration. Specifically, ASDM is accessed using a Secure Socket Layer (SSL) web browser connection to the ASA Web Server. SSL encrypts the traffic between the client and the ASA Web Server.
+
+
+
+At a minimum, the ASA requires that a management interface be configured in order to run ASDM. The management interface depends on the model of ASA. On an ASA 5506-X, the management interface can be any inside interface (G1/2 - G1/8).
+
+
+
+Specifically, to prepare for ASDM access on an ASA 5506-X, the following must be configured, as shown in the example: (On cards 190-192).
+
+
+
+After configuring the ASA, verify connectivity by pinging it from the authorized host.
+
+
+
+ciscoasa# conf t
+
+ciscoasa(config)# interface g1/2
+
+ciscoasa(config-if)# ip address 192.168.1.1 255.255.255.0
+
+ciscoasa(config-if)# nameif INSIDE
+
+INFO: Security level for "INSIDE" set to 100 by default.
+
+ciscoasa(config-if)# no shutdown
+
+ciscoasa(config)# exit
+
+ciscoasa(config)#
+
+ciscoasa(config)# http server enable
+
+ciscoasa(config)# http 192.168.1.0 255.255.255.0 inside
+
+ciscoasa(config)#
+
+Selected inside physical port	Complete a basic configuration on the port including a management IP address and security level
+
+Enable the ASA Web Server	Enable the ASA Web Server
+
+Permit access to the ASA Web Server	By default, the ASA operates in a closed policy; therefore, all connections to the HTTP server are denied. A network statement that specifies the hosts that are permitted to access the HTTP server must be configured.
+
+21.9.3
+
+
+
+Syntax Checker - Configure an ASA 5506-X for ASDM Access	Use the Syntax Checker to configure an ASA 5506-X for ASDM access.
+
+
+
+Configure the INSIDE interface.
+
+
+
+Enter interface configuration mode for g1/2.
+
+Name the interface INSIDE.
+
+Configure the IP address 192.168.1.1 255.255.255.0.
+
+Activate the interface.
+
+Exit interface configuration mode.
+
+
+
+ciscoasa(config)#interface g1/2
+
+ciscoasa(config-if)#ip address 192.168.1.1 255.255.255.0
+
+ciscoasa(config-if)#nameif INSIDE
+
+INFO: Security level for "INSIDE" set to 100 by default.
+
+ciscoasa(config-if)#no shutdown
+
+ciscoasa(config-if)#exit
+
+
+
+Enable the ASA as an HTTP server.
+
+Configure any host on the 192.168.1.0/24 network to access the HTTP server on the INSIDE interface.
+
+
+
+ciscoasa(config)#http server enable
+
+ciscoasa(config)#http 192.168.1.0 255.255.255.0 INSIDE
+
+
+
+You have successfully configured an ASA 5506-X for ASDM access.
+
+21.9.4
+
+
+
+Start ASDM	To start ASDM, enter the management IP address of the ASA in a web browser from a permitted host. The permitted host must establish a connection through a browser to the inside interface IP address using the HTTPS protocol.
+
+
+
+Click to disregard the initial security certificate warning and to launch the ASDM window.
+
+
+
+The initial ASDM window is displayed, as shown in the figure. It provides two options for preparing your computer to access the ASDM GUI: (On cards 195-196).
+
+
+
+After selecting an option, the installation process will begin. Note: You computer requires a version of the Java runtime in order for either of these options to work.
+
+
+
+ASDM Initial Launch Window
+
+
+
+In this example, Install ASDM Launcher is selected. The application installer will download to your computer. Run the installer and follow the prompts to install the software. When installation is complete, the Cisco ASDM-IDM Launcher window will appear as shown in the figure. Provide the enable password and click OK.
+
+
+
+Authenticate to Use ASDM
+
+
+
+Finally, the ASDM Home page displays, as shown in the figure.
+
+
+
+ASDM Home Page
+
+Run Cisco ASDM as a local application	This provides the Install ASDM Launcher option to connect to the ASA from the host's desktop using SSL. The advantage of doing so is that one application can be used to manage several ASA devices, and a web browser is not required to start ASDM.
+
+Run Cisco ASDM as a Java Web Start application	This provides the Install Java Web Start option to enable a browser to run launch ASDM. A web browser is required to establish a connection. ASDM is not installed on the local host.
+
+21.9.5
+
+
+
+Lab - Configure ASA Basic Settings and Firewall Using ASDM	In this lab, you will complete the following objectives:
+
+
+
+Configure ASA Basic Settings and Firewall Using ASDM

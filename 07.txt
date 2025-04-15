@@ -1,0 +1,1468 @@
+
+AAA Characteristics
+
+
+
+7.1.1
+
+
+
+Authentication without AAA	Network hackers can potentially gain access to sensitive network equipment and services. Access control limits who or what can use specific resources. It also limits the services or options that are available after access is granted. Many types of authentication can be performed on a Cisco device, and each method offers varying levels of security.
+
+
+
+The simplest method of remote access authentication is to configure a login and password combination on console, vty lines, and aux ports, as shown in the figure.
+
+
+
+User Access VerificationPassword: ciscoPassword: cisco1Password: cisco12% Bad passwordsG0/0S0/0/0
+
+Internet
+
+
+
+R1(config)# line vty 0 4
+
+R1(config-line)# password cis5cio
+
+R1(config-line)# login
+
+
+
+This method is the easiest to implement, but it is also the weakest and least secure. This method provides no accountability. Anyone with the password can gain entry to the device and alter the configuration.
+
+
+
+SSH is a more secure form of remote access. It requires both a username and a password, both of which are encrypted during transmissions. The local database method provides additional security because an attacker is required to know a username and a password. It also provides more accountability because the username is recorded when a user logs in. Although Telnet can be configured using a username and password, both are sent in plaintext, which makes it vulnerable to being captured and exploited. The local database method has some limitations. The user accounts must be configured locally on each device, as shown for the configuration of SSH in the figure.
+
+
+
+G0/0S0/0/0User Access VerificationUsername: AdminPassword: cisco1% Login invalidUsername: AdminPassword: cisco12% Login invalid
+
+Internet
+
+
+
+R1(config)# username Admin algorithm-type scrypt secret Str0ng5rPa55w0rd
+
+R1(config)# ip domain-name netsec.com
+
+R1(config)# crypto
+
+7.1.2
+
+
+
+AAA Components	AAA network security services provide the primary framework to set up access control on a network device. AAA is a way to control who is permitted to access a network (authenticate) and what they can do while they are there (authorize). AAA also allows auditing of the actions that users perform while accessing the network (accounting).
+
+
+
+Network and administrative AAA security in the Cisco environment has three functional components:
+
+
+
+Authentication - Users and administrators must prove their identity before accessing the network and network resources. Authentication can be established using username and password combinations, challenge and response questions, token cards, and other methods. For example: "I am user 'student' and I know the password to prove it."
+
+
+
+Authorization - After the user is authenticated, authorization services determine which resources the user can access and which operations the user is allowed to perform. An example is "User 'student' can access host serverXYZ using SSH only."
+
+
+
+Accounting and auditing - Accounting records what the user does, including what is accessed, the amount of time the resource is accessed, and any changes that were made. Accounting keeps track of how network resources are used. An example is "User 'student' accessed host serverXYZ using SSH for 15 minutes."
+
+
+
+This concept is similar to using a credit card, as indicated by the figure. The credit card identifies who can use it, how much that user can spend, and keeps account of what items or services the user purchased.
+
+
+
+AuthenticationWho are you?AuthorizationHow much can you spend?AccountingWhat did you spend it on?
+
+7.1.3
+
+
+
+Authentication Modes	AAA Authentication can be used to authenticate users for administrative access or it can be used to authenticate users for remote network access. Cisco provides two common methods of implementing AAA services:
+
+
+
+Local AAA Authentication -Local AAA uses a local database for authentication. This method is sometimes known as self-contained authentication. In this course, it will be referred to as local AAA authentication. This method stores usernames and passwords locally in the Cisco router, and users authenticate against the local database, as shown in the figure. This database is the same one that is required for establishing role-based CLI. Local AAA is ideal for small networks.
+
+
+
+123
+
+Remote ClientAAA Router
+
+The client establishes a connection with the router.
+
+The AAA router prompts the user for a username and password.
+
+The router authenticates the username and password using the local database and the user is provided access to the network based on information in the local database.
+
+
+
+Server-Based AAA Authentication - With the server-based method, the router accesses a central AAA server, such as the Cisco Secure Access Control System (ACS) for Windows, which is shown in the figure. The central AAA server contains the usernames and password for all users. The router uses either the Remote Authentication Dial-In User Service (RADIUS) or Terminal Access Controller Access Control System (TACACS+) protocols to communicate with the AAA server. When there are multiple routers and switches, server-based AAA is more appropriate because accounts can be administered from a central location rather than on individual devices.
+
+
+
+Note: In this course, the focus is on implementing network security with IPv4 on Cisco routers, switches, and Adaptive Security Appliances. On occasion, references are made to IPv6-specific technologies and p
+
+7.1.4
+
+
+
+Authorization	After users are successfully authenticated against the selected AAA data source, either local or server-based, they are then authorized for specific network resources, as shown in the figure.
+
+
+
+AAA Authorization
+
+
+
+Remote ClientPerimeter RouterAAA Server
+
+
+
+1. When a user has been authenticated, a session is established between the router and the server.
+
+
+
+2. The router requests authorization from the AAA server for the client's requested service.
+
+
+
+3. The AAA server returns a PASS/FAIL for authorization.
+
+
+
+Authorization controls what users can and cannot do on the network after they are authenticated. This is similar to how privilege levels and role-based CLI give users specific rights and privileges to certain commands on the router.
+
+
+
+Authorization is typically implemented using a AAA server. Authorization uses a set of attributes that describes the user's access to the network. These attributes are compared to the information contained within the AAA database, and a determination of restrictions for that user is made and delivered to the local router where the user is connected.
+
+
+
+Authorization is automatic and does not require users to perform additional steps after authentication. Authorization is implemented immediately after the user is authenticated.
+
+7.1.5
+
+
+
+Accounting	AAA Accounting collects and reports usage data. This data can be used for such purposes as auditing or billing. The collected data might include the start and stop connection times, the commands executed, the number of packets, and the number of bytes.
+
+
+
+Accounting is implemented using a AAA server. This service reports usage statistics back to the ACS server. These statistics can be extracted to create detailed reports about the configuration of the network.
+
+
+
+One widely deployed use of accounting is to combine it with AAA authentication. This helps with managing access to internetworking devices by network administrative staff. Accounting provides more security than just authentication. The AAA servers keep a detailed log of exactly what the authenticated user does on the device, as shown in the figure. This includes all EXEC and configuration commands issued by the user. The log contains numerous data fields, including the username, the date and time, and the actual command that was entered by the user. This information is useful when troubleshooting devices. It also provides leverage against individuals who perform malicious actions.
+
+
+
+AAA Accounting
+
+
+
+Remote ClientPerimeter Router
+
+
+
+1. When a user has been authenticated, the AAA accounting process generates a start message to begin the accounting process.
+
+
+
+2. When the user finishes, a stop message is recorded and the accounting process ends.
+
+
+
+Click below to learn more about the types of information that are collected by AAA accounting. On cards 6-10.
+
+Network Accounting	Network accounting collects usage records for network access over various remote access connections.
+
+Connection Accounting	Connection accounting captures information about all outbound connections made from the AAA client, such as Telnet or SSH.
+
+EXEC Accounting	EXEC accounting captures information about user EXEC terminal sessions (user shells) on the network access server, including username, date, start and stop times, and the access server IP address.
+
+System Accounting	System accounting captures information about all system-level events (for example, when the system reboots or when accounting is turned on or off).
+
+Command Accounting	Command accounting captures information about the EXEC shell commands for a specified privilege level that are being executed on a network access server. Each command accounting record includes a list of the commands executed for that privilege level, as well as the date and time each command was executed, and the user who executed it.
+
+7.1.6
+
+
+
+Check Your Understanding - Identify the Characteristics of AAA	Check your understanding of AAA characteristics by identifying whether the statement describes Authentication, Authorization, or Accounting.
+
+1. Records what the user does, including what is accessed, the amount of time the resource is accessed, and any changes that were made.	Accounting
+
+2. Uses a created set of attributes that describes the user's access to the network.	Authorization
+
+3. Established using username and password combinations, challenge and response questions, token cards, and other methods.	Authentication
+
+4. Collects and reports usage data so that it can be employed for purposes such as auditing or billing.	Accounting
+
+5. Users and administrators must prove that they are who they say they are.	Authentication
+
+6. What a user can and cannot do on the network.	Authorization
+
+7. Specifies which resources the user can access and which operations the user is allowed to perform.	Authorization
+
+8. Provides leverage against individuals who perform malicious actions.	Accounting
+
+9. A way to control who is permitted to access a network.	Authentication
+
+Configure Local AAA Authentication
+
+
+
+7.2.1
+
+
+
+Authenticate Administrative Access	Local AAA Authentication should be configured for smaller networks. Smaller networks are those networks that have one or two networking devices that provide access to a limited number of users. This method uses the local usernames and passwords that have been configured and stored on a device. The system administrator must populate the local security database by specifying username and password profiles for each user that might log in.
+
+
+
+The Local AAA Authentication method is similar to using the login local command with one exception. AAA also provides a way to configure backup methods of authentication.
+
+
+
+Configuring local AAA services to authenticate administrator access requires a few basic steps:
+
+
+
+Step 1. Add usernames and passwords to the local router database for users that need administrative access to the router.
+
+
+
+Step 2. Enable AAA globally on the router.
+
+
+
+Step 3. Configure AAA parameters on the router.
+
+
+
+Step 4. Confirm and troubleshoot the AAA configuration.
+
+
+
+The aaa authentication login command in the figure allows the ADMIN and JR-ADMIN users to log into the router via the console or vty terminal lines. The default keyword means that the authentication method applies to all lines, except those for which a specific line configuration overrides the default. The authentication is case-sensitive, indicated by the local-case keyword. This means that both the password and the username are case sensitive.
+
+
+
+R1(config)# username JR-ADMIN algorithm-type scrypt secret Str0ng5rPa55w0rd
+
+R1(config)# username ADMIN algorithm-type scrypt secret Str0ng5rPa55w0rd
+
+R1(config)# aaa new-model
+
+R1(config)# aaa authentication login default local-case
+
+R1(config)#
+
+7.2.2
+
+
+
+Authentication Methods	To enable AAA, the aaa new-model global configuration command must first be configured. To disable AAA, use the no form of this command.
+
+
+
+No other AAA commands are available until this command is entered.
+
+
+
+Note: It is important to know that when the aaa new-model command is first entered, that an unseen "default" authentication using the local database is automatically applied to all lines except the console. For this reason, always configure a local database entry before enabling AAA.
+
+
+
+Use the aaa authentication login command, shown below, to enable authentication of the console, aux, and vty lines. The default keyword applies authentication to all lines. Alternatively, a custom authentication method can be configured using a list-name. 
+
+
+
+Router(config)# aaa authentication login {default | list-name} method1...[ method4 ]
+
+
+
+On cards 23-25.
+
+
+
+The final portion of the command identifies the type of methods that will be queried to authenticate the users. Up to four methods can be defined, providing fallback methods should one method not be available. When a user attempts to log in, the first method listed is used. Cisco IOS software attempts authentication with the next listed authentication method only when there is no response or an error from the previous method occurs. If the authentication method denies the user access, the authentication process stops and no other authentication methods are allowed.
+
+
+
+To enable local authentication using a preconfigured local database, use the keyword local or local-case. The difference between the two options is that local accepts a username regardless of case, whereas local-case is case-sensitive. For example, if a local database entry with the username ADMIN was configured, the local method would accept ADMIN, Admin, or even admin. If the local-case method was configured, then only
+
+default	Uses the listed authentication methods that follow this keyword as the default list of methods when a user logs in.
+
+list-name	Instead of using default list name, the administrator may wish to specify a name for documentation purposes. The name can be up to 31 characters.
+
+method1...[method4]	Identifies the list of methods that the AAA authentication process will query in the given sequence. At least one method must be specified. A maximum of four methods may be specified.
+
+enable	Uses the enable password for authentication.
+
+local	Uses the local username database for authentication.
+
+local-case	Uses case-sensitive local username authentication.
+
+none	Uses no authentication.
+
+group radius	Uses the list of all RADIUS servers for authentication.
+
+group tacacs+	Uses the list of all TACACS+ servers for authentication.
+
+group group-name	Uses a subset of RADIUS or TACACS+ servers for authentication as defined by the aaa group server radius or aaa group server tacacs+ command.
+
+7.2.3
+
+
+
+Default and Named Methods	For flexibility, different method lists can be applied to different interfaces and lines using the aaa authentication login list-name command.
+
+
+
+For example, an administrator could apply a special login for SSH and then have the default login method for the line console, as shown in the example.
+
+
+
+R1(config)# username JR-ADMIN algorithm-type scrypt secret Str0ng5rPa55w0rd
+
+R1(config)# username ADMIN algorithm-type scrypt secret Str0ng5rPa55w0rd
+
+R1(config)# aaa new-model
+
+R1(config)# aaa authentication login default local-case enable
+
+R1(config)# aaa authentication login SSH-LOGIN local-case
+
+R1(config)# line vty 0 4
+
+R1(config-line)# login authentication SSH-LOGIN
+
+
+
+In this example, the vty line would only use the local database for authentication. All other lines (i.e., console and aux lines) would use the local database and use the enable password as a fallback if there were no database entries on the device.
+
+
+
+Notice that the named list has to be explicitly enabled on the line using the login authentication line configuration command. If a line has a custom authentication method list applied to it, that method list overrides the default method list for that interface.
+
+
+
+When a custom authentication method list is applied to an interface, it is possible to return to the default method list by using the no authentication login command.
+
+7.2.4
+
+
+
+Fine-Tuning the Authentication Configuration	Additional security can be implemented on the line using the aaa local authentication attempts max-fail global configuration mode command, as show in the example. This command secures AAA user accounts by locking out accounts that have excessive failed attempts. On card 35.
+
+
+
+Router(config)# aaa local authentication attempts max-fail [number-of-unsuccessful-attempts]
+
+
+
+Unlike the login delay command which introduces a delay between failed login attempts without locking the account, the aaa local authentication attempts max-fail command locks the user account if the authentication fails. The locked out user account remains locked until it is manually cleared by an administrator using the clear aaa local user lockout privileged EXEC mode command.
+
+
+
+To display a list of all locked-out users, use the show aaa local user lockout command in privileged EXEC mode, as shown in the example.
+
+
+
+R1# show aaa local user lockout
+
+
+
+Local-user Lock time
+
+JR-ADMIN 04:28:49 UTC Tue Feb 16 2021
+
+
+
+When a user logs into a Cisco router that uses AAA, a unique ID is assigned to that user's session. Throughout the life of the session, various attributes that are related to the session are collected and stored internally within the AAA database. These attributes can include the IP address of the user, the protocol that is used to access the router (e.g., PPP), the speed of the connection, and the number of packets or bytes that are received or transmitted.
+
+
+
+To display the attributes that are collected for one AAA session, use the show aaa user command in privileged EXEC mode. This command does not provide information for all users who are logged into a device, but only for those who have been authenticated or authorized using AAA, or whose sessions are being accounted for by the AAA module.
+
+
+
+The show aaa sessions command can be used to show the unique
+
+number-of-unsuccessful-attempts	Number of unsuccessful authentication attempts before a connection is dropped and the user account is locked.
+
+7.2.5
+
+
+
+Lab - Configure Local AAA Authentication	In this lab, you will complete the following objectives:
+
+
+
+Part 1: Configure Basic Device Settings.
+
+Part 2: Configure Local Authentication.
+
+Part 3: Configure Local Authentication using AAA.
+
+7.2.6
+
+
+
+Packet Tracer - Configure Local AAA for Console and VTY Access	In this PT activity, you will configure AAA local authentication on the console line and VTY lines with SSH.
+
+Server-Based AAA Characteristics and Protocols
+
+
+
+7.3.1
+
+
+
+Compare Local AAA and Server-Based AAA Implementations	Local implementations of AAA are acceptable in very small networks. However, local authentication does not scale well.
+
+
+
+Most corporate environments have multiple routers, switches, and other infrastructure devices, multiple router administrators, and hundreds or thousands of users needing access to the corporate LAN. Maintaining a local database on each device for this size of network is not feasible.
+
+
+
+To solve this challenge, one or more AAA servers can be used to manage the user and administrative access needs for an entire corporate network. AAA server software can create a central user and administrative access database to which all devices in the network can refer. It may also work with many external databases, including Active Directory and Lightweight Directory Access Protocol (LDAP). These databases store user account information and passwords, allowing for central administration of user accounts. For increased redundancy, multiple servers can be implemented. The figure shows the process of authenticating router administrator users.
+
+
+
+Server-Based Authentication
+
+
+
+AAAServerAAAServerAAAServer
+
+
+
+1. The user establishes a connection with the router.
+
+
+
+2. The router prompts the user for a username and password.
+
+
+
+3. The router passes the username and password to the Cisco Secure ACS (server or engine).
+
+
+
+4. The Cisco Secure ACS authenticates the user. The user is provided access to the router (administrative access) or the network, based on information found in the Cisco Secure ACS database.
+
+7.3.2
+
+
+
+Cisco Identity Services Engine (ISE)	Cisco Identity Services Engine (ISE) is an identity and access control policy platform that enables enterprises to enforce compliance, enhance infrastructure security, and streamline their service operations. The architecture of Cisco ISE allows enterprises to gather real-time contextual information from networks, users, and devices. The administrator can then use that information to make proactive governance decisions by tying identity to various network elements. These network elements include access switches, wireless LAN controllers (WLCs), VPNs, gateways, and data center switches.
+
+
+
+BYOD (Bring Your Own Device) is becoming more common and even necessary in many enterprises. Cisco ISE defines fair access policies and enforces compliance for all end devices including BYOD.
+
+
+
+Cisco ISE is the main policy component for Cisco TrustSec and is a Cisco technology that protects assets such as data, applications, and mobile devices from unauthorized access. Cisco ISE combines policy definition, control, and reporting in one appliance. ISE works with existing network infrastructure to provide network administrators with information about the end devices (known as endpoints) that attach to the network.
+
+
+
+Several features of ISE are: On cards 40-44.
+
+
+
+ISE provides context-aware identity management:
+
+
+
+To determine whether users are accessing the network on an authorized, policy-compliant device
+
+
+
+To establish user identity, location, and access history, which can be used for compliance and reporting
+
+
+
+To assign services based on the assigned user role, group, and associated policy (job role, location, device type, etc.)
+
+
+
+To grant authenticated users access to specific segments of the network, or specific applications and services, or both, based on authentication results
+
+
+
+The figure shows a view of the Cisco ISE management console.
+
+Asset Visibility	Provides visibility and control over who and what is on the network consistently, across wireless, wired, and VPN connections. Cisco ISE uses probes and device sensors to listen to the way devices connect to the network. The Cisco ISE profile database, which is extensive, then classifies the device. This gives the visibility and context that is required to grant the right level of network access.
+
+Posture assessment	Determines if the device complies with device security policies before it connects to the network. It can determine if a device is clean of viruses and suspicious applications and can even make sure that a device's antivirus software is up to date.
+
+Segmentation	Cisco ISE uses contextual data about network devices and endpoints to facilitate network segmentation. Security group tags, access control lists, network access protocols, and policy sets that define authorization, access, and authentication, are some ways in which Cisco ISE enables secure network segmentation.
+
+Guest management and secure wireless	Enables providing secure network access to visitors, contractors, consultants, and customers.
+
+Threat Containment	If Cisco ISE detects threat or vulnerability attributes from an endpoint, adaptive network control policies are sent to dynamically change the access levels of the endpoint. After the threat or vulnerability is evaluated and addressed, the endpoint can be given back its original access policy.
+
+7.3.3
+
+
+
+The TACACS+ and RADIUS Protocols	TACACS+ and RADIUS are both authentication protocols that are used to communicate with AAA servers. As shown in the table, each supports different capabilities. On cards 46-52.
+
+
+
+Whether TACACS+ or RADIUS is selected depends on the needs of the organization. For example, a large ISP might select RADIUS because it supports the detailed accounting required for billing users. An organization with various user groups might select TACACS+ because it requires authorization policies to be applied on a per-user or per-group basis.
+
+
+
+It is important to understand the many differences between the TACACS+ and RADIUS protocols.
+
+
+
+These are three critical factors for TACACS+:
+
+
+
+Separates authentication and authorization
+
+Encrypts all communication
+
+Utilizes TCP port 49
+
+
+
+These are four critical factors for RADIUS:
+
+
+
+Combines RADIUS authentication and authorization as one process
+
+Encrypts only the password
+
+Utilizes UDP
+
+Supports remote-access technologies, 802.1X, and Session Initiation Protocol (SIP)
+
+
+
+While both protocols can be used to communicate between a router and AAA servers, TACACS+ is considered the more secure protocol. This is because all TACACS+ protocol exchanges are encrypted, while RADIUS only encrypts the user's password. RADIUS does not encrypt user names, accounting information, or any other information carried in the RADIUS message.
+
+Functionality	TACACS+
+
+
+
+Separates AAA according to the AAA architecture, allowing modularity of the security server implementation
+
+
+
+RADIUS
+
+
+
+Combines authentication and authorization but separates accounting, allowing less flexibility in implementation than TACACS+
+
+Standard	TACACS+
+
+
+
+Mostly Cisco supported
+
+
+
+RADIUS
+
+
+
+Open/RFC standard
+
+Transport Protocol	TACACS+
+
+
+
+TCP
+
+
+
+RADIUS
+
+
+
+UDP
+
+CHAP	TACACS+
+
+
+
+Bidirectional challenge and response as used in Challenge Handshake Authentication Protocol (CHAP)
+
+
+
+RADIUS
+
+
+
+Unidirectional challenge and response from the RADIUS security server to the RADIUS client
+
+Confidentiality	TACACS+
+
+
+
+Entire packet encrypted
+
+
+
+RADIUS
+
+
+
+Password encrypted
+
+Customization	TACACS+
+
+
+
+Provides authorization of router commands on a per-user or per-group basis
+
+
+
+RADIUS
+
+
+
+Has no option to authorize router commands on a per-user or per-group basis
+
+Accounting	TACACS+
+
+
+
+Limited
+
+
+
+RADIUS
+
+
+
+Extensive
+
+7.3.4
+
+
+
+TACACS+ Authentication	TACACS+ is a Cisco enhancement to the original TACACS protocol. Despite its name, TACACS+ is an entirely new protocol that is incompatible with any previous version of TACACS. TACACS+ is supported by the Cisco family of routers and access servers.
+
+
+
+TACACS+ provides separate AAA services. Separating the AAA services provides flexibility in implementation because it is possible to use TACACS+ for authorization and accounting while using another method of authentication.
+
+
+
+The extensions to the TACACS+ protocol provide more types of authentication requests and response codes than were in the original TACACS specification. TACACS+ offers multiprotocol support, such as IP and legacy AppleTalk. Normal TACACS+ operation encrypts the entire body of the packet for more secure communications and utilizes TCP port 49.
+
+
+
+Click Play in the figure to view the TACACS+ authentication process.
+
+
+
+Process for TACACS+ Authentication
+
+
+
+Password prompt?
+
+JR-ADMIN
+
+JR-ADMIN
+
+Username?
+
+Use "Username"
+
+Username prompt?
+
+Connect
+
+Use "Password"
+
+Password?
+
+Client
+
+AAA
+
+Str0ngPa55w0rd
+
+Accept/Reject
+
+Str0ngPa55w0rd
+
+7.3.5
+
+
+
+RADIUS Authentication	RADIUS, which was developed by Livingston Enterprises, is an open IETF standard AAA protocol for applications such as network access or IP mobility. RADIUS works in both local and roaming situations and is commonly used for accounting purposes. RADIUS is currently defined by RFCs 2865, 2866, 2867, 2868, 3162 and 6911.
+
+
+
+The RADIUS protocol hides passwords during transmission, even with the Password Authentication Protocol (PAP), using a rather complex operation that involves Message Digest 5 (MD5) hashing and a shared secret. However, the rest of the packet is sent in plaintext.
+
+
+
+RADIUS combines authentication and authorization as one process. When a user is authenticated, that user is also authorized. RADIUS uses UDP port 1645 or 1812 for authentication and UDP port 1646 or 1813 for accounting.
+
+
+
+RADIUS is widely used by VoIP service providers. It passes login credentials of a SIP endpoint, such as a broadband phone, to a SIP registrar using digest authentication, and then to a RADIUS server using RADIUS. RADIUS is also a common authentication protocol that is utilized by the 802.1X security standard.
+
+
+
+Click Play in the figure to view a RADIUS authentication process.
+
+
+
+Process for RADIUS Authentication
+
+
+
+Access-Accept
+
+Access-Request(JR-ADMIN, "Str0ngPa55w0rd")
+
+Str0ngPa55w0rd
+
+Password?
+
+JR-ADMIN
+
+Username?
+
+Client
+
+AAA
+
+7.3.6
+
+
+
+Check Your Understanding - Identify the AAA Communication Protocol	Click the appropriate field next to each feature to indicate the communication protocol.
+
+Incompatible with its predecessors	TACACS+
+
+Uses proxy servers for scalability	RADIUS
+
+Separates authentication and authorization	TACACS+
+
+Combines authentication and authorization as one process	RADIUS
+
+Encrypts only the password	RADIUS
+
+Encrypts all communication	TACACS+
+
+Utilizes TCP port 49	TACACS+
+
+Utilizes UDP	RADIUS
+
+Supports remote-access technologies, 802.1X, and SIP	RADIUS
+
+Configure Server-Based Authentication
+
+
+
+7.4.1
+
+
+
+Steps to Configure Server-Based AAA Authentication	Unlike Local AAA Authentication, server-based AAA must identify various TACACS+ and RADIUS servers that the AAA service should consult when authenticating and authorizing users.
+
+
+
+There are four basic steps to configure server-based authentication.
+
+
+
+Step 1. Globally enable AAA to allow the use of all AAA elements. This step is a prerequisite for all other AAA commands.
+
+
+
+Step 2. Specify the server that will provide AAA services for the router. This can be a TACACS+ or RADIUS server.
+
+
+
+Step 3. Configure the encryption key needed to encrypt the data transfer between the network device and AAA server.
+
+
+
+Step 4. Configure the AAA authentication method list to refer to the TACACS+ or RADIUS server. For redundancy, it is possible to configure more than one server.
+
+7.4.2
+
+
+
+Configure TACACS+ Servers	TACACS+ and RADIUS protocols are used to communicate between clients and the AAA security servers. The figure displays the AAA reference topology for this topic.
+
+
+
+Server-Based AAA Reference Topology
+
+
+
+R1192.168.1.100192.168.1.101
+
+RADIUS ServerTACACS+ Serever
+
+
+
+To configure a TACACS+ server, globally enable AAA using the aaa new-model command. Next, use the tacacs server name command. In TACACS+ server configuration mode, configure the IPv4 address of the TACACS+ server using the address ipv4 command. The address ipv4 command allows the option to modify the authentication port and the accounting port. You can also specify an IPv6 address with the address ipv6 ipv6-address command.
+
+
+
+Next, use the single-connection command to enhance TCP performance by maintaining a single TCP connection for the life of the session. Otherwise, by default, a TCP connection is opened and closed for each session. If required, multiple TACACS+ servers can be identified by entering their respective IPv4 addresses using the tacacs server name command.
+
+
+
+The key key command is used to configure the shared secret key to encrypt the data transfer between the TACACS+ server and AAA-enabled router. This key must be configured exactly the same way on both the router and the TACACS+ server.
+
+
+
+The example displays a sample TACACS+ server configuration.
+
+
+
+R1(config)# aaa new-model
+
+R1(config)#
+
+R1(config)# tacacs server Server-T
+
+R1(config-server-tacacs)# address ipv4 192.168.1.101
+
+R1(config-server-tacacs)# single-connection
+
+R1(config-server-tacacs)# key TACACS-Pa55w0rd
+
+R1(config-server-tacacs)# exit
+
+R1(config)#
+
+7.4.3
+
+
+
+Configure RADIUS Servers	To configure a RADIUS server, use the radius server name command. This puts you into radius server configuration mode.
+
+
+
+Because RADIUS uses UDP, there is no equivalent single-connection keyword. If required, multiple RADIUS servers can be identified by entering a radius server name command for each server.
+
+
+
+In RADIUS server configuration mode, configure the IPv4 address of the RADIUS server using the address ipv4 ipv4-address command. You can also specify an IPv6 address with the address ipv6 ipv6-address command.
+
+
+
+By default, Cisco routers use port 1645 for the authentication and port 1646 for the accounting. However, IANA has reserved ports 1812 for the RADIUS authentication port and 1813 for the RADIUS accounting port. It is important to make sure these ports match between the Cisco router and the RADIUS server.
+
+
+
+To configure the shared secret key for encrypting the password, use the key command. This key must be configured exactly the same way on the router and the RADIUS server.
+
+
+
+The example displays a sample RADIUS server configuration.
+
+
+
+R1(config)# aaa new-model
+
+R1(config)#
+
+R1(config)# radius server SERVER-R
+
+R1(config-radius-server)# address ipv4 192.168.1.100 auth-port 1812 acct-port 1813
+
+R1(config-radius-server)# key RADIUS-Pa55w0rd
+
+R1(config-radius-server)# exit
+
+R1(config)#
+
+7.4.4
+
+
+
+Authenticate to the AAA Server Configuration Commands	When the AAA security servers have been identified, the servers must be included in the method list of the aaa authentication login command. AAA servers are identified using the group tacacs+ or group radius keywords. Refer to the example to see command syntax options available with the aaa authentication login command.
+
+
+
+R1(config)# aaa authentication login default ?
+
+cache Use Cached-group
+
+enable Use enable password for authentication.
+
+group Use Server-group
+
+krb5 Use Kerberos 5 authentication.
+
+krb5-telnet Allow logins only if already authenticated via Kerberos V Telnet.
+
+line Use line password for authentication.
+
+local Use local username authentication.
+
+local-case Use case-sensitive local username authentication.
+
+none NO authentication.
+
+passwd-expiry enable the login list to provide password aging support
+
+
+
+R1(config)# aaa authentication login default group ?
+
+WORD Server-group name
+
+ldap Use list of all LDAP hosts.
+
+radius Use list of all Radius hosts.
+
+tacacs+ Use list of all Tacacs+ hosts.
+
+
+
+To configure a method list for the default login to authenticate first using a TACACS+ server, second with a RADIUS server, and finally with a local username database, specify the order with the aaa authentication login default command, as highlighted in the example. It is important to realize that R1 will only attempt to authenticate using RADIUS if the TACACS+ server is not reachable. Likewise, R1 would only attempt to authenticate using the local database if the TACACS+ and RADIUS servers are unavailable
+
+
+
+R1(config)# aaa new-model
+
+R1(config)#
+
+R1(config)# tacacs server Server-T
+
+R1(config-server-tacacs)# address ipv4 192.168.1.100
+
+R1(config-server-tacacs)# single-connection
+
+R1(config-server-tacacs)# key TACACS-Pa55w0rd
+
+R1(config-server-tacacs)# exit
+
+R1(config)#
+
+R1(config)# radius server SERVER-R
+
+R1(config-radius-server)# address ipv4
+
+7.4.5
+
+
+
+Syntax Checker - Configure Server-Based AAA Authentication	Use the Syntax Checker to configure server-based AAA authentication on R1. The local username database has been configured and TACACS+ and RADIUS servers have been implemented on the network.
+
+
+
+Configure TACACS+ server settings on router R1 using the following instructions:
+
+
+
+Enable AAA.
+
+Enter TACACS+ server configuration mode and name the server configuration SERVER-T.
+
+Configure the TACACS+ server address to 192.168.1.100.
+
+Configure a single persistent TCP connection to the TACACS+ server.
+
+Configure the shared secret key TACACS-Pa55w0rd.
+
+Exit TACACS+ server configuration mode.
+
+
+
+R1(config)#aaa new-model
+
+R1(config)#tacacs server SERVER-T
+
+R1(config-server-tacacs)#address ipv4 192.168.1.100
+
+R1(config-server-tacacs)#single-connection
+
+R1(config-server-tacacs)#key TACACS-Pa55w0rd
+
+R1(config-server-tacasc)#exit
+
+
+
+Enter RADIUS server configuration mode and name the configuration SERVER-R.
+
+
+
+Configure the RADIUS server address to 192.168.1.101 with the authentication port set to 1812 and the accounting port set to 1813.
+
+Configure the shared secret key RADIUS-Pa55w0rd.
+
+Exit RADIUS server configuration mode.
+
+
+
+R1(config)#radius server SERVER-R
+
+R1(config-radius-server)#address ipv4 192.168.1.101 auth-port 1812 acct-port 1813
+
+R1(config-radius-server)#key RADIUS-Pa55w0rd
+
+R1(config-radius-server)#exit
+
+
+
+Specify a default authentication method list with primary option TACACS+, secondary option RADIUS, and tertiary option local username case-sensitive authentication. After configuration, exit configuration mode.
+
+
+
+R1(config)#aaa authentication login default group tacacs+ group radius local-case
+
+R1(config)#exit
+
+R1#
+
+*Mar 3 17:02:15.123: %SYS-5-CONFIG_I: Configured from console by console
+
+R1#
+
+
+
+You successfully configured server-based AAA authentication.
+
+7.4.6
+
+
+
+Video Demonstration - Configure a Cisco Router to Access a AAA RADIUS Server	This video demonstrates how to configure a Cisco router to access a AAA RADIUS server by completing the following:
+
+
+
+Step 1. Create users on the RADIUS server.
+
+
+
+Step 2. Set a secret key on the RADIUS server.
+
+
+
+Step 3. Verify port 1812 for the RADIUS authentication port and 1813 for the RADIUS accounting port.
+
+
+
+Step 4. Set up SSH on the router for remote access.
+
+
+
+Step 5. Set up a local user on the router in case of RADIUS server failure.
+
+
+
+Step 6. Enable AAA authentication on the router.
+
+
+
+Step 7. Set AAA authentication login method lists.
+
+
+
+Step 8. Enable the router to use the RADIUS server for authentication by configuring the following on the router:
+
+
+
+1. RADIUS server name
+
+2. RADIUS server IP address, authentication port 1812, and accounting port 1813
+
+3. shared secret key
+
+
+
+Step 9. Configure the console line and specify the AAA login authentication method list to use
+
+
+
+Step 10. Configure the VTY lines for SSH and specify the AAA login authentication method list to use.
+
+
+
+Step 11. Test and verify.
+
+7.4.7
+
+
+
+Lab - Install the Virtual Machine	In this lab, you will complete the following objectives:
+
+
+
+Part 1: Prepare a Personal Computer for Virtualization
+
+Part 2: Import a Virtual Machine into VirtualBox Inventory
+
+7.4.8
+
+
+
+Lab - Configure Server-Based Authentication with RADIUS	In this lab, you will complete the following objective:
+
+
+
+Configure Centralized Authentication Using AAA and RADIUS
+
+7.4.9
+
+
+
+Packet Tracer - Configure Server-Based Authentication with TACACS+ and RADIUS	In this Packet Tracer activity, you will complete the following objectives:
+
+
+
+Configure server-based AAA authentication using TACACS+.
+
+Verify server-based AAA authentication from the PC-B client.
+
+Configure server-based AAA authentication using RADIUS.
+
+Verify server-based AAA authentication from the PC-C client.
+
+Configure Server-Based Authorization and Accounting
+
+
+
+7.5.1
+
+
+
+Introduction to Server-Based AAA Authorization	While authentication must ensure that the device or end user is legitimate, authorization is concerned with allowing and disallowing authenticated users access to functions of the network device interface.
+
+
+
+The TACACS+ protocol allows the separation of authentication from authorization. A router can be configured to restrict the user to performing only certain functions after successful authentication. Keep in mind that RADIUS does not separate the authentication from the authorization process.
+
+
+
+Another important aspect of authorization is the ability to control user access to specific services. Controlling access to configuration commands greatly simplifies the infrastructure security in large enterprise networks.
+
+
+
+In the animation, the JR-ADMIN has successfully established an SSH session with the router and authenticated to the TACACS+ AAA server. Click Play to see how the server responds to different commands.
+
+
+
+AAA Server Authorization
+
+
+
+In the animation, the JR-ADMIN is permitted to access the show version command, but not the configure terminal command. The router queries the AAA server for permission to execute the commands on behalf of the user. When the user issues the show version command, the server sends an ACCEPT response. If the user issues a configure terminal command, the server sends a REJECT response.
+
+
+
+By default, TACACS+ establishes a new TCP session for every authorization request, which can lead to delays when users enter commands. To improve performance, AAA supports persistent TCP sessions that are configured with the single-connection tacacs server configuration mode command.
+
+7.5.2
+
+
+
+AAA Authorization Configuration	To configure authorization, use the aaa authorization command, as shown in the examples below. The authorization type can specify the types of commands or services:
+
+
+
+network - for network services such as PPP and SLIP
+
+exec - for User EXEC terminal sessions
+
+commands level - command authorization attempts authorization for all EXEC mode commands, including global configuration commands, associated with a specific privilege level
+
+
+
+Router(config)# aaa authorization (network | exec | commands level) {default | list-name} method1... [method4]
+
+
+
+R1(config)# aaa authorization exec ?
+
+WORD Named authorization list. default 
+
+The default authorization list.
+
+
+
+R1(config)# aaa authorization exec default ?
+
+cache Use Cached-group
+
+group Use server-group.
+
+if-authenticated Succeed if user has authenticated.
+
+krb5-instance Use Kerberos instance privilege maps.
+
+local Use local database.
+
+none No authorization (always succeeds).
+
+
+
+R1(config)# aaa authorization exec default group ?
+
+WORD Server-group name
+
+ldap Use list of all LDAP hosts.
+
+radius Use list of all Radius hosts.
+
+tacacs+ Use list of all Tacacs+ hosts.
+
+
+
+When AAA authorization is not enabled, all users are allowed full access. After authentication is started, the default changes to allow no access. This means that the administrator must create a user with full access rights before authorization is enabled, as shown in the example. Failure to do so immediately locks the administrator out of the system the moment the aaa authorization command is entered. The only way to recover from this is to reboot the router. If this is a production router, rebooting might be unacceptable. Be sure that at least one user always has full rights.
+
+
+
+R1(config)# username JR-ADMIN algorithm-type scrypt secret Str0ng5rPa55w0rd
+
+R1(config)# username ADMIN algorithm-type scrypt secret Str0ng5rPa55w0rd
+
+R1(config)# a
+
+7.5.3
+
+
+
+Introduction to Server-Based AAA Accounting	Companies often need to keep track of which resources individuals or groups use. AAA accounting enables usage tracking. An example of usage tracking is when one department charges another department for access, or when one company provides internal support to another company. The accounting function is similar to the accounting information provided in a credit card billing statement as shown in the figure.
+
+
+
+Credit Card Accounting Example
+
+
+
+Accounting What did you spend it on?
+
+
+
+Although accounting is generally considered a network management or financial management issue, it is discussed briefly here because it is so closely linked with security. One security issue that is addressed by accounting is the creation of a list of users and the time of day they logged into the system. If, for example, the administrator knows that a worker logs in to the system in the middle of the night, this information can be used to further investigate the purpose of the login.
+
+
+
+Another reason to implement accounting is to create a list of changes occurring on the network, the user that made the changes, and the exact nature of the changes. Knowing this information helps the troubleshooting process if the changes cause unexpected results.
+
+
+
+When accounting is configured on a AAA server it functions as a central repository for accounting information. It tracks events that occur on the network, similar to the way in which financial activity is tracked for a credit card account. Each session that is established through Cisco Secure ACS can be fully accounted for and stored on the server. This stored information can be very helpful for management, security audits, capacity planning, and network usage billing.
+
+
+
+Like authentication and authorization method lists, method lists for accounting define the way accounting is performed and the sequence i
+
+7.5.4
+
+
+
+AAA Accounting Configuration	To configure AAA accounting, use the aaa accounting command that is shown in the example.
+
+
+
+The following three parameters are commonly used aaa accounting keywords:
+
+
+
+network - Runs accounting for all network-related service requests, including PPP.
+
+exec - Runs accounting for the EXEC shell session.
+
+connection - Runs accounting on all outbound connections such as SSH and Telnet.
+
+
+
+Router(config)# aaa accounting {network | exec | connection} {default | list-name} {start-stop | stop-only | none } [broadcast] method1...[method4]
+
+
+
+R1(config)# aaa accounting exec ?
+
+WORD Named Accounting list.
+
+default The default accounting list
+
+
+
+As with AAA authentication, either the keyword default or a list-name can be used.
+
+
+
+Next, the record type, or trigger, is configured. The trigger specifies what actions cause accounting records to be updated. Possible triggers include:
+
+
+
+start-stop - Sends a "start" accounting notice at the beginning of a process and a "stop" accounting notice at the end of a process.
+
+
+
+stop-only - Sends a "stop" accounting record for all cases including authentication failures.
+
+
+
+none - Disables accounting services on a line or interface.
+
+
+
+The examples show the command syntax and method list options available.
+
+
+
+R1(config)# aaa accounting exec default start-stop ?
+
+broadcast Use Broadcast for Accounting
+
+
+
+group Use Server-group
+
+
+
+R1(config)# aaa accounting exec default start-stop group ?
+
+WORD Server-group name
+
+radius Use list of all Radius hosts.
+
+tacacs+ Use list of all Tacacs+ hosts.
+
+
+
+The example shows an accounting configuration that logs the use of EXEC commands and network connections.
+
+
+
+R1(config)# username JR-ADMIN algorithm-type scrypt secret Str0ng5rPa5w0rd
+
+R1(config)# username ADMIN algorithm-type scrypt secret Str0ng5rPa55w0rd
+
+R1(config)# aaa new-model
+
+R1(config)# aaa authentication login default group tacacs+
+
+R1(c
+
+7.5.5
+
+
+
+Syntax Checker - Configure AAA Accounting	Use the Syntax Checker to configure server-based AAA authorization and accounting on R1. A local username database has been configured, AAA has been enabled, AAA authentication has been configured, and TACACS+ and RADIUS servers have been implemented on the network
+
+
+
+On router R1, a local username database has been configured, AAA has been enabled, and AAA authentication has been configured. TACACS+ and RADIUS servers have been implemented on the network. Configure R1 using the following instructions:
+
+
+
+Configure default AAA authorization method list for EXEC shells and network services using TACACS+.
+
+Configure default AAA accounting method list for EXEC shells and network services using TACACS+, with start and stop notices sent at the beginning and end of a process.
+
+After configuration, exit configuration mode.
+
+
+
+R1(config)#aaa authorization exec default group tacacs+
+
+R1(config)#aaa authorization network default group tacacs+
+
+R1(config)#aaa accounting exec default start-stop group tacacs+
+
+R1(config)#aaa accounting network default start-stop group tacacs+
+
+R1(config)#exit
+
+R1#
+
+*Mar 3 18:22:23.443: %SYS-5-CONFIG_I: Configured from console by console
+
+R1#
+
+
+
+You successfully configured AAA accounting.
+
+Authentication, Authorization, and Accounting (AAA) Summary
+
+
+
+7.6.1
+
+
+
+What Did I Learn in this Module?	AAA Characteristics
+
+
+
+Local authentication can be configured on networking devices with usernames and passwords that protect console, vty lines, and User EXEC mode. This is the easiest authentication to implement, but also the weakest and least secure. SSH should be used for remote access to vty lines because telnet is not secure. AAA provides a means by which users can be authenticated against a centralized database of users. AAA authentication requires users and admins to prove their identity with usernames and passwords or through other methods. AAA authorization can be used to limit the access of users or groups of users to only the network resources that they need to access. It also can control what the user can do with various resources. Authorization can be configured to control what different users can do on network devices. AAA accounting records user actions including when the user accessed the network or device, the length of time for the session, and the resources or functions that were accessed by the user. AAA can be configured to access a local user database that has been configured on a router or switch, or centralized AAA server. After authentication has successfully occurred, authorization for user access is determined. After successful authentication, AAA accounting records the beginning of the session.
+
+
+
+Configure Local AAA Authentication
+
+
+
+Local AAA authentication should be configured for smaller networks. Usernames and passwords are configured on the networking device, similar to when login local is configured on the console and vty lines. AAA local authentication provides additional options that are not available when AAA is not used. For example, different authentication methods can be configured on different lines, including using local authentication for some lines and server-based authentication
+
+7.6.2
+
+
+
+Module 4 - Authentication, Authorization, and Accounting (AAA) Quiz	
+
+1. What is a feature of the TACACS+ protocol?	It encrypts the entire body of the packet for more secure communications.
+
+2. Which two protocols are used to provide server-based AAA authentication? (Choose two.)	RADIUS
+
+
+
+TACACS+
+
+3. Which functionality does ​the TACACS single-connection keyword provide to AAA services?	enhances the performance of the TCP connection
+
+4. What are three access control security services? (Choose three.)	accounting
+
+
+
+authorization
+
+
+
+authentication
+
+5. What is the purpose of the network security accounting function?	to keep track of the actions of a user
+
+6. What does the TACACS+ protocol provide in a AAA deployment?	authorization on a per-user or per-group basis
+
+7. Which term describes the ability of a web server to keep a log of the users who access the server, as well as the length of time they use it?	accounting
+
+8. What is the first required task when configuring server-based AAA authentication?	Enable AAA globally.
+
+9. What is a characteristic of AAA accounting?	Possible triggers for the aaa accounting exec default command include start-stop and stop-only.
+
+10. When a method list for AAA authentication is being configured, what is the effect of the keyword local?	It accepts a locally configured username, regardless of case.
+
+11. Which statement describes a difference between RADIUS and TACACS+?	RADIUS encrypts only the password whereas TACACS+ encrypts all communication.
+
+12. A user complains about not being able to gain access to a network device configured with AAA. How would the network administrator determine if login access for the user account is disabled?	Use the show aaa local user lockout command.
+
+13. Which component of AAA is used to determine which resources a user can access and which operations the user is allowed to perform?	authorization

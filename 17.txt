@@ -1,0 +1,604 @@
+
+Public Key Cryptography with Digital Signatures
+
+
+
+17.1.1
+
+
+
+Digital Signature Overview	Digital signatures are a mathematical technique used to provide authenticity, integrity, and nonrepudiation. Digital signatures have specific properties that enable entity authentication and data integrity. In addition, digital signatures provide nonrepudiation of the transaction. In other words, the digital signature serves as legal proof that the data exchange did take place. Digital signatures use asymmetric cryptography.
+
+
+
+Click the buttons to explore properties of digital signatures. (On cards 2-5).
+
+
+
+Digital signatures are commonly used in the following two situations: (On cards 6-7).
+
+
+
+1. Code signing - This is used for data integrity and authentication purposes. Code signing is used to verify the integrity of executable files downloaded from a vendor website. It also uses signed digital certificates to authenticate and verify the identity of the site that is the source of the files.
+
+
+
+2. Digital certificates - These are similar to a virtual ID card and used to authenticate the identity of system with a vendor website and establish an encrypted connection to exchange confidential data.
+
+
+
+There are three Digital Signature Standard (DSS) algorithms that are used for generating and verifying digital signatures:
+
+(On cards 8-10).
+
+
+
+Digital Signature Algorithm (DSA) - DSA is the original standard for generating public and private key pairs, and for generating and verifying digital signatures.
+
+
+
+Rivest-Shamir Adelman Algorithm (RSA) - RSA is an asymmetric algorithm that is commonly used for generating and verifying digital signatures.
+
+
+
+Elliptic Curve Digital Signature Algorithm (ECDSA) - ECDSA is a newer variant of DSA and provides digital signature authentication and non-repudiation with the added benefits of computational efficiency, small signature sizes, and minimal bandwidth.
+
+
+
+In the 1990s, RSA Security Inc. started to p
+
+Authentic	The signature cannot be forged and provides proof that the signer, and no one else, signed the document.
+
+Unalterable	After a document is signed, it cannot be altered.
+
+Not Reusable	The document signature cannot be transferred to another document.
+
+Non-repudiated	The signed document is considered to be the same as a physical document. The signature is proof that the document has been signed by the actual person.
+
+Code signing	This is used for data integrity and authentication purposes. Code signing is used to verify the integrity of executable files downloaded from a vendor website. It also uses signed digital certificates to authenticate and verify the identity of the site that is the source of the files.
+
+Digital certificates	These are similar to a virtual ID card and used to authenticate the identity of system with a vendor website and establish an encrypted connection to exchange confidential data.
+
+Digital Signature Algorithm (DSA)	DSA is the original standard for generating public and private key pairs, and for generating and verifying digital signatures.
+
+Rivest-Shamir Adelman Algorithm (RSA)	RSA is an asymmetric algorithm that is commonly used for generating and verifying digital signatures.
+
+Elliptic Curve Digital Signature Algorithm (ECDSA)	ECDSA is a newer variant of DSA and provides digital signature authentication and non-repudiation with the added benefits of computational efficiency, small signature sizes, and minimal bandwidth.
+
+17.1.2
+
+
+
+Digital Signatures for Code Signing	Digital signatures are commonly used to provide assurance of the authenticity and integrity of software code. Executable files are wrapped in a digitally signed envelope, which allows the end user to verify the signature before installing the software.
+
+
+
+Digitally signing code provides several assurances about the code:
+
+
+
+The code is authentic and is actually sourced by the publisher.
+
+The code has not been modified since it left the software publisher.
+
+The publisher undeniably published the code. This provides nonrepudiation of the act of publishing.
+
+
+
+The US Government Federal Information Processing Standard (FIPS) Publication 140-3 specifies that software available for download on the internet is to be digitally signed and verified. The purpose of digitally signed software is to ensure that the software has not been tampered with, and that it originated from the trusted source as claimed. Digital signatures serve as verification that the code has not been tampered with by threat actors and malicious code has not been inserted into the file by a third party.
+
+
+
+Click the buttons to access the properties of a file that has a digitally signed certificate. (On cards 12-16).
+
+File Properties	This executable file was downloaded from the internet. The file contains a software tool from Cisco Systems.
+
+Digital Signatures	Clicking the Digital Signatures tab reveals that the file is from a trusted organization, Cisco Systems Inc. The file digest was created with the sha256 algorithm. The date on which the file was signed is also provided. Clicking Details opens the Digital Signatures Details window.
+
+Digital Signatures Details	The Digital Signature Details window reveals that the file was signed by Cisco Systems, Inc in October of 2019. This was verified by countersignature provided by Entrust Time Stamping Authority on the same day as it was signed by Cisco. Click View Certificate to see the details of the certificate itself.
+
+Certificate Information	The General tab provides the purposes of the certificate, who the certificate was issued to, and who issued the certificate. It also displays the period for which the certificate is valid. Invalid certificates can prevent the file from running.
+
+Certification Path	Click the Certification Path tab to see the file was signed by Cisco Systems, as verified to DigiCert. In some cases an additional entity may independently verify the certificate.
+
+17.1.3
+
+
+
+Digital Signatures for Digital Certificates	A digital certificate is equivalent to an electronic passport. It enables users, hosts, and organizations to securely exchange information over the internet. Specifically, a digital certificate is used to authenticate and verify that a user who is sending a message is who they claim to be. Digital certificates can also be used to provide confidentiality for the receiver with the means to encrypt a reply.
+
+
+
+Digital certificates are similar to physical certificates. For example, the paper-based Cisco Certified Network Associate Security (CCNA-S) certificate in the figure identifies who the certificate is issued to, who authorized the certificate, and for how long the certificate is valid. Digital certificates also provide similar information.
+
+The figure shows an example of the CCNA certificate pointing out who it was issued to, bob smith, the expiration date, august 6, 2022, and the certificate authority, chuck robbins.
+
+
+
+Expiry dateCertificate AuthorityIssued to :
+
+
+
+The digital certificate independently verifies an identity. Digital signatures are used to verify that an artifact, such as a file or message, is sent from the verified individual. In other words, a certificate verifies identity, a signature verifies that something comes from that identity.
+
+
+
+This scenario will help you understand how a digital signature is used. Bob is confirming an order with Alice. Alice is ordering from Bob's website. Alice has connected with Bob's website, and after the certificate has been verified, the Bob's certificate is stored on Alice's website. The certificate contains Bob's public key. The public key is used to verify the Bob's digital signature.
+
+
+
+Refer to the figure to see how the digital signature is used.
+
+
+
+123
+
+BobDataPrivate KeyEncryptHashBobConfirm Order1c34d56...0a77b3440...Confirm OrderSignature0a77b3440...Signed Data
+
+Authorities and the PKI Trust System
+
+
+
+17.2.1
+
+
+
+Public Key Management	Internet traffic consists of traffic between two parties. When establishing an asymmetric connection between two hosts, the hosts will exchange their public key information.
+
+
+
+For example, an SSL certificate is a digital certificate that confirms the identity of a website domain. To implement SSL on your website, you purchase an SSL certificate for your domain from an SSL Certificate provider. The trusted third party does an in-depth investigation prior to the issuance of credentials. After this in-depth investigation, the third-party issues credentials (i.e. digital certificate) that are difficult to forge. From that point forward, all individuals who trust the third party simply accept the credentials that the third-party issues.
+
+
+
+When computers attempt to connect to a web site over HTTPS, the web browser checks the website's security certificate and verifies that it is valid and originated from a reliable Certificate Authority (CA). This validates that the website identify is true. The digital certificate is saved locally by the web browser and is then used in subsequent transactions. The website's public key is included in the certificate and is used to verify future communications between the website and the client.
+
+
+
+The SSL Certificate provider and Certificate Authorities are trusted third parties that provide services similar to governmental licensing bureaus.
+
+
+
+Alice applies for a driver's license.
+
+
+
+She receives her driver's license after her identity is proven.
+
+
+
+Alice attempts to cash a check.
+
+
+
+Her identity is accepted after her driver's license is checked.
+
+
+
+The Public Key Infrastructure (PKI) consists of specifications, systems, and tools that are used to create, manage, distribute, use, store, and revoke digital certificates. The certificate authority (CA) is an organization that creates digital certificates b
+
+17.2.2
+
+
+
+The Public Key Infrastructure	PKI is needed to support large-scale distribution and identification of public encryption keys. The PKI framework facilitates a highly scalable trust relationship.
+
+
+
+It consists of the hardware, software, people, policies, and procedures needed to create, manage, store, distribute, and revoke digital certificates.
+
+
+
+The figure shows the main elements of the PKI.
+
+The figure shows a user at a pc with the words P K I certificate above it and a circled number one. There is a circled number 2 beside the computer with the words certificate store. To the right of the user is a circled three public building icon labeled P K I certificate authority and to the right of that is a circled four and a cylinder labeled certificate database.
+
+
+
+Certificate StorePKI CertificatePKI Certificate AuthorityCertificate Database
+
+
+
+1. PKI certificates contain an entity's or individual's public key, its purpose, the certificate authority (CA) that validated and issued the certificate, the date range during which the certificate is valid, and the algorithm used to create the signature.
+
+
+
+2. The certificate store resides on a local computer and stores issued certificates and private keys.
+
+
+
+3. The PKI Certificate of Authority (CA) is a trusted third party that issues PKI certificates to entities and individuals after verifying their identity. It signs these certificates using its private key.
+
+
+
+4. The certificate database stores all certificates approved by the CA.
+
+
+
+The next figure shows how the elements of the PKI interoperate:
+
+
+
+In this example, Bob has received his digital certificate from the CA. This certificate is used whenever Bob communicates with other parties.
+
+
+
+Bob communicates with Alice.
+
+
+
+When Alice receives Bob's digital certificate, she communicates with the trusted CA to validate Bob's identity.
+
+
+
+Certificate AuthorityCertificate DatabaseBob
+
+17.2.3 
+
+
+
+The PKI Authorities System	Many vendors provide CA servers as a managed service or as an end-user product. Some of these vendors include Symantec Group (VeriSign), Comodo, Go Daddy Group, GlobalSign, and DigiCert among others.
+
+
+
+Organizations may also implement private PKIs using Microsoft Server or Open SSL.
+
+
+
+CAs, especially those that are outsourced, issue certificates based on classes which determine how trusted a certificate is.
+
+
+
+The table provides a description of the classes. The table provides a description of the classes as defined by VeriSign. There is no standard for digital certificate classes, so there are different classes depending on the CA. Other CAs may use a three class system. The class number is determined by how rigorous the procedure was that verified the identity of the holder when the certificate was issued. The higher the class number, the more trusted the certificate. Therefore, a class 5 certificate is trusted much more than a lower-class certificate. (On cards 21-26).
+
+
+
+Class 0 - Used for testing in situations in which no checks have been performed.
+
+
+
+Class 1 - Used by individuals who require verification of email.
+
+
+
+Class 2 - Used by organizations for which proof of identity is required.
+
+
+
+Class 3 - Used for servers and software signing. Independent verification and checking of identity and authority is done by the certificate authority.
+
+
+
+Class 4 - Used for online business transactions between companies.
+
+
+
+Class 5 - Used for private organizations or government security.
+
+
+
+For example, a class 1 certificate might require an email reply from the holder to confirm that they wish to enroll. This kind of confirmation is a weak authentication of the holder. For a class 3 or 4 certificate, the future holder must prove identity and authenticate the public key by showing up in person with at least two official ID documents.
+
+
+
+Some CA
+
+Class 0	Used for testing in situations in which no checks have been performed.
+
+Class 1	Used by individuals who require verification of email.
+
+Class 2	Used by organizations for which proof of identity is required.
+
+Class 3	Used for servers and software signing. Independent verification and checking of identity and authority is done by the certificate authority.
+
+Class 4	Used for online business transactions between companies.
+
+Class 5	Used for private organizations or government security.
+
+17.2.4
+
+
+
+The PKI Trust System	PKIs can form different topologies of trust. The simplest is the single-root PKI topology.
+
+
+
+As shown in the figure below, a single CA, called the root CA, issues all the certificates to the end users, which are usually within the same organization. The benefit to this approach is its simplicity. However, it is difficult to scale to a large environment because it requires a strictly centralized administration, which creates a single point of failure.
+
+
+
+Single-Root PKI Topology
+
+
+
+Root CA
+
+
+
+On larger networks, PKI CAs may be linked using two basic architectures: (On cards 28-29).
+
+
+
+Cross-certified CA topologies - As shown in the figure below, this is a peer-to-peer model in which individual CAs establish trust relationships with other CAs by cross-certifying CA certificates. Users in either CA domain are also assured that they can trust each other. This provides redundancy and eliminates the single-point of failure.
+
+
+
+Cross-Certified CA
+
+
+
+CA1CA2CA3
+
+
+
+Hierarchical CA topologies - As shown in the figure below, the highest-level CA is called the root CA. It can issue certificates to end users and to a subordinate CA. The sub-CAs could be created to support various business units, domains, or communities of trust. The root CA maintains the established "community of trust" by ensuring that each entity in the hierarchy conforms to a minimum set of practices. The benefits of this topology include increased scalability and manageability. This topology works well in most large organizations. However, it can be difficult to determine the chain of the signing process.
+
+
+
+A hierarchical and cross-certification topology can be combined to create a hybrid infrastructure. An example would be when two hierarchical communities want to cross-certify each other in order for members of each community to trust each other.
+
+
+
+Hierarchical CA
+
+
+
+Root CASubo
+
+17.2.5
+
+
+
+Interoperability of Different PKI Vendors	Interoperability between a PKI and its supporting services, such as Lightweight Directory Access Protocol (LDAP) and X.500 directories, is a concern because many CA vendors have proposed and implemented proprietary solutions instead of waiting for standards to develop.
+
+
+
+Note: LDAP and X.500 are protocols that are used to query a directory service, such as Microsoft Active Directory, to verify a username and password.
+
+
+
+To address this interoperability concern, the IETF published the Internet X.509 Public Key Infrastructure Certificate Policy and Certification Practices Framework (RFC 2527). The X.509 version 3 (X.509 v3) standard defines the format of a digital certificate.
+
+
+
+Refer to the figure for examples of how the X.509 v3 format is used in the infrastructure of the internet. (On cards 29-32).
+
+
+
+X.509v3 Applications
+
+
+
+1234
+
+InternetEnterprise NetworkVPN ConcentratorExternal Web ServerInternet Mail ServerCisco Secure ACSCA ServerSSLS/MIMEEAP-TLSIPsec
+
+
+
+1. SSL - Secure web servers use X.509.v3 for website authentication in the SSL and TLS protocols, while web browsers use X.509v3 to implement HTTPS client certificates. SSL is the most widely used certificate-based authentication.
+
+2. IPsec - IPsec VPNs use X.509 certificates when RSA-based authentication is used for internet key exchange (IKE).
+
+3. S/MIME - User mail agents that support mail protection with the Secure/Multipurpose Internet Mail Extensions (S/MIME) protocol use X.509 certificates.
+
+4. EAP-TLS - Cisco switches can use certificates to authenticate end devices that connect to LAN ports using 802.1x between the adjacent devices. The authentication can be proxied to a central ACS via the Extensible Authentication Protocol with TLS (EAP-TLS).
+
+SSL	Secure web servers use X.509.v3 for website authentication in the SSL and TLS protocols, while web browsers use X.509v3 to implement HTTPS client certificates. SSL is the most widely used certificate-based authentication.
+
+IPsec	IPsec VPNs use X.509 certificates when RSA-based authentication is used for internet key exchange (IKE).
+
+S/MIME	User mail agents that support mail protection with the Secure/Multipurpose Internet Mail Extensions (S/MIME) protocol use X.509 certificates.
+
+EAP-TLS	Cisco switches can use certificates to authenticate end devices that connect to LAN ports using 802.1x between the adjacent devices. The authentication can be proxied to a central ACS via the Extensible Authentication Protocol with TLS (EAP-TLS).
+
+17.2.6
+
+
+
+Certificate Enrollment, Authentication, and Revocation	The first step in the CA authentication procedure is to securely obtain a copy of the CA's public key. All systems that leverage the PKI must have the CA's public key, which is called the self-signed certificate. The CA public key verifies all the certificates issued by the CA and is vital for the proper operation of the PKI.
+
+
+
+Note: Only a root CA can issue a self-signed certificate that is recognized or verified by other CAs within the PKI.
+
+
+
+For many systems such as web browsers, the distribution of CA certificates is handled automatically. The web browser comes pre-installed with a set of public CA root certificates. Organizations and their website domains push their public certificates to website visitors. CAs and certificate domain registrars create and distribute private and public certificates to clients that purchase certificates.
+
+
+
+The certificate enrollment process is used by a host system to enroll with a PKI. To do so, CA certificates are retrieved in-band over a network, and the authentication is done out-of-band (OOB) by telephone.
+
+
+
+Once enrolled, authentication between two parties is no longer dependent on the presence of the CA server as each user exchanges their certificates containing public keys.
+
+
+
+Authentication no longer requires the presence of the CA server, and each user exchanges their certificates containing public keys.
+
+
+
+Certificates must sometimes be revoked. For example, a digital certificate can be revoked if key is compromised or if it is no longer needed.
+
+
+
+Here are two of the most common methods of revocation: (On cards 34-35).
+
+
+
+Certificate Revocation List (CRL) - A list of revoked certificate serial numbers that have been invalidated because they expired. PKI entities regularly poll the CRL repository to receive the current CRL.
+
+Online Certificate Status Protocol (OCSP) - An internet proto
+
+Certificate Revocation List (CRL)	A list of revoked certificate serial numbers that have been invalidated because they expired. PKI entities regularly poll the CRL repository to receive the current CRL.
+
+Online Certificate Status Protocol (OCSP)	An internet protocol used to query an OCSP server for the revocation status of an X.509 digital certificate. Revocation information is immediately pushed to an online database.
+
+17.2.7
+
+
+
+Lab - Certificate Authority Stores	In this lab, you will complete the following objectives:
+
+
+
+Certificates Trusted by Your Browser
+
+Checking for Man-In-Middle
+
+Applications and Impacts of Cryptography
+
+
+
+17.3.1
+
+
+
+PKI Applications	Where can PKI be used by an enterprise? The following provides a short list of common uses of PKIs:
+
+
+
+SSL/TLS certificate-based peer authentication
+
+Secure network traffic using IPsec VPNs
+
+HTTPS Web traffic
+
+Control access to the network using 802.1x authentication
+
+Secure email using the S/MIME protocol
+
+Secure instant messaging
+
+Approve and authorize applications with Code Signing
+
+Protect user data with the Encryption File System (EFS)
+
+Implement two-factor authentication with smart cards
+
+Securing USB storage devices
+
+17.3.2
+
+
+
+Encrypted Network Transactions	A security analyst must be able to recognize and solve potential problems related to permitting PKI-related solutions on the enterprise network.
+
+
+
+Consider how the increase of SSL/TLS traffic poses a major security risk to enterprises because the traffic is encrypted and cannot be intercepted and monitored by normal means. Users can introduce malware or leak confidential information over an SSL/TLS connection.
+
+
+
+Threat actors can use SSL/TLS to introduce regulatory compliance violations, viruses, malware, data loss, and intrusion attempts in a network.
+
+
+
+Other SSL/TLS-related issues may be associated with validating the certificate of a web server. When this occurs, web browsers will display a security warning. PKI-related issues that are associated with security warnings include: (On cards 39-40).
+
+
+
+Validity date range - The X.509v3 certificates specify "not before" and "not after" dates. If the current date is outside the range, the web browser displays a message. Expired certificates may simply be the result of administrator oversight, but they may also reflect more serious conditions.
+
+Signature validation error - If a browser cannot validate the signature on the certificate, there is no assurance that the public key in the certificate is authentic. Signature validation will fail if the root certificate of the CA hierarchy is not available in the browser's certificate store.
+
+
+
+The figure shows an example of a signature validation error with the Cisco AnyConnect Mobility VPN Client.
+
+
+
+Signature Validation Error
+
+
+
+Some of these issues can be avoided due to the fact that the SSL/TLS protocols are extensible and modular. This is known as a cipher suite. The key components of the cipher suite are the Message Authentication Code Algorithm (MAC), the encryption algorithm, the key exchange algorithm, and the authentication algorit
+
+Validity date range	The X.509v3 certificates specify "not before" and "not after" dates. If the current date is outside the range, the web browser displays a message. Expired certificates may simply be the result of administrator oversight, but they may also reflect more serious conditions.
+
+Signature validation error	If a browser cannot validate the signature on the certificate, there is no assurance that the public key in the certificate is authentic. Signature validation will fail if the root certificate of the CA hierarchy is not available in the browser's certificate store.
+
+17.3.3
+
+
+
+Encryption and Security Monitoring	Network monitoring becomes more challenging when packets are encrypted. However, security analysts must be aware of those challenges and address them as best as possible. For instance, when site-to-site VPNs are used, the IPS should be positioned so it can monitor unencrypted traffic.
+
+
+
+However, the increased use of HTTPS in the enterprise network introduces new challenges. Since HTTPS introduces end-to-end encrypted HTTP traffic (via TLS/SSL), it is not as easy to peek into user traffic.
+
+
+
+Security analysts must know how to circumvent and solve these issues. Here is a list of some of the things that a security analyst could do:
+
+
+
+Configure rules to distinguish between SSL and non-SSL traffic, HTTPS and non-HTTPS SSL traffic.
+
+Enhance security through server certificate validation using CRLs and OCSP.
+
+Implement antimalware protection and URL filtering of HTTPS content.
+
+
+
+Cryptography is dynamic and always changing. A security analyst must maintain a good understanding of cryptographic algorithms and operations to be able to investigate cryptography-related security incidents.
+
+
+
+There are two main ways in which cryptography impacts security investigations. First, attacks can be directed to specifically target the encryption algorithms themselves. After the algorithm has been cracked and the attacker has obtained the keys, any encrypted data that has been captured can be decrypted by the attacker and read, thus exposing private data. Secondly, the security investigation is also affected because data can be hidden in plain sight by encrypting it. For example, command and control traffic that is encrypted with TLS/SSL most likely cannot be seen by a firewall. The command and control traffic between a command and control server and an infected computer in a secure network cannot be stopped if it cannot be seen and understood. The
+
+Public Key Cryptography Summary
+
+
+
+17.4.1
+
+
+
+What Did I Learn in this Module?	Public Key Cryptography
+
+
+
+Digital signatures are a mathematical technique used to provide three basic security services: authenticity, integrity, and nonrepudiation. Properties of digital signature are that they are authentic, unalterable, not reusable, and non-repudiated. Digital signatures are commonly used in the following two situations: code signing and digital certificates. There are three DSS algorithms that are used for generating and verifying digital signatures: DSA, RSA and ECDSA. Digitally signing code provides assurances about the software code: the code is authentic and is actually sourced by the publisher, the code has not been modified since it left the software publisher, and the publisher undeniably published the code. A digital certificate is equivalent to an electronic passport. It enables users, hosts, and organizations to securely exchanges information over the internet. Specifically, a digital certificate is used to authenticate and verify that a user who is sending a message is who they claim to be.
+
+
+
+Authorities and the PKI Trust System
+
+
+
+When establishing secure connection between two hosts, the hosts will exchange their public key information. There are trusted third parties on the internet that validate the authenticity of these public keys using digital certificates. The PKI consists of specifications, systems, and tools that are used to create, manage, distribute, use, store, and revoke digital certificates. PKI is needed to support large-scale distribution of public encryption keys. The PKI framework facilitates a highly scalable trust relationship. Many vendors provide CA servers as a managed service or as an end-user product. Some of these vendors include Symantec Group (VeriSign), Comodo, Go Daddy Group, GlobalSign, and DigiCert among others. The class number is determined by how rigorous
+
+17.4.2
+
+
+
+Module 17 - Configure Network and Device Security Quiz	
+
+1. What are the two important components of a public key infrastructure (PKI) used in network security? (Choose two.)	certificate authority
+
+
+
+digital certificates
+
+2. What is the purpose of code signing?	integrity of source .EXE files
+
+3. Which statement describes the use of certificate classes in the PKI?	A class 5 certificate is more trustworthy than a class 4 certificate.
+
+4. What role does an RA play in PKI?	a subordinate CA
+
+5. Which protocol uses X.509 certificates to support mail protection performed by mail agents?	S/MIME
+
+6. What protocol is used to query the revocation status of an X.509 certificate?	OCSP
+
+7. In which way does the use of HTTPS increase the security monitoring challenges within enterprise networks?	HTTPS traffic enables end-to-end encryption.
+
+8. Which technology is used to provide assurance of the authenticity and integrity of software code?	digital signatures
+
+9. Which CA class of digital certificates would be used by individuals to perform email verification?	1
+
+10. What is a purpose of a digital certificate?	to authenticate and verify that a user who is sending a message is who they claim to be
+
+11. What is an appropriate use for class 5 digital certificates?	used for private organizations or government security

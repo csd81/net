@@ -1,0 +1,1238 @@
+
+Integrity and Authenticity
+
+
+
+16.1.1
+
+
+
+Secure Communications	Organizations must provide support to secure data as it travels across links. This may include internal traffic, but it is even more important to protect data that travels outside of the organization to branch sites, telecommuter sites, and partner sites.
+
+
+
+These are the four elements of secure communications:
+
+
+
+Data Integrity - Guarantees that the message was not altered. Any changes to data in transit will be detected. Integrity is ensured by implementing either of the Secure Hash Algorithms (SHA-2 or SHA-3). The MD5 message digest algorithm is still widely in use. However, it is inherently insecure and creates vulnerabilities in a network. Note that MD5 should be avoided.
+
+Origin Authentication - Guarantees that the message is not a forgery and does actually come from whom it states. Many modern networks ensure authentication with algorithms such as hash-based message authentication code (HMAC).
+
+Data Confidentiality - Guarantees that only authorized users can read the message. If the message is intercepted, it cannot be deciphered within a reasonable amount of time. Data confidentiality is implemented using symmetric and asymmetric encryption algorithms.
+
+Data Non-Repudiation - Guarantees that the sender cannot repudiate, or refute, the validity of a message sent. Nonrepudiation relies on the fact that only the sender has the unique characteristics or signature for how that message is treated.
+
+
+
+Cryptography can be used almost anywhere that there is data communication. In fact, the trend is toward all communication being encrypted.
+
+Data Integrity	Guarantees that the message was not altered. Any changes to data in transit will be detected. Integrity is ensured by implementing either of the Secure Hash Algorithms (SHA-2 or SHA-3). The MD5 message digest algorithm is still widely in use. However, it is inherently insecure and creates vulnerabilities in a network. Note that MD5 should be avoided.
+
+Origin Authentication	Guarantees that the message is not a forgery and does actually come from whom it states. Many modern networks ensure authentication with algorithms such as hash-based message authentication code (HMAC).
+
+Data Confidentiality	Guarantees that only authorized users can read the message. If the message is intercepted, it cannot be deciphered within a reasonable amount of time. Data confidentiality is implemented using symmetric and asymmetric encryption algorithms.
+
+Data Non-Repudiation	Guarantees that the sender cannot repudiate, or refute, the validity of a message sent. Nonrepudiation relies on the fact that only the sender has the unique characteristics or signature for how that message is treated.
+
+16.1.2
+
+
+
+Cryptographic Hash Functions	Hashes are used to verify and ensure data integrity. They are also used to verify authentication. Hashing is based on a one-way mathematical function that is relatively easy to compute, but significantly harder to reverse.
+
+
+
+Grinding coffee is a good analogy of a one-way function. It is easy to grind coffee beans, but it is almost impossible to put all of the tiny pieces back together to rebuild the original beans.
+
+
+
+As shown in the figure, a hash function takes a variable block of binary data, called the message, and produces a fixed-length, condensed representation, called the hash. The resulting hash is also sometimes called the message digest, digest, or digital fingerprint.
+
+
+
+e883aa0b24c09f
+
+Plaintext Message (data of arbitrary length)Hash FunctionFixed-Length Hash Value
+
+
+
+With hash functions, it is computationally infeasible for two different sets of data to come up with the same hash output. Furthermore, the hash value changes every time the data is changed or altered. Because of this, cryptographic hash values are often called "digital fingerprints". These fingerprints can be used to detect duplicate data files, file version changes, and similar applications. These values are used to guard against an accidental or intentional change to the data, or accidental data corruption.
+
+
+
+The cryptographic hash function is applied in many different situations for entity authentication, data integrity, and data authenticity purposes.
+
+16.1.3
+
+
+
+Cryptographic Hash Operation	Mathematically, the equation h= H(x) is used to explain how a hash algorithm operates. As shown in the figure, a hash function H takes an input x and returns a fixed-size string hash value h.
+
+
+
+xHhH(x)e883aa0b24c09f
+
+Hash FunctionArbitrary Length TextHash FunctionHash ValuePlaintext Message
+
+
+
+The example in the figure summarizes the mathematical process. A cryptographic hash function should have the following properties:
+
+
+
+The input can be any length.
+
+The output is always a fixed length.
+
+H(x) is relatively easy to compute for any given x.
+
+H(x) is one way and not reversible.
+
+H(x) is collision free, meaning that two different input values will result in different hash values.
+
+
+
+If a hash function is hard to invert, it is considered a one-way hash. Hard to invert means that given a hash value of h, it is computationally infeasible to find an input for x such that h=H(x).
+
+16.1.4
+
+
+
+MD5 and SHA	Hash functions are used to ensure the integrity of a message. They help ensure data has not accidentally changed and that what was sent is indeed what was received.
+
+
+
+Note: Deliberate changes can be made by a threat actor.
+
+
+
+In the figure, the sender is sending a $100 money transfer to Alex. The sender wants to ensure that the message is not accidentally altered on its way to the receiver.
+
+
+
+The figure shows hash computations of a message in which the starting hash and the ending hash are different. The message sent says, Pay to Alex $100.00. The message received says, Pay to Jeremy $1000.00. The starting hash is 4ehlDx67NMop9 and the ending hash is 12ehqPx67NMoX.
+
+Pay to Alex$100.00One Hundred and 00/100 Dollars4ehlDx67NMop9Starting HashPay to Jeremy$1000.00One Thousand and 00/100 Dollars12ehqPx67NMoXEnding HashDifferent
+
+The hash algorithm works as follows:
+
+The sending device inputs the message into a hashing algorithm and computes its fixed-length hash of 4ehiDx67NMop9.
+
+This hash is then attached to the message and sent to the receiver. Both the message and the hash are in plaintext.
+
+The receiving device removes the hash from the message and inputs the message into the same hashing algorithm. If the computed hash is equal to the one that is attached to the message, the message has not been altered during transit. If the hashes are not equal, as shown in the figure, then the integrity of the message can no longer be trusted.
+
+There are four well-known hash functions:	MD5 with 128-bit digest - Developed by Ron Rivest and used in a variety of internet applications, MD5 is a one-way function that produces a 128-bit hashed message. MD5 is considered to be a legacy algorithm and should be avoided and used only when no better alternatives are available. It is recommended that SHA-2 or SHA-3 be used instead.
+
+SHA-1 - Developed by the U.S. National Security Agency (NSA) in 1995. It is very similar to the MD5 hash functions. Several versions exist. SHA-1 creates a 160-bit hashed message and is slightly slower than MD5. SHA-1 has known flaws and is a legacy algorithm.
+
+SHA-2 - Developed by the NSA. It includes SHA-224 (224 bit), SHA-256 (256 bit), SHA-384 (384 bit), and SHA-512 (512 bit). If you are using SHA-2, then the SHA-256, SHA-384, and SHA-512 algorithms should be used whenever possible.
+
+SHA-3 - SHA-3 is the newest hashing algorithm and was introduced by the National Institute of Standards and Technology (NIST) as an alternative and eventual replacement for the SHA-2 family of hashing algorithms. SHA-3 includes SHA3-224 (224 bit), SHA3-256 (256 bit), SHA3-384 (384 bit), and SHA3-512 (512 bit). The SHA-3 family are next-generation algorithms and should be used whenever possible.
+
+
+
+While hashing can be used to detect accidental changes, it cannot be used to guard against deliberate changes that are made by a threat actor. There is no unique identifying information from the sender in the hashing procedure. This means that anyone can compute a hash for any data, as long as they have the correct hash function.
+
+
+
+For example, when the message traverses the network, a potential threat actor could intercept the message, change it, recalculate the hash, and append it to the message. The receiving device will only validate against whatever hash is appended.
+
+
+
+Therefore, hashing is vulnerable to man-
+
+MD5 with 128-bit digest	Developed by Ron Rivest and used in a variety of internet applications, MD5 is a one-way function that produces a 128-bit hashed message. MD5 is considered to be a legacy algorithm and should be avoided and used only when no better alternatives are available. It is recommended that SHA-2 or SHA-3 be used instead.
+
+SHA-1	Developed by the U.S. National Security Agency (NSA) in 1995. It is very similar to the MD5 hash functions. Several versions exist. SHA-1 creates a 160-bit hashed message and is slightly slower than MD5. SHA-1 has known flaws and is a legacy algorithm.
+
+SHA-2	Developed by the NSA. It includes SHA-224 (224 bit), SHA-256 (256 bit), SHA-384 (384 bit), and SHA-512 (512 bit). If you are using SHA-2, then the SHA-256, SHA-384, and SHA-512 algorithms should be used whenever possible.
+
+SHA-3	SHA-3 is the newest hashing algorithm and was introduced by the National Institute of Standards and Technology (NIST) as an alternative and eventual replacement for the SHA-2 family of hashing algorithms. SHA-3 includes SHA3-224 (224 bit), SHA3-256 (256 bit), SHA3-384 (384 bit), and SHA3-512 (512 bit). The SHA-3 family are next-generation algorithms and should be used whenever possible.
+
+16.1.5
+
+
+
+Origin Authentication	To add origin authentication and integrity assurance, use a keyed-hash message authentication code (HMAC). HMAC uses an additional secret key as input to the hash function.
+
+
+
+Note: Other Message Authentication Code (MAC) methods are also used. However, HMAC is used in many systems including SSL, IPsec, and SSH.
+
+
+
+Click each button for an illustration and explanation about origin authentication using HMAC. (On cards 15-18).
+
+HMAC Hashing Algorithm	As shown in the figure, an HMAC is calculated using any cryptographic algorithm that combines a cryptographic hash function with a secret key. Hash functions are the basis of the protection mechanism of HMACs.
+
+
+
+Only the sender and the receiver know the secret key, and the output of the hash function now depends on the input data and the secret key. Only parties who have access to that secret key can compute the digest of an HMAC function. This defeats man-in-the-middle attacks and provides authentication of the data origin.
+
+
+
+If two parties share a secret key and use HMAC functions for authentication, a properly constructed HMAC digest of a message that a party has received indicates that the other party was the originator of the message. This is because the other party possesses the secret key.
+
+
+
+The figure shows the h m a c hashing algorithm
+
+e883aa0b24c09f
+
+Fixed Length Authenticated Hash ValueData of Arbitrary LengthSecret KeyHash FunctionPlaintext Message
+
+Creating the HMAC Value	As shown in the figure, the sending device inputs data (such as Terry Smith's pay of $100 and the secret key) into the hashing algorithm and calculates the fixed-length HMAC digest. This authenticated digest is then attached to the message and sent to the receiver.
+
+
+
+The figure shows creating the h m a c value
+
+4ehIDx67NMop94ehIDx67NMop9
+
+Pay to Terry Smith........................$100.00 One Hundred and xx/100................DollarsDataSecret KeyPay to Terry Smith........................$100.00 One Hundred and xx/100.............DollarsHMAC (Authenticated Fingerprint)Hash Function
+
+Verifying the HMAC Value	In the figure, the receiving device removes the digest from the message and uses the plaintext message with its secret key as input into the same hashing function. If the digest that is calculated by the receiving device is equal to the digest that was sent, the message has not been altered. Additionally, the origin of the message is authenticated because only the sender possesses a copy of the shared secret key. The HMAC function has ensured the authenticity of the message.
+
+
+
+The figure shows verifying the h m a c value
+
+4ehIDx67NMop9
+
+Pay to Terry Smith..........................$100.00 One Hundred and xx/100...........DollarsReceived DataSecret KeyIf the generated HMAC matches the sent HMAC, then integrity and authenticity have been verified. If they do not match, discard the message.HMAC (Authenticated Fingerprint)Hash Function
+
+Cisco Router HMAC Example	The figure shows how HMACs are used by Cisco routers that are configured to use Open Shortest Path First (OSPF) routing authentication.
+
+
+
+R1 is sending a link state update (LSU) regarding a route to network 10.2.0.0/16:
+
+
+
+1. R1 calculates the hash value using the LSU message and the secret key.
+
+2. The resulting hash value is sent with the LSU to R2.
+
+3. R2 calculates the hash value using the LSU and its secret key. R2 accepts the update if the hash values match. If they do not match, R2 discards the update.
+
+
+
+The figure shows a Cisco router h m a c example.
+
+1238b0bDx67NMop98b0bDx67NMop9R1R28b0bDx67NMop9
+
+Secret KeyLink 1Network: 10.2.0.1/16IP address: 10.2.0.1Type of link: FastEthernetCost of that link: 19Neighbors: R2OSPF LSUHashHashLSU sent to R2Link 1Network: 10.2.0.1/16IP address: 10.2.0.1Type of link: FastEthernetCost of that link: 19Neighbors: R2SHA-1 or MD5SHA-1 or MD5Secret KeyLink 1Network: 10.2.0.1/16IP address: 10.2.0.1Type of link: FastEthernetCost of that link: 19Neighbors: R2OSPF LSU
+
+16.1.6
+
+
+
+Lab - Hashing Things Out	In this lab, you will complete the following objectives:
+
+
+
+Creating Hashes with OpenSSL
+
+Verifying Hashes
+
+Key Management
+
+
+
+16.2.1
+
+
+
+Characteristics of Key Management	Key management is often considered the most difficult part of designing a cryptosystem. Many cryptosystems have failed because of mistakes in their key management, and all modern cryptographic algorithms require key management procedures. In practice, most attacks on cryptographic systems are aimed at the key management level, rather than at the cryptographic algorithm itself.
+
+
+
+As shown in the table, there are several essential characteristics of key management to consider.
+
+
+
+Key Generation - It was up to Caesar to choose the key of his cipher. The Vigenère cipher key is also chosen by the sender and receiver. In a modern cryptographic system, key generation is usually automated and not left to the end user. The use of good random number generators is needed to ensure that all keys are equally generated so that the attacker cannot predict which keys are more likely to be used.
+
+
+
+Key Verification - Some keys are better than others. Almost all cryptographic algorithms have some weak keys that should not be used. With the help of key verification procedures, weak keys can be identified and regenerated to provide a more secure encryption. With the Caesar cipher, using a key of 0 or 25 does not encrypt the message, so it should not be used.
+
+
+
+Key Exchange - Key management procedures should provide a secure key exchange mechanism that allows secure agreement on the keying material with the other party, probably over an untrusted medium.
+
+
+
+Key Storage - On a modern multi-user operating system that uses cryptography, a key can be stored in memory. This presents a possible problem when that memory is swapped to the disk, because a Trojan horse program installed on the PC of a user could then have access to the private keys of that user.
+
+
+
+Key Lifetime - Using short key lifetimes improves the security of legacy ciphers that are used
+
+Key Generation	It was up to Caesar to choose the key of his cipher. The Vigenère cipher key is also chosen by the sender and receiver. In a modern cryptographic system, key generation is usually automated and not left to the end user. The use of good random number generators is needed to ensure that all keys are equally generated so that the attacker cannot predict which keys are more likely to be used.
+
+Key Verification	Some keys are better than others. Almost all cryptographic algorithms have some weak keys that should not be used. With the help of key verification procedures, weak keys can be identified and regenerated to provide a more secure encryption. With the Caesar cipher, using a key of 0 or 25 does not encrypt the message, so it should not be used.
+
+Key Exchange	Key management procedures should provide a secure key exchange mechanism that allows secure agreement on the keying material with the other party, probably over an untrusted medium.
+
+Key Storage	On a modern multi-user operating system that uses cryptography, a key can be stored in memory. This presents a possible problem when that memory is swapped to the disk, because a Trojan horse program installed on the PC of a user could then have access to the private keys of that user.
+
+Key Lifetime	Using short key lifetimes improves the security of legacy ciphers that are used on high-speed connections. In IPsec a 24-hour lifetime is typical. However, changing the lifetime to 30 minutes improves the security of the algorithms.
+
+Key Revocation and Destruction	Revocation notifies all interested parties that a certain key has been compromised and should no longer be used. Destruction erases old keys in a manner that prevents malicious attackers from recovering them.
+
+16.2.2
+
+
+
+Key Length and Keyspace	Two terms that are used to describe keys are:
+
+
+
+Key length - Also called the key size, this is the measure in bits. In this course, we will use the term key length.
+
+Keyspace - This is the number of possibilities that can be generated by a specific key length.
+
+
+
+As key length increase, the keyspace increases exponentially:
+
+
+
+A 2-bit (22) key length = a keyspace of 4 because there are four possible keys (00, 01, 10, and 11).
+
+A 3-bit (23) key length = a keyspace of 8, because there are eight possible keys (000, 001, 010, 011, 100, 101, 110, 111).
+
+A 4-bit (24) key length = a keyspace of 16 possible keys.
+
+A 40-bit (240) key length = a keyspace of 1,099,511,627,776 possible keys.
+
+
+
+The table displays the characteristics of the AES encryption algorithm. Notice how AES uses long key lengths. This dramatically increases the keyspace which affects the time it takes to crack the code.
+
+
+
+Characteristic Description
+
+
+
+Algorithm Full Name Advanced Encryption Standard
+
+
+
+Timeline Official standard since 2001
+
+
+
+Type of Algorithm Symmetric
+
+
+
+Key Size (in bits) 128, 192, and 256
+
+
+
+Speed High
+
+
+
+Time to Crack
+
+(assuming a computer could 149 trillion years
+
+try 255 keys per second)
+
+
+
+Resource Consumption Low
+
+Key length	Also called the key size, this is the measure in bits. In this course, we will use the term key length.
+
+Keyspace	This is the number of possibilities that can be generated by a specific key length.
+
+2-bit (2*2) key length	A keyspace of 4 because there are four possible keys (00, 01, 10, and 11).
+
+3-bit (2*2*2) key length	A keyspace of 8, because there are eight possible keys (000, 001, 010, 011, 100, 101, 110, 111).
+
+4-bit (2*2*2*2) key length	A keyspace of 16 possible keys.
+
+40-bit (2*2*2*2*2*2*2*2*2*2*2*2*2*2*2*2*2*2*2*2*2*2*2*2*2*2*2*2*2*2*2*2*2*2*2*2*2*2*2*2) key length	A keyspace of 1,099,511,627,776 possible keys.
+
+16.2.3
+
+
+
+The Keyspace	The keyspace of an algorithm is the set of all possible key values. A key that has n bits produces a keyspace that has 2n possible key values. By adding one bit to the key, the keyspace is effectively doubled.
+
+
+
+As shown in the table, DES with its 56-bit keys has a keyspace of more than 72,000,000,000,000,000 (256) possible keys. By adding one bit to the key length, the keyspace doubles, and an attacker needs twice the amount of time to search the keyspace. Adding an additional bit to a 57-bit key size means that it would now take an attacker four times the amount of time to search the keyspace. Adding 4 more bits to 56-bits would create a 60-bit key. A 60-bit key would take 16 times longer to crack than a 56-bit key.
+
+
+
+DES Key Keyspace Approximate Number of 
+
+ Possible Keys 
+
+
+
+56-bit 2 (56) ~72,000,000,000,000,000 
+
+
+
+ 11111111 11111111 11111111
+
+ 11111111 11111111 11111111 11111111
+
+
+
+
+
+57-bit 2 (57) ~144,000,000,000,000,000
+
+
+
+ 11111111 11111111 11111111
+
+ 11111111 11111111 11111111 11111111 1
+
+
+
+
+
+58-bit 2 (58) ~288,000,000,000,000,000
+
+
+
+ 11111111 11111111 11111111
+
+ 11111111 11111111 11111111 11111111 11
+
+
+
+
+
+59-bit 2 (59) ~576,000,000,000,000,000
+
+
+
+ 11111111 11111111 11111111
+
+ 11111111 11111111 11111111 11111111 111
+
+
+
+
+
+60-bit 2 (60) ~1,152,000,000,000,000,000
+
+
+
+ 11111111 11111111 11111111
+
+ 11111111 11111111 11111111 11111111 1111
+
+
+
+Note: Longer keys are more secure; however, they are also more resource intensive. Caution should be exercised when choosing longer keys because handling them could add a significant load to the processor in lower-end products.
+
+
+
+Almost every algorithm has some weak keys in its keyspace that enable an attacker to break the encryption via a shortcut. Weak keys show the regularities in encryption. For instance, DES has four keys for which encryption is the same as decryption. This means that if one of these weak
+
+16.2.4
+
+
+
+Types of Cryptographic Keys	Several types of cryptographic keys can be generated:
+
+
+
+Symmetric keys - Can be exchanged between two routers supporting a VPN
+
+Asymmetric keys - Are used in secure HTTPS applications
+
+Digital signatures - Are used when connecting to a secure website
+
+Hash keys - Are used in symmetric and asymmetric key generation, digital signatures, and other types of applications
+
+
+
+Regardless of the key type, all keys share similar issues. Choosing a suitable key length is one issue. If the cryptographic system is trustworthy, the only way to break it is with a brute-force attack. If the keyspace is large enough, the search requires an enormous amount of time, making such an exhaustive effort impractical. The table summarizes the key length required to secure data for the indicated amount of time.
+
+
+
+Length of Protection 
+
+
+
+3 years
+
+
+
+Symmetric Key
+
+
+
+80
+
+
+
+Asymmetric Key
+
+
+
+1248
+
+
+
+Digital Signature
+
+
+
+160
+
+
+
+Hash
+
+
+
+160
+
+
+
+
+
+Length of Protection
+
+
+
+10 years
+
+
+
+Symmetric Key
+
+
+
+96
+
+
+
+Asymmetric Key
+
+
+
+1776
+
+
+
+Digital Signature
+
+
+
+192
+
+
+
+Hash
+
+
+
+192
+
+
+
+
+
+Length of Protection
+
+
+
+20 years
+
+
+
+Symmetric Key
+
+
+
+112
+
+
+
+Asymmetric Key
+
+
+
+2432
+
+
+
+Digital Signature
+
+
+
+224
+
+
+
+Hash
+
+
+
+224
+
+
+
+
+
+Length of Protection
+
+
+
+30 years
+
+
+
+Symmetric Key
+
+
+
+128
+
+
+
+Asymmetric Key
+
+
+
+3248
+
+
+
+Digital Signature
+
+
+
+256
+
+
+
+Hash
+
+
+
+256
+
+
+
+
+
+Length of Protection
+
+
+
+Protection against quantum computers
+
+
+
+Symmetric Key
+
+
+
+256
+
+
+
+Asymmetric Key
+
+
+
+15424
+
+
+
+Digital Signature
+
+
+
+512
+
+
+
+Hash
+
+
+
+
+
+On average, an attacker has to search through half of the keyspace before the correct key is found. The time that is needed to accomplish this search depends on the computer power that is available to the attacker.
+
+
+
+Current key lengths can easily make any attempt insignificant because it takes millions or billions of years to complete the search when a sufficiently long key is used.
+
+
+
+With modern algorithms that are trusted, the strength of protection depends solely on the size of th
+
+16.2.5
+
+
+
+Choice of Cryptographic Keys	Performance is another issue that can influence the choice of a key length. An administrator must find a good balance between the speed and protective strength of an algorithm, because some algorithms, such as the Rivest, Shamir, and Adleman (RSA) algorithm, run slowly due to large key lengths. Strive for adequate protection, while enabling communication over untrusted networks.
+
+
+
+The estimated funding of the attacker should also affect the choice of key length. When assessing the risk of someone breaking the encryption algorithm, estimate the resources of the attacker and how long the data must be protected. For example, classic DES can be broken by a $1 million machine in a couple of minutes. If the data that is being protected is worth significantly more than the $1 million dollars needed to acquire a cracking device, then another algorithm should be used. In fact, DES is now considered too weak to use for any application.
+
+
+
+Because of the rapid advances in technology and cryptanalytic methods, the key length that is needed for a particular application is constantly increasing. Part of the strength of the RSA algorithm is the difficulty of factoring large numbers. For example, the factors of 12 would be 1 x 12, 2 x 6, and 3 x 4. Therefore, a 1024-bit number is a very large number with many factors. Increasing that number to a 2048-bit number creates even more factors. Of course, this advantage is lost if an easy way to factor large numbers is found, but cryptographers consider this possibility unlikely.
+
+
+
+The rule "the longer the key, the better" is valid, except for possible performance reasons. Shorter keys equal faster processing, but are less secure. Longer keys equal slower processing, but are more secure.
+
+16.2.6
+
+
+
+Check Your Understanding - Characteristics of Key Management	Check your understanding of characteristics of key management by choosing the BEST answer to the following questions.
+
+1. Which characteristic helps identify a weak key and regenerate a new replacement key?	key verification
+
+2. Which characteristic creates new keys for cryptography?	key generation
+
+3. Which characteristic is a mechanism that allows secure agreement on the keying material with the other party over an untrusted medium?	key exchange
+
+Confidentiality
+
+
+
+16.3.1
+
+
+
+Data Confidentiality	Asymmetric and symmetric encryption are the two classes of encryption used to provide data confidentiality. These two classes differ in how they use keys.
+
+
+
+Symmetric encryption algorithms such as Data Encryption Standard (DES), 3DES, and Advanced Encryption Standard (AES) are based on the premise that each communicating party knows the pre-shared key. Data confidentiality can also be ensured using asymmetric algorithms, including Rivest, Shamir, and Adleman (RSA) and the public key infrastructure (PKI).
+
+
+
+Note: DES is a legacy algorithm and should not be used. 3DES should be avoided if possible.
+
+
+
+The figure highlights some differences between symmetric and asymmetric encryption.
+
+
+
+Symmetric EncryptionAsymmetric EncryptionUse the same key to encrypt and decrypt data.Key lengths are short (40 bits - 256 bits).Faster than asymmetric encryption.Commonly used for encrypting bulk data such as in VPN traffic.Uses different keys to encrypt and decrypt data.Key lengths are long (512 bits - 4096 bits).Computationally taxing therefore slower than symmetric encryption.Commonly used for quick data transactions such as HTTPS when accessing your bank data.
+
+16.3.2
+
+
+
+Symmetric Encryption	Symmetric algorithms use the same pre-shared key to encrypt and decrypt data. A pre-shared key, also called a secret key, is known by the sender and receiver before any encrypted communications can take place.
+
+
+
+To help illustrate how symmetric encryption works, consider an example where Alice and Bob live in different locations and want to exchange secret messages with one another through the mail system. In this example, Alice wants to send a secret message to Bob.
+
+
+
+In the figure, Alice and Bob have identical keys to a single padlock. These keys were exchanged prior to sending any secret messages. Alice writes a secret message and puts it in a small box that she locks using the padlock with her key. She mails the box to Bob. The message is safely locked inside the box as the box makes its way through the post office system. When Bob receives the box, he uses his key to unlock the padlock and retrieve the message. Bob can use the same box and padlock to send a secret reply back to Alice.
+
+
+
+Symmetric Encryption Example
+
+
+
+KeyKeyPre-Shared key$!@#IQEncryptMessageDecryptMessage
+
+
+
+Today, symmetric encryption algorithms are commonly used with VPN traffic. This is because symmetric algorithms use less CPU resources than asymmetric encryption algorithms. This allows the encryption and decryption of data to be fast when using a VPN. When using symmetric encryption algorithms, like any other type of encryption, the longer the key, the longer it will take for someone to discover the key. Most encryption keys are between 112 and 256 bits. To ensure that the encryption is safe, a minimum key length of 128 bits should be used. Use a longer key for more secure communications.
+
+
+
+Symmetric encryption algorithms are sometimes classified as either a block cipher or a stream cipher. Click the buttons to learn about these two cipher modes. (On
+
+Block ciphers	Transform a fixed-length block of plaintext into a common block of ciphertext of 64 or 128 bits. Common block ciphers include DES with a 64-bit block size and AES with a 128-bit block size.
+
+
+
+The figure shows a plaintext message being encrypted in 64 bit blocks.
+
+01010010110010101010100101100010101
+
+Plaintext MessageEncrypted Message64 bits64 bits64 bitsBlock Cipher - Encryption is completed in 64 bit blocks.blank blank 1100101
+
+Stream ciphers	Encrypt plaintext one byte or one bit at a time. Stream ciphers are basically a block cipher with a block size of one byte or bit. Stream ciphers are typically faster than block ciphers because data is continuously encrypted. Examples of stream ciphers include RC4 and A5 which is used to encrypt GSM cell phone communications.
+
+
+
+The figure shows a plaintext message being encrypted one bit at a time.
+
+01010010110101010010110010101010010110010101001010010110010101010101
+
+Plaintext MessageEncrypted MessageStream Cipher - Encryption is one bit at a time.
+
+Data Encryption Standard (DES)	This is a legacy symmetric encryption algorithm. It uses a short key length that makes it insecure for most current uses.
+
+3DES (Triple DES)	The is the replacement for DES and repeats the DES algorithm process three times. It should be avoided if possible as it is scheduled to be retired in 2023. If implemented, use very short key lifetimes.
+
+Advanced Encryption Standard (AES)	AES is a popular and recommended symmetric encryption algorithm. It offers combinations of 128-, 192-, or 256-bit keys to encrypt 128, 192, or 256 bit-long data blocks.
+
+Software-Optimized Encryption Algorithm (SEAL)	SEAL is a faster alternative symmetric encryption algorithm to AES. SEAL is a stream cypher that uses a 160-bit encryption key and has a lower impact on the CPU compared to other software-based algorithms.
+
+Rivest ciphers (RC) series algorithms	This algorithm was developed by Ron Rivest. Several variations have been developed, but RC4 was the most prevalent in use. RC4 is a stream cipher that was used to secure web traffic. It has been found to have multiple vulnerabilities which have made it insecure. RC4 should not be used.
+
+16.3.3
+
+
+
+Asymmetric Encryption	Asymmetric algorithms, also called public-key algorithms, are designed so that the key that is used for encryption is different from the key that is used for decryption, as shown in the figure. The decryption key cannot, in any reasonable amount of time, be calculated from the encryption key and vice versa.
+
+
+
+Asymmetric Encryption Example
+
+
+
+Encryption KeyPlaintextEncryptedEncryptionPlaintextDecryptionDecryption Key
+
+
+
+Asymmetric algorithms use a public key and a private key. Both keys are capable of the encryption process, but the complementary paired key is required for decryption. The process is also reversible. Data that is encrypted with the public key requires the private key to decrypt. Asymmetric algorithms achieve confidentiality and authenticity by using this process.
+
+
+
+Because neither party has a shared secret, very long key lengths must be used. Asymmetric encryption can use key lengths between 512 to 4,096 bits. Key lengths greater than or equal to 2,048 bits can be trusted, while key lengths of 1,024 or shorter are considered insufficient.
+
+
+
+Examples of protocols that use asymmetric key algorithms include:
+
+
+
+Internet Key Exchange (IKE) - This is a fundamental component of IPsec VPNs.
+
+Secure Socket Layer (SSL) - This is now implemented as IETF standard Transport Layer Security (TLS).
+
+Secure Shell (SSH) - This protocol provides a secure remote access connection to network devices.
+
+Pretty Good Privacy (PGP) - This computer program provides cryptographic privacy and authentication. It is often used to increase the security of email communications.
+
+
+
+Asymmetric algorithms are substantially slower than symmetric algorithms. Their design is based on computational problems, such as factoring extremely large numbers or computing discrete logarithms of extremely large numbers.
+
+
+
+Because they are slow, asymmetric algorithms a
+
+Internet Key Exchange (IKE)	This is a fundamental component of IPsec VPNs
+
+Secure Socket Layer (SSL)	This is now implemented as IETF standard Transport Layer Security (TLS).
+
+Secure Shell (SSH)	This protocol provides a secure remote access connection to network devices.
+
+Pretty Good Privacy (PGP)	This computer program provides cryptographic privacy and authentication. It is often used to increase the security of email communications.
+
+Diffie-Hellman (DH)	The Diffie-Hellman algorithm allows two parties to agree on a key that they can use to encrypt messages they want to send to each other. The security of this algorithm depends on the assumption that it is easy to raise a number to a certain power, but difficult to compute which power was used given the number and the outcome.
+
+
+
+Key Length
+
+
+
+512, 1024, 2048, 3072, 4096
+
+Digital Signature Standard (DSS) and Digital Signature Algorithm (DSA)	DSS specifies DSA as the algorithm for digital signatures. DSA is a public key algorithm based on the ElGamal signature scheme. Signature creation speed is similar to RSA, but is 10 to 40 times slower for verification.
+
+
+
+Key Length
+
+
+
+512 - 1024
+
+Rivest, Shamir, and Adleman encryption algorithms (RSA)	RSA is for public-key cryptography that is based on the current difficulty of factoring very large numbers. It is the first algorithm known to be suitable for signing, as well as encryption. It is widely used in electronic commerce protocols and is believed to be secure given sufficiently long keys and the use of up-to-date implementations.
+
+
+
+Key Length
+
+
+
+512 to 2048
+
+EIGamal	An asymmetric key encryption algorithm for public-key cryptography which is based on the Diffie-Hellman key agreement. A disadvantage of the ElGamal system is that the encrypted message becomes very big, about twice the size of the original message and for this reason it is only used for small messages such as secret keys.
+
+
+
+Key Length
+
+
+
+512 - 1024
+
+Elliptic curve techniques	Elliptic curve cryptography can be used to adapt many cryptographic algorithms, such as Diffie-Hellman or ElGamal. The main advantage of elliptic curve cryptography is that the keys can be much smaller.
+
+
+
+Key Length
+
+
+
+224 or higher
+
+16.3.4
+
+
+
+Asymmetric Encryption - Confidentiality	Asymmetric algorithms are used to provide confidentiality without pre-sharing a password. The confidentiality objective of asymmetric algorithms is initiated when the encryption process is started with the public key.
+
+
+
+The process can be summarized using the formula:
+
+
+
+Public Key (Encrypt) + Private Key (Decrypt) = Confidentiality
+
+
+
+When the public key is used to encrypt the data, the private key must be used to decrypt the data. Only one host has the private key; therefore, confidentiality is achieved.
+
+
+
+If the private key is compromised, another key pair must be generated to replace the compromised key.
+
+
+
+Click the buttons to view how the private and public keys can be used to provide confidentiality to the data exchange between Bob and Alice. (On cards 61-63).
+
+Alice acquires Bob's public key	Alice requests and obtains Bob's public key.
+
+
+
+Alice  Can I get your Public Key please? Bob's Public Key
+
+
+
+Bob  Here is my Public Key.
+
+
+
+Public Key (Encrypt) + Private Key (Decrypt) = Confidentiality
+
+Alice uses the public key	Alice uses Bob's public key to encrypt a message using an agreed-upon algorithm. Alice sends the encrypted message to Bob.
+
+
+
+Diploma and Bob's Public Key + Encryption Algorithm  Encrypted Text
+
+Bob decrypts message with private key	Bob then uses his private key to decrypt the message. Since Bob is the only one with the private key, Alice's message can only be decrypted by Bob and thus confidentiality is achieved.
+
+The figure shows a textbox that states encrypted text, a plus symbol, and a key labeled Bob's private key with an arrow going into a funnel labeled encryption algorithm. An arrow comes out of the funnel to a certificate.
+
+
+
+Encrypted Text and Bob's Private Key + Encryption Algorithm  Diploma
+
+16.3.5
+
+
+
+Asymmetric Encryption - Authentication	The authentication objective of asymmetric algorithms is initiated when the encryption process is started with the private key.
+
+
+
+The process can be summarized using the formula:
+
+
+
+Private Key (Encrypt) + Public Key (Decrypt) = Authentication
+
+
+
+When the private key is used to encrypt the data, the corresponding public key must be used to decrypt the data. Because only one host has the private key, only that host could have encrypted the message, providing authentication of the sender. Typically, no attempt is made to preserve the secrecy of the public key, so any number of hosts can decrypt the message. When a host successfully decrypts a message using a public key, it is trusted that the private key encrypted the message, which verifies who the sender is. This is a form of authentication.
+
+
+
+Click the buttons to view how the private and public keys can be used to provide authentication to the data exchange between Bob and Alice. (On cards 65-67).
+
+Alice uses her private key	Alice encrypts a message using her private key. Alice sends the encrypted message to Bob. Bob needs to authenticate that the message did indeed come from Alice.
+
+
+
+Alice's Computer, Diploma, and Private key + Encryption Algorithm  Encrypted Text
+
+
+
+Private Key (Encrypt) + Public Key (Decrypt) = Authentication
+
+Bob requests the pubic key	In order to authenticate the message, Bob requests Alice's public key.
+
+
+
+Alice and her public key  Can I get your Public Key please? 
+
+ Here is my public key  Bob
+
+
+
+Bob needs to verify that the message actually came from Alice. He requests and acquires Alice's public key.
+
+Bob decrypts using the public key	Bob uses Alice's public key to decrypt the message.
+
+
+
+Bob, Encrypted Text, Alice's Public Key + Encryption Algorithm  Diploma
+
+
+
+Bob uses the public key to successfully decrypt the message and authenticate that the message did, indeed, come from Alice.
+
+16.3.6
+
+
+
+Asymmetric Encryption - Integrity	Combining the two asymmetric encryption processes provides message confidentiality, authentication, and integrity.
+
+
+
+The following example will be used to illustrate this process. In this example, a message will be ciphered using Bob's public key and a ciphered hash will be encrypted using Alice's private key to provide confidentiality, authenticity, and integrity. (On cards 69-72).
+
+Alice uses Bob's public key	Alice wants to send a message to Bob ensuring that only Bob can read the document. In other words, Alice wants to ensure message confidentiality. Alice uses the public key of Bob to cipher the message. Only Bob will be able to decipher it using his private key.
+
+
+
+Alice, Plaintext, Bob's Public Key + Encryption Algorithm  Encrypted Text
+
+Alice encrypts a hash using her private key	Alice also wants to ensure message authentication and integrity. Authentication ensures Bob that the document was sent by Alice, and integrity ensures that it was not modified Alice uses her private key to cipher a hash of the message. Alice sends the encrypted message with its encrypted hash to Bob.
+
+
+
+Hash and Alice's Private Key + Encryption Algorithm  Encrypted Hash
+
+Bob uses Alice's public key to decrypt the hash	Bob uses Alice's public key to verify that the message was not modified. The received hash is equal to the locally determined hash based on Alice's public key. Additionally, this verifies that Alice is definitely the sender of the message because nobody else has Alice's private key.
+
+
+
+Encrypted Hash and Alice's Public Key + Decryption Algorithm  Hash
+
+Bob uses his private key to decrypt the message	Bob uses his private key to decipher the message.
+
+
+
+Encrypted Text, Bob's Private Key + Decryption Algorithm  Plaintext
+
+16.3.6
+
+
+
+Asymmetric Encryption - Integrity	Combining the two asymmetric encryption processes provides message confidentiality, authentication, and integrity.
+
+
+
+The following example will be used to illustrate this process. In this example, a message will be ciphered using Bob's public key and a ciphered hash will be encrypted using Alice's private key to provide confidentiality, authenticity, and integrity. (On cards 74-77).
+
+Alice uses Bob's public key	Alice wants to send a message to Bob ensuring that only Bob can read the document. In other words, Alice wants to ensure message confidentiality. Alice uses the public key of Bob to cipher the message. Only Bob will be able to decipher it using his private key.
+
+
+
+Alice, Plaintext, and Bob's public key + Encryption Algorithm  Encrypted Text
+
+Alice encrypts a hash using her private key	Alice also wants to ensure message authentication and integrity. Authentication ensures Bob that the document was sent by Alice, and integrity ensures that it was not modified Alice uses her private key to cipher a hash of the message. Alice sends the encrypted message with its encrypted hash to Bob.
+
+
+
+Hash and Alice's Private Key + Encryption Algorithm  Encrypted Hash
+
+Bob uses Alice's public key to decrypt the hash	Bob uses Alice's public key to verify that the message was not modified. The received hash is equal to the locally determined hash based on Alice's public key. Additionally, this verifies that Alice is definitely the sender of the message because nobody else has Alice's private key.
+
+
+
+Encrypted Hash and Alice's Public Key + Decryption Algorithm  Hash
+
+Bob uses his private key to decrypt the message	Bob uses his private key to decipher the message.
+
+
+
+Encrypted Text, Bob's Private Key, and Bob + Decryption Algorithm  Plaintext
+
+16.3.7
+
+
+
+Diffie-Hellman	Diffie-Hellman (DH) is an asymmetric mathematical algorithm that allows two computers to generate an identical shared secret without having communicated before. The new shared key is never actually exchanged between the sender and receiver. However, because both parties know it, the key can be used by an encryption algorithm to encrypt traffic between the two systems.
+
+
+
+Here are two examples of instances when DH is commonly used:
+
+
+
+Data is exchanged using an IPsec VPN
+
+SSH data is exchanged
+
+
+
+To help illustrate how DH operates, refer to the figure.
+
+
+
+The figure illustrates how the Diffie-Hellman algorithm works by using colors. Assume Alice and Bob have agreed to start with 50 milliliters (50ml) of yellow paint. Alice adds 50 ml of red paint to the yellow paint to create a 100 ml amount of orange paint. Bob mixes his 50 ml of yellow paint with 50 ml of blue paint to create 100 ml of green paint. Alice sends Bob her 100 ml of orange color paint and Bob sends Alice his 100 ml green color paint. Alice then proceeds to add another 50 ml of her red paint to Bob's 100 ml of green paint to create 150 ml of brown paint. Bob mixes another 50 ml of blue paint to the 100 ml of Alice's orange paint to create 150 ml of the exact same color brown color paint that Alice created.
+
+++==++==
+
+Agreed on ColorAlice's Secret ColorAlice's Public ColorBob's Public ColorAlice's Secret ColorAlice's Final ColorAliceAgreed on ColorBob's Secret ColorBob's Public ColorAlice's Public ColorBob's Secret ColorBob's Final ColorBob
+
+
+
+The colors in the figure will be used instead of complex long numbers to simplify the DH key agreement process. The DH key exchange begins with Alice and Bob agreeing on an arbitrary common color that does not need to be kept secret. The agreed-on color in our example is yellow.
+
+
+
+Next, Alice and Bob will each select a secret color.
+
+16.3.8
+
+
+
+Video - Cryptography	
+
+16.3.9
+
+
+
+Check Your Understanding - Classify the Encryption Algorithms	
+
+1. True or False? In asymmetric encryption, encryption and decryption use the same key.	False
+
+2. What is an example of a symmetric encryption algorithm?	Advanced Encryption Standard (AES)
+
+3. Which algorithm provides asymmetric encryption?	Diffie-Hellman (DH)
+
+4. Which hash function is the most secure?	SHA-3
+
+16.3.10
+
+
+
+Lab - Encrypting and Decrypting Data Using OpenSSL	In this lab, you will complete the following objectives:
+
+
+
+Encrypting Messages with OpenSSL
+
+Decrypting Messages with OpenSSL
+
+16.3.11
+
+
+
+Lab - Encrypting and Decrypting Data Using a Hacker Tool	In this lab, you will complete the following objectives:
+
+
+
+Setup Scenario
+
+Create and Encrypt Files
+
+Recover Encrypted Zip File Passwords
+
+16.3.12
+
+
+
+Lab - Examining Telnet and SSH in Wireshark	In this lab, you will complete the following objectives:
+
+
+
+Examine a Telnet Session with Wireshark
+
+Examine an SSH Session with Wireshark
+
+Basic Integrity and Authenticity Summary
+
+
+
+16.4.1
+
+
+
+What Did I Learn in this Module?	Integrity and Authenticity
+
+
+
+These are the four elements of secure communications: data integrity, origin authentication, data confidentiality, and data non-repudiation. Cryptography can be used almost anywhere that there is data communication. Hashes are used to verify and ensure data integrity. Hashing is based on a one-way mathematical function that is relatively easy to compute, but significantly harder to reverse. The cryptographic hashing function can also be used to verify authentication. A hash function takes a variable block of binary data, called the message, and produces a fixed-length, condensed representation, called the hash. The resulting hash is also sometimes called the message digest, digest, or digital fingerprint. Mathematically, the equation h= H(x) is used to explain how a hash algorithm operates. A hash function H takes an input x and returns a fixed-size string hash value h. A cryptographic hash function should have the following properties:
+
+
+
+:: The input can be any length.
+
+:: The output has a fixed length.
+
+:: H(x) is relatively easy to compute for any given x.
+
+:: H(x) is one way and not reversible.
+
+:: H(x) is collision free, meaning that two different input values will result in different hash values.
+
+
+
+The four well-known hash functions are MD5 with 128 bit digest, SHA-1, SHA-2, and SHA-3. While hashing can be used to detect accidental changes, it cannot be used to guard against deliberate changes that are made by a threat actor in a man-in-the-middle attack. Origin authentication is also required to provide protection.
+
+
+
+To add origin authentication and integrity assurance, use a keyed-hash message authentication code (HMAC). HMAC uses an additional secret key as input to the hash function. Other Message Authentication Code (MAC) methods are also used. However, HMAC is used in many systems including
+
+16.4.2
+
+
+
+Module 16 - Basic Integrity and Authenticity Quiz	
+
+1. Which security function is provided by encryption algorithms?	confidentiality
+
+2. Which type of cryptographic key would be used when connecting to a secure website?	digital signatures
+
+3. What do most cryptographic system attacks seek to target?	key management
+
+4. Which type of attack does the use of HMACs protect against?	man-in-the-middle
+
+5. What is a feature of asymmetrical encryption?	Different keys are used to encrypt and decrypt data.
+
+6. What is the reason for HMAC to use an additional secret key as input to the hash function?	to provide authentication
+
+7. What is the purpose of the DH algorithm?	To generate a shared secret between two hosts that have not communicated before
+
+8. Which statement describes the Software-Optimized Encryption Algorithm (SEAL)?	SEAL is a stream cipher.
+
+9. Which data security component is provided by hashing algorithms?	integrity
+
+10. Which two algorithms use a hashing function to ensure message integrity? (Choose two.)	SHA
+
+
+
+MD5
+
+11. Which characteristic of security key management is responsible for making certain that weak cryptographic keys are not used?	verification
+
+12. What is the function of the Diffie-Hellman algorithm within the IPsec framework?	allows peers to exchange shared keys

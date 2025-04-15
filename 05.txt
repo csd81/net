@@ -1,0 +1,1010 @@
+
+Configure Privilege Levels
+
+
+
+5.1.1
+
+
+
+Limiting Command Availability	Large organizations have many varied job functions within an IT department. Not all job functions should have the same level of access to the infrastructure devices. Cisco IOS software has two methods of providing infrastructure access: privilege level and role-based CLI. Both methods help determine who should be allowed to connect to the device and what that person should be able to do with it. Role-based CLI access provides more granularity and control.
+
+
+
+By default, the Cisco IOS software CLI has two levels of access to commands:
+
+
+
+User EXEC mode (privilege level 1) - This provides the lowest EXEC mode user privileges and allows only user-level commands available at the Router> prompt.
+
+
+
+Privileged EXEC mode (privilege level 15) - This includes all enable-level commands at the Router# prompt.
+
+
+
+There are 16 privilege levels in total, as listed below. The higher the privilege level, the more router access a user has. Commands that are available at lower privilege levels are also executable at higher levels.
+
+
+
+Level 0: Predefined for user-level access privileges. Seldom used, but includes five commands: disable, enable, exit, help, and logout.
+
+
+
+Level 1: The default level for login with the router prompt Router >. A user cannot make any changes or view the running configuration file.
+
+
+
+Levels 2 -14: May be customized for user-level privileges. Commands from lower levels may be moved up to another higher level, or commands from higher levels may be moved down to a lower level.
+
+
+
+Level 15: Reserved for the enable mode privileges (enable command). Users can change configurations and view configuration files.
+
+
+
+To assign commands to a custom privilege level, use the privilege global configuration mode command shown below.
+
+
+
+Router(config)# privilege mode {level level|reset} command
+
+mode	Specifies the configuration mode. Use the privilege ? command to see a complete list of router configuration modes available on your router.
+
+level	(Optional) Enables setting a privilege level with a specified command.
+
+level	(Optional) The privilege level that is associated with a command. You can specify up to 16 privilege levels, using numbers 0 to 15.
+
+reset	(Optional) Resets the privilege level of a command.
+
+command	(Optional) Argument to use when you want to reset the privilege level.
+
+5.1.2
+
+
+
+Configuring and Assigning Privilege Levels	To configure a privilege level with specific commands, use the privilege exec level level [command]. The example shows examples for three different privilege levels.
+
+
+
+Privilege level 5 has access to all the commands available for the predefined level 1 and the ping command.
+
+
+
+Privilege level 10 has access to all the commands available for level 5 as well as the reload command.
+
+
+
+Privilege level 15 is predefined and does not need to be explicitly configured. This privilege level has access to all commands including viewing and changing the configuration.
+
+
+
+R1# conf t
+
+R1(config)# !Level 5 and SUPPORT user configuration
+
+R1(config)# privilege exec level 5 ping
+
+R1(config)# enable algorithm-type scrypt secret level 5 cisco5
+
+R1(config)# username SUPPORT privilege 5 algorithm-type scrypt secret cisco5
+
+R1(config)# !Level 10 and JR-ADMIN user configuration
+
+R1(config)# privilege exec level 10 reload
+
+R1(config)# enable algorithm-type scrypt secret level 10 cisco10
+
+R1(config)# username JR-ADMIN privilege 10 algorithm-type scrypt secret cisco10
+
+R1(config)# !Level 15 and ADMIN user configuration
+
+R1(config)# enable algorithm-type scrypt secret level 15 cisco123
+
+R1(config)# username ADMIN privilege 15 algorithm-type scrypt secret cisco123
+
+
+
+There are two methods for assigning passwords to the different privilege levels:
+
+
+
+To a user that is granted a specific privilege level, use the username name privilege level secret password global configuration mode command
+
+
+
+To the privilege level, use the enable secret level level password global configuration mode command
+
+
+
+Note: Both the username secret and the enable secret commands are configured for type 9 encryption.
+
+
+
+Use the username command to assign a privilege level to a specific user. Use the enable secret command to assign a privilege level to a specific EXEC mode password. For example, the
+
+5.1.3
+
+
+
+Limitations of Privilege Levels	The use of privilege levels has its limitations:
+
+
+
+There is no access control to specific interfaces, ports, logical interfaces, and slots on a router.
+
+
+
+Commands available at lower privilege levels are always executable at higher levels.
+
+
+
+Commands specifically set at a higher privilege level are not available for lower privileged users.
+
+
+
+Assigning a command with multiple keywords allows access to all commands that use those keywords. For example, allowing access to show ip route allows the user access to all show and show ip commands.
+
+
+
+Note: If an administrator must create a user account that has access to most but not all commands, privilege exec statements need to be configured for every command that must be executed at a privilege level lower than 15.
+
+5.1.4
+
+
+
+Syntax Checker - Configure Privilege Levels on R2	Use this Syntax Checker to configure privilege levels on R2.
+
+
+
+Configure privilege level 5:
+
+
+
+Use the privilege exec level command to provide access to the ping command.
+
+
+
+Enable a level 5 secret password of cisco5 that is encrypted with the algorithm-type scrypt hashing.
+
+
+
+Create a local database entry for a user named Support with a privilege level of 5, encrypt the password with type 9 (algorithm-type scrypt) hashing, and set the password to cisco5.
+
+
+
+R2(config)#privilege exec level 5 ping
+
+R2(config)#enable algorithm-type scrypt secret level 5 cisco5
+
+R2(config)#username Support privilege 5 algorithm-type scrypt secret cisco5
+
+
+
+Configure privilege level 10:
+
+
+
+Use the privilege exec level command to be allowed access to the reload command.
+
+
+
+Enable a level 10 secret password of cisco10 that is encrypted with the algorithm-type scrypt hashing.
+
+
+
+Create a local database entry for a user named Jr-Admin with a privilege level of 10, encrypt the password with a type 9 (algorithm-type scrypt) hashing, and set the password to cisco10.
+
+
+
+R2(config)#privilege exec level 10 reload
+
+R2(config)#enable algorithm-type scrypt secret level 10 cisco10
+
+R2(config)#username Jr-Admin privilege 10 algorithm-type scrypt secret cisco10
+
+
+
+Configure privilege level 15:
+
+
+
+Enable a level 15 secret password of cisco123 that is encrypted with the algorithm-type scrypt hashing.
+
+Create a local database entry for a user named Admin with a privilege level of 15, encrypt the password with a type 9 (algorithm-type scrypt) hashing, and set the password to cisco123.
+
+Exit configuration mode.
+
+
+
+R2(config)#enable algorithm-type scrypt secret level 15 cisco123
+
+R2(config)#username Admin privilege 15 algorithm-type scrypt secret cisco123
+
+R2(config)#exit
+
+R2#
+
+
+
+You successfully configured privilege levels on R2.
+
+Configure Role-Based CLI
+
+
+
+5.2.1
+
+
+
+Role-Based CLI Access	In an effort to provide more flexibility than privilege levels allow, Cisco introduced the role-based CLI access feature in Cisco IOS Release 12.3(11)T. This feature provides finer, more granular access by controlling which commands are available to specific roles. Role-based CLI access enables the network administrator to create different views of router configurations for different users. Each view defines the CLI commands that each user can access.
+
+
+
+Security
+
+
+
+Role-based CLI access enhances the security of the device by defining the set of CLI commands that are accessible by a specific user. Additionally, administrators can control user access to specific ports, logical interfaces, and slots on a router. This prevents a user from accidentally or purposely changing a configuration or collecting information to which they should not have access.
+
+
+
+Availability
+
+
+
+Role-based CLI access prevents unintentional execution of CLI commands by unauthorized personnel and minimizes downtime.
+
+
+
+Operational Efficiency
+
+
+
+Users only see the CLI commands applicable to the ports and CLI to which they have access. Therefore, the router appears to be less complex, and commands are easier to identify when using the help feature on the device.
+
+5.2.2
+
+
+
+Role-Based Views	Role-based CLI provides three types of views that dictate which commands are available:
+
+
+
+Root View
+
+
+
+To configure any view for the system, the administrator must be in root view. Root view has the same access privileges as a user who has level 15 privileges. However, a root view is not the same as a level 15 user. Only a root view user can configure a new view and add or remove commands from the existing views.
+
+
+
+CLI View
+
+
+
+A specific set of commands can be bundled into a CLI view. Unlike privilege levels, a CLI view has no command hierarchy and no higher or lower views. Each view must be assigned all commands associated with that view. A view does not inherit commands from any other view. Additionally, the same commands can be used in multiple views.
+
+
+
+Superview
+
+
+
+A superview consists of one or more CLI views. Administrators can define which commands are accepted and which configuration information is visible. Superviews allow a network administrator to assign users and groups of users multiple CLI views at once, instead of having to assign a single CLI view per user with all commands associated with that one CLI view.
+
+
+
+Superviews have several specific characteristics:
+
+
+
+A single CLI view can be shared within multiple superviews.
+
+
+
+Commands cannot be configured for a superview. An administrator must add commands to the CLI view and add that CLI view to the superview.
+
+
+
+Users who are logged into a superview can access all the commands that are configured for any of the CLI views that are part of the superview.
+
+
+
+Each superview has a password that is used to switch between superviews or from a CLI view to a superview.
+
+
+
+Deleting a superview does not delete the associated CLI views. The CLI views remain available to be assigned to another superview.
+
+
+
+Click Play in the animation for an explanation of the views.
+
+
+
+Demonstrating Role-
+
+5.2.3
+
+
+
+Configure Role-Based Views	Before an administrator can create a view, AAA must be enabled using the aaa new-model command. To configure and edit views, an administrator must log in as the root view using the enable view privileged EXEC command. The enable view root command can also be used. When prompted, enter the enable secret password.
+
+
+
+There are five steps to create and manage a specific view.
+
+
+
+Step 1. Enable AAA with the aaa new-model global configuration mode command. Exit and enter the root view with the enable view command. On cards 13-14.
+
+
+
+Router# enable [view [view-name]]
+
+
+
+Step 2. Create a view using the parser view view-name global configuration mode command. This enables the view configuration mode. Excluding the root view, there is a maximum limit of 15 views in total.
+
+
+
+Router(config)# parser view view-name
+
+
+
+Step 3. Assign a secret password to the view using the secret password view configuration mode command.
+
+
+
+This sets a password to protect access to the view. The password must be created immediately after creating a view, otherwise, an error message will appear.
+
+
+
+Router(config-view)# secret password
+
+
+
+Step 4. Assign commands to the selected view using the commands parser-mode command in view configuration mode. On cards 15-22.
+
+
+
+Router(config-view)# commands parser-mode {include | include-exclusive | exclude} [all] [interface interface-name | command]
+
+
+
+Step 5. Exit view configuration mode by typing the exit command.
+
+
+
+The example below shows the configuration of three views. Notice in the example, that the secret command only supports MD5 encryption (type 5). Also, notice that when a command was added to a view before the password was assigned, an error occurred.
+
+
+
+R1(config)# aaa new-model
+
+R1(config)# parser view SHOWVIEW
+
+R1(config-view)# secret ?
+
+0 Specifies an UNENCRYPTED password will follow
+
+5 Specifies an ENCRYPTED secret will f
+
+view	This parameter enters root view if no view-name is specified, which enables an administrator to configure CLI views. The view parameter is required to configure a CLI view.
+
+view-name	(Optional) This parameter enters or exits a specified CLI view. This parameter can be used to switch from one CLI view to another CLI view.
+
+commands	Adds commands or interfaces to a view.
+
+parser-mode	The mode in which the specified command exists; for example, EXEC mode.
+
+include	Adds a command or an interface to the view and allows the same command or interface to be added to other views.
+
+include-exclusive	Adds a command or an interface to the view and excludes the same command or interface from being added to all other views.
+
+exclude	Excludes a command or an interface from the view.
+
+all	A "wildcard" that allows every command in a specified configuration mode that begins with the same keyword or every subinterface for a specified interface to be part of the view.
+
+interface interface-name	Interface that is added to the view.
+
+command	Command that is added to the view.
+
+5.2.4
+
+
+
+Syntax Checker - Configure Views on R2	Use this Syntax Checker to configure three views with different privileges on R2.
+
+
+
+Enable AAA.
+
+
+
+R2(config)#aaa new-model
+
+
+
+Configure the first view:
+
+
+
+Create a view called SHOWVIEW.
+
+Assign the view the password cisco.
+
+Allow the view to use all EXEC commands that begin with show.
+
+After configuration, return to global configuration mode.
+
+
+
+R2(config)#parser view SHOWVIEW
+
+R2(config-view)#secret cisco
+
+R2(config-view)#commands exec include show
+
+R2(config-view)#exit
+
+
+
+Configure the second view.
+
+
+
+Create a view called VERIFYVIEW.
+
+Assign the view the password cisco5.
+
+Allow the view to use the ping command.
+
+After configuration, return to global configuration mode.
+
+
+
+R2(config)#
+
+R2(config)#parser view VERIFYVIEW
+
+R2(config-view)#secret cisco5
+
+R2(config-view)#commands exec include ping
+
+R2(config-view)#exit
+
+
+
+Configure the third view.
+
+
+
+Create a view called REBOOTVIEW.
+
+Assign the view the password cisco10.
+
+Allow the view to use the reload command.
+
+After configuration, return directly to privileged EXEC mode.
+
+
+
+R2(config)#parser view REBOOTVIEW
+
+R2(config-view)#secret cisco10
+
+R2(config-view)#commands exec include reload
+
+R2(config-view)#end
+
+
+
+Verify the configured views using the show running-config | section parser command.
+
+
+
+R2#show running-config | section parser
+
+parser view SHOWVIEW
+
+secret 5 $1$4c8S$8ayWlp1brumavcCek7OUz. commands exec include show
+
+parser view VERIFYVIEW
+
+secret 5 $1$mV.n$Wl99F.nQQQvuP7QiEzE.40
+
+commands exec include ping
+
+parser view REBOOTVIEW
+
+secret 5 $1$BBYq$L6prAiM.wrcuGbst/9JY51
+
+commands exec include reload
+
+R2#
+
+
+
+You successfully configured three views with different privileges on R2.
+
+5.2.5
+
+
+
+Lab - Configure Administrative Roles	In this lab, you will complete the following objectives:
+
+
+
+Part 1: Configure basic device settings.
+
+Part 2: Configure administrative roles.
+
+5.2.6
+
+
+
+Configure Role-Based CLI Superviews	The steps to configure a superview are essentially the same as configuring a CLI view, except that the view view-name command is used to assign commands to the superview. The administrator must be in root view to configure a superview. To confirm that root view is being used, use either the enable view or enable view root command. When prompted, enter the secret password.
+
+
+
+There are four steps to create and manage a superview.
+
+
+
+Click each step below to learn more.
+
+
+
+More than one view can be assigned to a superview, and views can be shared between superviews. The example shows configuring three superviews: the USER, SUPPORT, and JR-ADMIN.
+
+
+
+R1(config)# parser view USER superview
+
+R1(config-view)# secret cisco
+
+R1(config-view)# view SHOWVIEW
+
+R1(config-view)# exit
+
+R1(config)#
+
+R1(config)# parser view SUPPORT superview
+
+R1(config-view)# secret cisco1
+
+R1(config-view)# view SHOWVIE
+
+% Invalid view name SHOWVIE
+
+
+
+R1(config-view)# view SHOWVIEW
+
+R1(config-view)# view VERIFYVIEW
+
+R1(config-view)# exit
+
+R1(config)#
+
+R1(config)# parser view JR-ADMIN superview
+
+R1(config-view)# secret cisco2
+
+R1(config-view)# view SHOWVIEW
+
+R1(config-view)# view VERIFYVIEW
+
+R1(config-view)# view REBOOTVIEW
+
+R1(config-view)# exit
+
+R1(config)#
+
+
+
+The example below displays the configured superviews in the running configuration.
+
+
+
+To access existing views, enter the enable view view-name command in user mode and enter the password that was assigned to the custom view. Use the same command to switch from one view to another.
+
+
+
+R1# show running-config
+
+<output omitted>
+
+!
+
+parser view SUPPORT superview
+
+secret 5 $1$Vp1O$BBB1N68Z2ekr/aLHledts.
+
+view SHOWVIEW
+
+view VERIFYVIEW
+
+!
+
+parser view USER superview
+
+secret 5 $1$E4k5$ukHyfYP7dHOC48N8pxm4s/
+
+view SHOWVIEW
+
+!
+
+parser view JR-ADMIN superview
+
+secret 5 $1$8kx2$rbAe/ji220OmQ1yw.568g0
+
+view SHOWVIEW
+
+view VERIFYVIEW
+
+view REBOOTVIEW
+
+!
+
+Step 1	Create a view using the parser view view-name superview command and enter superview configuration mode. Appending the keyword superview to parser view creates a superview and enters configuration mode.
+
+
+
+Router(config)# parser view view-name superview
+
+Step 2	Assign a secret password to the view using the secret password command. This sets a password to protect access to the superview. The password must be created immediately after creating a view; otherwise an error message will appear.
+
+
+
+Router(config-view)# secret password
+
+Step 3	Assign an existing view using the view view-name command in view configuration mode. This adds a CLI view to superview. Multiple views can be added. Views may be shared between superviews.
+
+
+
+Router(config-view)# view view-name
+
+Step 4	Exit superview configuration mode by typing the exit command.
+
+5.2.7
+
+
+
+Syntax Checker - Configure Superviews on R2	Use this Syntax Checker to configure three superviews on R2.
+
+
+
+Configure the first superview.
+
+
+
+Create a superview called USER.
+
+Assign the superview the password cisco.
+
+Assign it the SHOWVIEW view.
+
+After configuration, return to global configuration view.
+
+
+
+R2(config)#parser view USER superview
+
+R2(config-view)#secret cisco
+
+R2(config-view)#view SHOWVIEW
+
+R2(config-view)#exit
+
+
+
+Configure the second superview.
+
+
+
+Create a superview called SUPPORT.
+
+Assign the superview the password cisco1.
+
+Assign it the SHOWVIEW view.
+
+Assign it the VERIFYVIEW view.
+
+After configuration, return to global configuration mode.
+
+
+
+R2(config)#parser view SUPPORT superview
+
+R2(config-view)#secret cisco1
+
+R2(config-view)#view SHOWVIEW
+
+R2(config-view)#view VERIFYVIEW
+
+R2(config-view)#exit
+
+
+
+Configure the third superview.
+
+
+
+Create a superview called JR-ADMIN.
+
+Assign the superview the password cisco2.
+
+Assign it the SHOWVIEW view.
+
+Assign it the VERIFYVIEW view.
+
+Assign it the REBOOTVIEW view.
+
+After configuration, return to privilege EXEC mode.
+
+
+
+R2(config)#parser view JR-ADMIN superview
+
+R2(config-view)#secret cisco2
+
+R2(config-view)#view SHOWVIEW
+
+R2(config-view)#view VERIFYVIEW
+
+R2(config-view)#view REBOOTVIEW
+
+R2(config-view)#end
+
+
+
+Verify the configured superviews using the show running-config | section superview command.
+
+
+
+R2#show running-config | section superview
+
+parser view USER superview
+
+secret 5 $1$PkVE$fWQNcCofjNnSNO5T5fR9b0
+
+view SHOWVIEW
+
+parser view SUPPORT superview
+
+secret 5 $1$AJdD$KXsrFpyr8nsoZaoyJcZGz.
+
+view SHOWVIEW
+
+view VERIFYVIEW
+
+parser view JR-ADMIN superview
+
+secret 5 $1$jDUK$v1DodSqackdof/Dbg11eJ1
+
+view SHOWVIEW
+
+view VERIFYVIEW
+
+view REBOOTVIEW
+
+R2#
+
+
+
+You successfully configured superviews on R2.
+
+5.2.8
+
+
+
+Verify Role-Based CLI Views	To verify a view, use the enable view command. Enter the name of the view to verify, and provide the password to log into the view. Use the question mark (?) command to verify that the commands available in the view are correct.
+
+
+
+The example enables the USER superview and lists the commands available in the view.
+
+
+
+R1# enable view USER
+
+Password: <cisco1>
+
+
+
+R1# ?
+
+Exec commands:
+
+<0-0>/<0-4> Enter card slot/sublot number
+
+do-exec Mode-independent "do-exec" prefix support
+
+enable Turn on privileged commands
+
+exit Exit from the EXEC
+
+show Show running system information
+
+
+
+R1# show ? banner Display banner information
+
+flash0: display information about flash0: file system
+
+flash1: display information about flash1: file system
+
+flash: display information about flash: file system
+
+parser Display parser information
+
+usbflash0: display information about usbflash0: file system
+
+
+
+The example below enables the SUPPORT superview and lists the commands available in the view.
+
+
+
+R1# enable view SUPPORT
+
+Password: <cisco1>
+
+
+
+R1# ?
+
+Exec commands:
+
+<0-0>/<0-4> Enter card slot/sublot number
+
+do-exec Mode-independent "do-exec" prefix support
+
+enable Turn on privileged commands
+
+exit Exit from the EXEC
+
+ping Send echo messages
+
+show Show running system information
+
+
+
+R1#
+
+
+
+This example enables the JR-ADMIN view and lists the commands available in the view.
+
+
+
+R1# enable view JR-ADMIN
+
+Password:
+
+
+
+R1# ?
+
+Exec commands:
+
+<0-0>/<0-4> Enter card slot/sublot number
+
+do-exec Mode-independent "do-exec" prefix support
+
+enable Turn on privileged commands
+
+exit Exit from the EXEC
+
+ping Send echo messages
+
+reload Halt and perform a cold restart
+
+show Show running system information
+
+
+
+R1#
+
+
+
+By not specifying a view for the enable view command, as shown here, you can log in as root. From the root view, use the show parser view all command to see a summary of all views. Notice how the asterisk
+
+Assigning Administrative Roles Summary
+
+
+
+5.3.1
+
+
+
+What Did I Learn in this Module?	Configure Privilege Levels
+
+
+
+Cisco IOS software has two methods of providing infrastructure access: privilege level and role-based CLI. By default, the Cisco IOS software CLI has two levels of access to commands: User EXEC mode (privilege level 1) and Privileged EXEC mode (privilege level 15). There are 16 privilege levels in total. The higher the privilege level, the more router access a user has. To configure a privilege level with specific commands, use the privilege exec level level [command]. Use the username command to assign a privilege level to a specific user. Use the enable secret command to assign a privilege level to a specific EXEC mode password. The use of privilege levels has its limitations:
+
+
+
+There is no access control to specific interfaces, ports, logical interfaces, and slots on a router.
+
+Commands available at lower privilege levels are always executable at higher levels.
+
+Commands specifically set at a higher privilege level are not available for lower privileged users.
+
+Assigning a command with multiple keywords allows access to all commands that use those keywords. For example, allowing access to show ip route allows the user access to all show and show ip commands.
+
+
+
+Configure Role-Based CLI
+
+
+
+In an effort to provide more flexibility than privilege levels allow, Cisco introduced the role-based CLI access feature in Cisco IOS Release 12.3(11)T. Role-based CLI access enables the network administrator to create different views of router configurations for different users. Role-based CLI provides three types of views that dictate which commands are available. Root view has the same access privileges as a user who has level 15 privileges. However, a root view is not the same as a level 15 user. Only a root view user can configure a new view and add or remove commands from the existing views. A specific set
+
+5.3.2
+
+
+
+Module 5 - Assign Administrative Roles Quiz	
+
+1. What must be done before any role-based CLI views can be created?	Issue the aaa new-model command.
+
+2. Which three statements describe limitations in using privilege levels for assigning command authorization? (Choose three.)	Commands set on a higher privilege level are not available for lower privilege users.
+
+
+
+Creating a user account that needs access to most but not all commands can be a tedious process.
+
+
+
+There is no access control to specific interfaces on a router.
+
+3. Which two router commands can a user issue when granted privilege level 0? (Choose two.)	help
+
+
+
+disable
+
+4. What does level 5 in the following enable secret global configuration mode command indicate?	The enable secret password grants access to privileged EXEC level 5.
+
+5. What are three network enhancements achieved by implementing the Cisco IOS software role-based CLI access feature? (Choose three.)	operational efficiency
+
+
+
+security 
+
+
+
+availability
+
+6. A network administrator wants to create a new view so that a user only has access to certain configuration commands. In role-based CLI, which view should the administrator use to create the new view?	root view
+
+7. A network administrator enters the command R1# enable view adminview. What is the purpose of this command?	to enter a CLI view named adminview
+
+8. Which range of custom privilege levels can be configured on Cisco routers?	2 through 14
+
+9. Which command will move the show interface command to privilege level 10?	router(config)# privilege exec level 10 show interface
+
+10. What is the default privilege level of user accounts created on Cisco routers?	1
+
+11. An administrator assigned a level of router access to the user ADMIN using the commands below.
+
+
+
+Router(config)# privilege exec level 14 show ip route
+
+Router(config)# enable algorithm-type scrypt secret level 14 cisco-level-10
+
+Router(config)# username ADMIN privilege 14 algorithm-type scrypt secret cisco-level-10
+
+
+
+Which two actions are permitted to the user ADMIN? (Choose two.)​	The user can issue the show version command.
+
+
+
+The user can execute all subcommands under the show ip interfaces command.

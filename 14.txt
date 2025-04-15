@@ -1,0 +1,3298 @@
+
+Layer 2 Security Threats
+
+
+
+14.1.1
+
+
+
+Describe Layer 2 Vulnerabilities	The OSI reference model is divided into seven layers which work independently of each other. As shown in the figure, each layer performs a specific function and has core elements that can be exploited.
+
+
+
+7 Application
+
+
+
+6 Presentation HTTP, HTTPS, POP3, IMAP, SSL, SSH, ...
+
+
+
+5 Session
+
+
+
+4 Transport Protocols / Ports
+
+
+
+3 Network IP Addresses
+
+
+
+2 Data Link Ethernet Frames
+
+
+
+1 Physical Physical Links
+
+
+
+
+
+Network administrators routinely implement security solutions to protect the elements in Layer 3 up through Layer 7 using VPNs, firewalls, and IPS devices. However, as shown in the figure below, if Layer 2 is compromised, then all layers above it are also affected. For example, if an employee or visitor with access to the internal network could capture Layer 2 frames, then all of the security implemented on the layers above would be useless. The employee could also wreak havoc on the Layer 2 LAN networking infrastructure.
+
+
+
+Lower Levels Affect Higher Levels
+
+
+
+7 Application
+
+
+
+6 Presentation HTTP, HTTPS, POP3, IMAP, SSL, SSH, ...
+
+
+
+5 Session Compromised
+
+
+
+4 Transport Protocols / Ports
+
+
+
+3 Network IP Addresses
+
+
+
+2 Data Link Ethernet Frames Initial Compromise
+
+
+
+1 Physical Physical Links
+
+14.1.2 
+
+
+
+Switch Attack Categories	Security is only as strong as the weakest link in the system, and Layer 2 is considered to be that weakest link. This is because traditionally LANs were under the administrative control of a single organization. We inherently trusted all persons and devices connected to our LAN. Today, with BYOD and more sophisticated attacks, our LANs have become more vulnerable to penetration. Therefore, in addition to protecting Layer 3 to Layer 7, network security professionals must also mitigate attacks to the Layer 2 LAN infrastructure.
+
+
+
+The first step in mitigating attacks on the Layer 2 infrastructure is to understand the underlying operation of Layer 2 and the threats posed by the Layer 2 infrastructure.
+
+
+
+Attacks against the Layer 2 LAN infrastructure are highlighted in the table.
+
+
+
+Note: The focus of this module is on common Layer 2 attacks.
+
+
+
+(On cards 3-8).
+
+MAC Table Attacks	Includes MAC table overflow (also called MAC Address Flooding) Attacks.
+
+VLAN Attacks	Includes VLAN hopping and VLAN double-tagging attacks. It also includes attacks between devices on a common VLAN.
+
+DHCP Attacks	Includes DHCP starvation and DHCP spoofing attacks.
+
+ARP Attacks	Includes ARP spoofing and ARP poisoning attacks.
+
+Address Spoofing Attacks	Includes MAC Address and IP address spoofing attacks.
+
+STP Attacks	Includes Spanning Tree Protocol manipulation attacks.
+
+The figure below provides an overview of Cisco solutions that help mitigate Layer 2 attacks.	IPSG
+
+
+
+DAI
+
+
+
+DHCP Snooping
+
+
+
+Port Security
+
+Port Security	Port security prevents many types of attacks including MAC table overflow attacks and DHCP starvation attacks.
+
+DHCP Snooping	DHCP Snooping prevents DHCP starvation and DHCP spoofing attacks by rogue DHCP servers.
+
+Dynamic ARP Inspection (DAI)	DAI prevents ARP spoofing and ARP poisoning attacks.
+
+IP Source Guard (IPSG)	IP Source Guard prevents MAC and IP address spoofing attacks.
+
+These Layer 2 solutions will not be effective if the management protocols are not secured. An example would be if attackers can easily telnet into a switch. Syslog, SNMP, TFTP, telnet, FTP and most other common network management protocols are insecure. Therefore, the following strategies are recommended:	Always use secure variants of these protocols such as SSH, SCP, and SSL.
+
+
+
+Consider using out-of-band (OOB) management.
+
+
+
+Use a dedicated management VLAN where nothing but management traffic resides.
+
+
+
+Use ACLs to filter unwanted access.
+
+14.1.3
+
+
+
+Check Your Understanding - Identify Layer 2 Threats and Mitigation Measures	Layer 2 Attacks and Mitigation
+
+
+
+Check your understanding of Layer 2 attacks and mitigation by choosing the correct answer to the following questions.
+
+1. What type of attack occurs when a threat actor sends packets with false MAC or IP addresses?	address spoofing
+
+2. What prevents many types of attacks including MAC table overflow attacks and DHCP starvation attacks?	Port Security
+
+3. What type of attack sends false address requests to a server until all addresses are used and none are available for legitimate users?	DHCP attack
+
+4. What prevents DHCP starvation and spoofing attacks?	DHCP Snooping
+
+5. What prevents MAC and IP address spoofing attacks?	IP Source Guard (IPSG)
+
+MAC Table Attacks
+
+
+
+14.2.1
+
+
+
+Switch Fundamentals	A switch uses MAC addresses to forward (or discard) frames to other devices on a network. If a switch just forwarded every frame it received out all ports, your network would be so congested that it would probably come to a complete halt.
+
+
+
+A Layer 2 Ethernet switch uses Layer 2 MAC addresses to make forwarding decisions. It is completely unaware of the data (protocol) being carried in the data portion of the frame, such as an IPv4 packet, an ARP message, or an IPv6 ND packet. The switch makes its forwarding decisions based solely on the Layer 2 Ethernet MAC addresses.
+
+
+
+An Ethernet switch examines its MAC address table to make a forwarding decision for each frame, unlike legacy Ethernet hubs that repeat bits out all ports except the incoming port. In the figure, the four-port switch was just powered on. The table shows the MAC Address Table which has not yet learned the MAC addresses for the four attached PCs.
+
+
+
+Note: MAC addresses are shortened throughout this topic for demonstration purposes.
+
+
+
+ABCD1234
+
+Table captionMAC Address TablePortMAC Address
+
+MAC00-0AMAC00-0BMAC00-0CMAC00-0D
+
+The switch MAC address table is empty.
+
+
+
+Note: The MAC address table is sometimes referred to as a content addressable memory (CAM) table. While the term CAM table is fairly common, for the purposes of this course, we will refer to it as a MAC address table.
+
+14.2.2
+
+
+
+Switch Learning and Forwarding	The switch dynamically builds the MAC address table by examining the source MAC address of the frames that are received on a port. The switch forwards frames by searching for a match between the destination MAC address in the frame and an entry in the MAC address table.
+
+
+
+Click the Learn and Forward buttons for an illustration and explanation of this process.
+
+Learn	Examine the Source MAC Address
+
+
+
+Every frame that enters a switch is checked for new information to learn. It does this by examining the source MAC address of the frame and the port number where the frame entered the switch. If the source MAC address does not exist, it is added to the table along with the incoming port number. If the source MAC address does exist, the switch updates the refresh timer for that entry in the table. By default, most Ethernet switches keep an entry in the table for 5 minutes.
+
+
+
+In the figure for example, PC-A is sending an Ethernet frame to PC-D. The table shows the switch adds the MAC address for PC-A to the MAC Address Table.
+
+
+
+Note: If the source MAC address does exist in the table but on a different port, the switch treats this as a new entry. The entry is replaced using the same MAC address but with the more current port number.
+
+
+
+The figure shows four hosts, A - D, are connected to a switch at ports 1 - 4. Host A with MAC address 00-0A (simplified in this example) is connected to the switch at port 1. Host A sends a frame with a destination MAC address of 00-0D. The source MAC in the frame is 00-0A. The switch maps port 1 to MAC address 00-0A in its MAC address table.
+
+ABCD1234
+
+Table captionMAC Address TablePortMAC Address100-0A
+
+MAC00-0AMAC00-0BMAC00-0CMAC00-0DDestination MAC00-0DSource MAC00-0ATypeDataFCS
+
+
+
+1. PC-A sends an Ethernet frame.
+
+
+
+2. The switch adds the port number and MAC address for PC-A to the MAC Address Table.
+
+Forward	Find the Destination MAC Address
+
+
+
+If the destination MAC address is a unicast address, the switch will look for a match between the destination MAC address of the frame and an entry in its MAC address table. If the destination MAC address is in the table, it will forward the frame out the specified port. If the destination MAC address is not in the table, the switch will forward the frame out all ports except the incoming port. This is called an unknown unicast.
+
+
+
+As shown in the figure, the switch does not have the destination MAC address in its table for PC-D, so it sends the frame out all ports except port 1.
+
+
+
+Note: If the destination MAC address is a broadcast or a multicast, the frame is also flooded out all ports except the incoming port.
+
+
+
+The figure shows four hosts, A - D, are connected to a switch at ports 1 - 4. A frame has a destination MAC of 00-0D and a source MAC of 00-0A. The only entry in the MAC address table maps port 1 to MAC address 00-0A. The frame is forwarded out ports 2, 3, and 4.
+
+ABCD1234
+
+Table captionMAC Address TablePortMAC Address100-0A
+
+MAC00-0AMAC00-0BMAC00-0CMAC00-0DDestination MAC00-0DSource MAC00-0ATypeDataFCS
+
+
+
+1. The destination MAC address is not in the table.
+
+
+
+2. The switch forwards the frame out all other ports.
+
+14.2.3
+
+
+
+Filtering Frames	As a switch receives frames from different devices, it is able to populate its MAC address table by examining the source MAC address of every frame. When the MAC address table of the switch contains the destination MAC address, it is able to filter the frame and forward out a single port.
+
+
+
+Click each button for an illustration and explanation of how a switch filters frames.
+
+PC-D to Switch	In the figure, PC-D is replying back to PC-A. The switch sees the MAC address of PC-D in the incoming frame on port 4. The switch then puts the MAC address of PC-D into the MAC Address Table associated with port 4.
+
+
+
+The figure shows four hosts, A - D, are connected to a switch at ports 1 - 4. Host D with MAC address 00-0D is connected to the switch at port 4. Host D sends a frame with a destination MAC address of 00-0A and a source MAC of 00-0D. The switch maps port 4 to MAC address 00-0D in its MAC address table.
+
+ABCD1234
+
+Table captionMAC Address TablePortMAC Address100-0A400-0D
+
+MAC00-0AMAC00-0BMAC00-0CMAC00-0DDestination MAC00-0ASource MAC00-0DTypeDataFCS
+
+
+
+The switch adds the port number and MAC address for PC-D to its MAC address table.
+
+Switch to PC-A	Next, because the switch has destination MAC address for PC-A in the MAC Address Table, it will send the frame only out port 1, as shown in the figure.
+
+
+
+The figure shows four hosts, A - D, are connected to a switch at ports 1 - 4. Host D with MAC address 00-0D is connected to the switch at port 4. The MAC address table of the switch has two entries. Port 1 is mapped to MAC address 00-0A and Port 4 is mapped to MAC address 00-0D. Host D sends a frame with a destination MAC address of 00-0A and a source MAC of 00-0D. The frame is sent out port 1 to host A whose MAC address is 00-0A.
+
+ABCD1234
+
+Table captionMAC Address TablePortMAC Address100-0A400-0D
+
+MAC00-0AMAC00-0BMAC00-0CMAC00-0DDestination MAC00-0ASource MAC00-0DTypeDataFCS
+
+
+
+1. The switch has a MAC address entry for the destination.
+
+
+
+2. The switch filters the frame, sending it only out port 1.
+
+PC-A to Switch to PC-D	Next, PC-A sends another frame to PC-D, as shown in the figure. The MAC address table already contains the MAC address for PC-A; therefore, the five-minute refresh timer for that entry is reset. Next, because the switch table contains the destination MAC address for PC-D, it sends the frame only out port 4.
+
+
+
+The figure shows four hosts, A - D, are connected to a switch at ports 1 - 4. Host A with MAC address 00-0A is connected to the switch at port 1. The MAC address table of the switch has two entries. Port 1 is mapped to MAC address 00-0A and Port 4 is mapped to MAC address 00-0D. Host A sends a frame with a destination MAC address of 00-0D and a source MAC of 00-0A. The frame is sent out port41 to host D whose MAC address is 00-0D.
+
+ABCD1234
+
+Table captionMAC Address TablePortMAC Address100-0A400-0D
+
+MAC00-0AMAC00-0BMAC00-0CMAC00-0DDestination MAC00-0DSource MAC00-0ATypeDataFCS
+
+
+
+1. The switch receives another frame from PC-A and refreshes the timer for the MAC address entry for port 1.
+
+
+
+2. The switch has a recent entry for the destination MAC address and filters the frame, forwarding it only out port 4.
+
+14.2.4
+
+
+
+MAC Address Table Flooding	All MAC tables have a fixed size and consequently, a switch can run out of resources in which to store MAC addresses. MAC address flooding attacks take advantage of this limitation by bombarding the switch with fake source MAC addresses until the switch MAC address table is full.
+
+
+
+When this occurs, the switch treats the frame as an unknown unicast and begins to flood all incoming traffic out all ports on the same VLAN without referencing the MAC table. This condition now allows a threat actor to capture all of the frames sent from one host to another on the local LAN or local VLAN.
+
+
+
+Note: Traffic is flooded only within the local LAN or VLAN. The threat actor can only capture traffic within the local LAN or VLAN to which the threat actor is connected.
+
+
+
+The figure shows how a threat actor can easily use the network attack tool macof to overflow a MAC address table.
+
+
+
+1. The threat actor is connected to VLAN 10 and uses macof to rapidly generate many random source and destination MAC and IP addresses.
+
+
+
+2. Over a short period of time, the switch's MAC table fills up.
+
+
+
+3. When the MAC table is full, the switch begins to flood all frames that it receives. As long as macof continues to run, the MAC table remains full and the switch continues to flood all incoming frames out every port associated with VLAN 10.
+
+
+
+4. The threat actor then uses packet sniffing software to capture frames from any and all devices connected to VLAN 10.
+
+
+
+If the threat actor stops macof from running or is discovered and stopped, the switch eventually ages out the older MAC address entries from the table and begins to act like a switch again.
+
+14.2.5
+
+
+
+MAC Address Table Attack Mitigation	What makes tools such as macof so dangerous is that an attacker can create a MAC table overflow attack very quickly. For instance, a Catalyst 6500 switch can store 132,000 MAC addresses in its MAC address table. A tool such as macof can flood a switch with up to 8,000 bogus frames per second; creating a MAC address table overflow attack in a matter of a few seconds. The example shows a sample output of the macof command on a Linux host.
+
+
+
+# macof -i eth1
+
+36:a1:48:63:81:70 15:26:8d:4d:28:f8 0.0.0.0.26413 > 0.0.0.0.49492: S 1094191437:1094191437(0) win 512
+
+16:e8:8:0:4d:9c da:4d:bc:7c:ef:be 0.0.0.0.61376 > 0.0.0.0.47523: S 446486755:446486755(0) win 512
+
+18:2a:de:56:38:71 33:af:9b:5:a6:97 0.0.0.0.20086 > 0.0.0.0.6728: S 105051945:105051945(0) win 512
+
+e7:5c:97:42:ec:1 83:73:1a:32:20:93 0.0.0.0.45282 > 0.0.0.0.24898: S 1838062028:1838062028(0) win 512
+
+62:69:d3:1c:79:ef 80:13:35:4:cb:d0 0.0.0.0.11587 > 0.0.0.0.7723: S 1792413296:1792413296(0) win 512
+
+c5:a:b7:3e:3c:7a 3a:ee:c0:23:4a:fe 0.0.0.0.19784 > 0.0.0.0.57433: S 1018924173:1018924173(0) win 512
+
+88:43:ee:51:c7:68 b4:8d:ec:3e:14:bb 0.0.0.0.283 > 0.0.0.0.11466: S 727776406:727776406(0) win 512
+
+b8:7a:7a:2d:2c:ae c2:fa:2d:7d:e7:bf 0.0.0.0.32650 > 0.0.0.0.11324: S 605528173:605528173(0) win 512
+
+e0:d8:1e:74:1:e 57:98:b6:5a:fa:de 0.0.0.0.36346 > 0.0.0.0.55700: S 2128143986:2128143986(0) win 512
+
+
+
+Another reason why these attack tools are dangerous is because they not only affect the local switch, they can also affect other connected Layer 2 switches. When the MAC address table of a switch is full, it starts flooding out all ports including those connected to other Layer 2 switches.
+
+
+
+To mitigate MAC address table overflow attacks, network administrators must implement port security. Port security will only allow a specified number of source MAC addresses to be learned on the port.
+
+Mitigate MAC Table Attacks
+
+
+
+14.3.1
+
+
+
+Secure Unused Ports	Layer 2 devices are considered to be the weakest link in a company's security infrastructure. Layer 2 attacks are some of the easiest for hackers to deploy but these threats can also be mitigated with some common Layer 2 solutions.
+
+
+
+All switch ports (interfaces) should be secured before the switch is deployed for production use. How a port is secured depends on its function.
+
+
+
+A simple method that many administrators use to help secure the network from unauthorized access is to disable all unused ports on a switch. For example, if a Catalyst 2960 switch has 24 ports and there are three Fast Ethernet connections in use, it is good practice to disable the 21 unused ports. Navigate to each unused port and issue the Cisco IOS shutdown command. If a port must be reactivated at a later time, it can be enabled with the no shutdown command.
+
+
+
+To configure a range of ports, use the interface range command.
+
+
+
+Switch(config)# interface range type module/first-number - last-number
+
+
+
+For example, to shutdown ports for Fa0/8 through Fa0/24 on S1, you would enter the following command.
+
+
+
+S1(config)# interface range fa0/8 - 24
+
+S1(config-if-range)# shutdown
+
+%LINK-5-CHANGED: Interface FastEthernet0/8, changed state to administratively down (output omitted)
+
+%LINK-5-CHANGED: Interface FastEthernet0/24, changed state to administratively down
+
+S1(config-if-range)#
+
+14.3.2
+
+
+
+Mitigate MAC Address Table Attacks	The simplest and most effective method to prevent MAC address table overflow attacks is to enable port security.
+
+
+
+Port security limits the number of valid MAC addresses allowed on a port. It allows an administrator to manually configure MAC addresses for a port or to permit the switch to dynamically learn a limited number of MAC addresses. When a port that is configured with port security receives a frame, the source MAC address of the frame is compared to the list of secure source MAC addresses that were manually configured or dynamically learned on the port.
+
+
+
+By limiting the number of permitted MAC addresses on a port to one, port security can be used to control unauthorized access to the network, as shown in the figure.
+
+
+
+MAC: AA:AA:AAMAC: BA:AD:01MAC: BA:AD:020/10/20/3PortAllowed MAC0/10/20/3AA:AA:AABB:BB:BBCC:CC:CC
+
+
+
+Note: MAC addresses are shown as 24 bits for simplicity.
+
+14.3.3
+
+
+
+Enable Port Security	Notice in the example, the switchport port-security command was rejected. This is because port security can only be configured on manually configured access ports or manually configured trunk ports. By default, Layer 2 switch ports are set to dynamic auto (trunking on). Therefore, in the example, the port is configured with the switchport mode access interface configuration command.
+
+
+
+Note: Trunk port security is beyond the scope of this course.
+
+
+
+S1(config)# interface f0/1
+
+S1(config-if)# switchport port-security
+
+Command rejected: FastEthernet0/1 is a dynamic port.
+
+S1(config-if)# switchport mode access
+
+S1(config-if)# switchport port-security
+
+S1(config-if)# end
+
+S1#
+
+
+
+Use the show port-security interface command to display the current port security settings for FastEthernet 0/1, as shown in the example below. Notice that port security is enabled, and the port status is Secure-down, which means there are no devices attached and no violation has occurred. Also, the violation mode is Shutdown, and the maximum number of MAC addresses allowed is 1. If a device is connected to the port, the switch port status would display Secure-up and the switch will automatically add the device's MAC address as a secure MAC. In this example, no device is connected to the port.
+
+
+
+S1# show port-security interface f0/1
+
+Port Security : Enabled
+
+Port Status : Secure-down
+
+Violation Mode : Shutdown
+
+Aging Time : 0 mins
+
+Aging Type : Absolute
+
+SecureStatic Address Aging : Disabled
+
+Maximum MAC Addresses : 1
+
+Total MAC Addresses : 0
+
+Configured MAC Addresses : 0
+
+Sticky MAC Addresses : 0
+
+Last Source Address:Vlan : 0000.0000.0000:0
+
+Security Violation Count : 0
+
+S1#
+
+
+
+Note: If an active port is configured with the switchport port-security command and more than one device is connected to that port, the port will transition to the error-disabled state. This condition
+
+14.3.4
+
+
+
+Limit and Learn MAC Addresses	To set the maximum number of MAC addresses allowed on a port, use the following command:
+
+
+
+Switch(config-if)# switchport port-security maximum value
+
+
+
+The default port security value is 1. The maximum number of secure MAC addresses that can be configured depends on the switch and the IOS. In this example, the maximum is 8192.
+
+
+
+S1(config)# interface f0/1
+
+S1(config-if)# switchport port-security maximum ?
+
+<1-8192> Maximum addresses
+
+S1(config-if)# switchport port-security maximum
+
+
+
+The switch can be configured to learn about MAC addresses on a secure port in one of three ways:
+
+
+
+1. Manually Configured
+
+
+
+The administrator manually configures a static MAC address(es) by using the following command for each secure MAC address on the port:
+
+
+
+Switch(config-if)# switchport port-security mac-address mac-address
+
+
+
+2. Dynamically Learned
+
+
+
+When the switchport port-security command is entered, the current source MAC for the device connected to the port is automatically secured but is not added to the startup configuration. If the switch is rebooted, the port will have to re-learn the device's MAC address.
+
+
+
+3. Dynamically Learned - Sticky
+
+
+
+The administrator can enable the switch to dynamically learn the MAC address and "stick" them to the running configuration by using the following command:
+
+
+
+Switch(config-if)# switchport port-security mac-address sticky
+
+
+
+Saving the running configuration will commit the dynamically learned MAC address to NVRAM.
+
+
+
+The following example demonstrates a complete port security configuration for FastEthernet 0/1 with a host connected to port Fa0/1. The administrator specifies a maximum of 2 MAC addresses, manually configures one secure MAC address, and then configures the port to dynamically learn additional secure MAC addresses up to the 2 secure MAC address maximum. Use the show port-security interface and the sh
+
+14.3.5
+
+
+
+Port Security Aging	Port security aging can be used to set the aging time for static and dynamic secure addresses on a port. Two types of aging are supported per port:
+
+
+
+Absolute - The secure addresses on the port are deleted after the specified aging time.
+
+
+
+Inactivity - The secure addresses on the port are deleted only if they are inactive for the specified aging time.
+
+
+
+Use aging to remove secure MAC addresses on a secure port without manually deleting the existing secure MAC addresses. Aging time limits can also be increased to ensure past secure MAC addresses remain, even while new MAC addresses are added. Aging of statically configured secure addresses can be enabled or disabled on a per-port basis.
+
+
+
+Use the switchport port-security aging command to enable or disable static aging for the secure port, or to set the aging time or type.
+
+
+
+Switch(config-if)# switchport port-security aging { static | time time | type {absolute | inactivity}}
+
+
+
+static Enable aging for statically configured secure addresses on this port.
+
+
+
+time time Specify the aging time for this port. The range is 0 to 1440 minutes. If the time is 0, aging is disabled for this port.
+
+
+
+type absolute Set the absolute aging time. All the secure addresses on this port age out exactly after the time (in minutes) specified and are removed from the secure address list.
+
+
+
+type inactivity Set the inactivity aging type. The secure addresses on this port age out only if there is no data traffic from the secure source address for the specified time period.
+
+
+
+Note: MAC addresses are shown as 24 bits for simplicity.
+
+
+
+The example shows an administrator configuring the aging type to 10 minutes of inactivity and then using the show port-security interface command to verify the configuration.
+
+
+
+S1(config)# interface fa0/1
+
+S1(config-if)# switchport port-security aging time 10
+
+S1(config-if)# switchpo
+
+14.3.6
+
+
+
+Port Security Violation Modes	If the MAC address of a device that is attached to the port differs from the list of secure addresses, then a port violation occurs. By default, the port enters the error-disabled state.
+
+
+
+To set the port security violation mode, use the following command:
+
+
+
+Switch(config-if)# switchport port-security violation { protect | restrict | shutdown}
+
+
+
+The following table describes the different switch modes. (On cards 37-39).
+
+
+
+The following table shows how a switch reacts based on the configured violation mode. (On cards 40-42).
+
+shutdown
+
+(default)	The port transitions to the error-disabled state immediately, turns off the port LED, and sends a syslog message. It increments the violation counter. When a secure port is in the error-disabled state, an administrator must re-enable it by entering the shutdown and no shutdown commands.
+
+restrict	The port drops packets with unknown source addresses until you remove a sufficient number of secure MAC addresses to drop below the maximum value or increase the maximum value. This mode causes the Security Violation counter to increment and generates a syslog message.
+
+protect	This is the least secure of the security violation modes. The port drops packets with unknown MAC source addresses until you remove a sufficient number of secure MAC addresses to drop below the maximum value or increase the maximum value. No syslog message is sent.
+
+Protect	Discards Offending Traffic
+
+
+
+Yes
+
+
+
+Sends Syslog Message
+
+
+
+No
+
+
+
+Increase Violation Counter
+
+
+
+No
+
+
+
+Shuts Down Port
+
+
+
+No
+
+Restrict	Discards Offending Traffic
+
+
+
+Yes
+
+
+
+Sends Syslog Message
+
+
+
+Yes
+
+
+
+Increase Violation Counter
+
+
+
+Yes
+
+
+
+Shuts Down Port
+
+
+
+No
+
+Shutdown	Discards Offending Traffic
+
+
+
+Yes
+
+
+
+Sends Syslog Message
+
+
+
+Yes
+
+
+
+Increase Violation Counter
+
+
+
+Yes
+
+
+
+Shuts Down Port
+
+
+
+Yes
+
+
+
+The following example shows an administrator changing the security violation to "restrict". The output of the show port-security interface command confirms that the change has been made.
+
+
+
+S1(config)# interface f0/1
+
+S1(config-if)# switchport port-security violation restrict
+
+S1(config-if)# end
+
+S1#
+
+S1# show port-security interface f0/1
+
+Port Security : Enabled
+
+Port Status : Secure-up
+
+Violation Mode : Restrict
+
+Aging Time : 10 mins
+
+Aging Type : Inactivity
+
+SecureStatic Address Aging : Disabled
+
+Maximum MAC Addresses : 2
+
+Total MAC Addresses : 2
+
+Configured MAC Addresses : 1
+
+Sticky MAC Addresses : 1
+
+Last Source Address:Vlan : a41f.7272.676a:1
+
+Security Violation Count : 0
+
+S1#
+
+14.3.7
+
+
+
+Ports in error-disabled State	What happens when the port security violation is shutdown and a port violation occurs? The port is physically shutdown and placed in the error-disabled state, and no traffic is sent or received on that port.
+
+
+
+In the example, the port security violation is changed back to the default shutdown setting. Then the host with MAC address a41f.7272.676a is disconnected and a new host is plugged into Fa0/1.
+
+
+
+Notice that a series of port security related messages are generated on the console.
+
+
+
+S1(config)# int fa0/1
+
+S1(config-if)# switchport port-security violation shutdown
+
+S1(config-if)# end
+
+S1#
+
+*Mar 1 00:24:15.599: %LINEPROTO-5-UPDOWN: Line protocol on Interface FastEthernet0/1, changed state to down
+
+*Mar 1 00:24:16.606: %LINK-3-UPDOWN: Interface FastEthernet0/1, changed state to down
+
+*Mar 1 00:24:19.114: %LINK-3-UPDOWN: Interface FastEthernet0/1, changed state to up
+
+*Mar 1 00:24:20.121: %LINEPROTO-5-UPDOWN: Line protocol on Interface FastEthernet0/1, changed state to up
+
+S1#
+
+*Mar 1 00:24:32.829: %PM-4-ERR_DISABLE: psecure-violation error detected on Fa0/1, putting Fa0/1 in err-disable state
+
+*Mar 1 00:24:32.838: %PORT_SECURITY-2-PSECURE_VIOLATION: Security violation occurred, caused by MAC address a41f.7273.018c on port FastEthernet0/1.
+
+*Mar 1 00:24:33.836: %LINEPROTO-5-UPDOWN: Line protocol on Interface FastEthernet0/1, changed state to down
+
+*Mar 1 00:24:34.843: %LINK-3-UPDOWN: Interface FastEthernet0/1, changed state to down
+
+S1#
+
+
+
+Note: The port protocol and link status are changed to down and the port LED is turned off.
+
+
+
+In the example, the show interface command identifies the port status as err-disabled. The output of the show port-security interface command now shows the port status as Secure-shutdown instead of Secure-up. The Security Violation counter increments by 1.
+
+
+
+S1# show interface fa0/1 | include down
+
+FastEthernet0
+
+14.3.8
+
+
+
+Verify Port Security	After configuring port security on a switch, check each interface to verify that the port security is set correctly, and check to ensure that the static MAC addresses have been configured correctly.
+
+
+
+Port Security for All Interfaces
+
+
+
+To display port security settings for the switch, use the show port-security command. The example indicates that only one port is configured with the switchport port-security command.
+
+
+
+S1# show port-security
+
+Secure Port MaxSecureAddr CurrentAddr SecurityViolation Security Action
+
+(Count) (Count) (Count)
+
+
+
+Fa0/1 2 2 0 Shutdown
+
+
+
+Total Addresses in System (excluding one mac per port) : 1
+
+Max Addresses limit in System (excluding one mac per port) : 8192
+
+S1#
+
+
+
+
+
+Port Security for a Specific Interface
+
+
+
+Use the show port-security interface command to view details for a specific interface, as shown previously and in this example.
+
+
+
+S1# show port-security interface fastethernet 0/1
+
+Port Security : Enabled
+
+Port Status : Secure-up
+
+Violation Mode : Shutdown
+
+Aging Time : 10 mins
+
+Aging Type : Inactivity
+
+SecureStatic Address Aging : Disabled
+
+Maximum MAC Addresses : 2
+
+Total MAC Addresses : 2
+
+Configured MAC Addresses : 1
+
+Sticky MAC Addresses : 1
+
+Last Source Address:Vlan : a41f.7273.018c:1
+
+Security Violation Count : 0
+
+S1#
+
+
+
+
+
+Verify Learned MAC Addresses
+
+
+
+To verify that MAC addresses are "sticking" to the configuration, use the show run command as shown in the example for FastEthernet 0/19.
+
+
+
+S1# show run interface fa0/1
+
+Building configuration...
+
+
+
+Current configuration : 365 bytes
+
+!
+
+interface FastEthernet0/1
+
+switchport mode access
+
+switchport port-security maximum 2
+
+switchport port-security mac-address sticky
+
+switchport port-security mac-address sticky a41f.7272.676a
+
+s
+
+14.3.9
+
+
+
+Syntax Checker - Implement Port Security	Implement port security for a switch interface based on the specified requirements
+
+
+
+You are currently logged into S1. Configure FastEthernet 0/5 for port security by using the following requirements:
+
+
+
+Use the interface name fa0/5 to enter interface configuration mode.
+
+Enable the port for access mode.
+
+Enable port security.
+
+Set the maximum number of MAC address to 3.
+
+Statically configure the MAC address aaaa.bbbb.1234.
+
+Configure the port to dynamically learn additional MAC addresses and dynamically add them to the running configuration.
+
+Return to privileged EXEC mode.
+
+
+
+
+
+S1(config)#interface fa0/5
+
+S1(config-if)#switchport mode access
+
+S1(config-if)#switchport port-security
+
+S1(config-if)#switchport port-security maximum 3
+
+S1(config-if)#switchport port-security mac-address aaaa.bbbb.1234
+
+S1(config-if)#switchport port-security mac-address sticky
+
+S1(config-if)#end
+
+
+
+Enter the command to verify port security for all interfaces.
+
+
+
+
+
+S1#show port-security
+
+Secure Port MaxSecureAddr CurrentAddr SecurityViolation Security Action
+
+(Count) (Count) (Count)
+
+
+
+Fa0/5 3 2 0 Shutdown
+
+
+
+Total Addresses in System (excluding one mac per port) : 0
+
+Max Addresses limit in System (excluding one mac per port) : 8192
+
+
+
+Enter the command to verify port security on FastEthernet 0/5. Use fa0/5 for the interface name.
+
+
+
+
+
+S1#show port-security interface fa0/5
+
+Port Security : Enabled
+
+Port Status : Secure-up
+
+Violation Mode : Shutdown
+
+Aging Time : 0 mins
+
+Aging Type : Absolute
+
+SecureStatic Address Aging : Disabled
+
+Maximum MAC Addresses : 3
+
+Total MAC Addresses : 2
+
+Configured MAC Addresses : 1
+
+Sticky MAC Addresses : 1
+
+Last Source Address:Vlan : 0090.2135.6B8C:1
+
+Security Violation Count : 0
+
+
+
+Enter the command that will di
+
+14.3.10
+
+
+
+SNMP MAC Address Notification	Network managers need a way of monitoring who is using the network and what their location is. For example, if port Fa0/1 is secure on a switch, an SNMP trap is generated when a MAC address entry for that port disappears from the MAC table.
+
+
+
+The MAC address notification feature sends SNMP traps to the network management station (NMS) whenever a new MAC address is added to, or an old address is deleted from, the forwarding tables. MAC address notifications are generated only for dynamic and secure MAC addresses.
+
+
+
+MAC address notification allows the network administrator to monitor MAC addresses that are learned, as well as MAC addresses that age out and are removed from the switch. For example, in the figure, the laptop with MAC C has disconnected from the network. The switch will eventually timeout port Fa0/3 and send an SNMP trap notification to the NMS Server.
+
+
+
+Use the mac address-table notification global configuration command to enable the MAC address notification feature on a switch.
+
+
+
+F0/2F0/1F0/3F0/4
+
+MAC AMAC BMAC CMAC DNMSSNMP traps
+
+14.3.11
+
+
+
+Packet Tracer - Implement Port Security	In this Packet Tracer activity, you will configure and verify port security on a switch. Port security allows you to restrict a port's ingress traffic by limiting the MAC addresses that are allowed to send traffic into the port.
+
+Mitigate VLAN Attacks
+
+
+
+14.4.1
+
+
+
+VLAN Hopping Attacks	VLANs are used to create separate broadcast domains on switches. Endpoints that are located in one VLAN are unable to communicate with endpoints that are on another VLAN unless permitted to do so by a router or Layer 3 switch. VLANs can be used to separate sensitive content from other network traffic. For example, a guest VLAN may be created for guests to an organization. Those guests should not have access to sensitive corporate content that is carried on other VLANs. VLAN attacks can circumvent the intention of a VLAN design by allowing unauthorized users access to VLANs that they should not be able access. Two types of VLAN attacks are VLAN hopping attacks and VLAN double-tagging attacks.
+
+
+
+A VLAN hopping attack enables traffic from one VLAN to be seen by another VLAN without the aid of a router. In a basic VLAN hopping attack, the threat actor configures a host to act like a switch to take advantage of the automatic trunking port feature enabled by default on most switch ports.
+
+
+
+The threat actor configures the host to spoof 802.1Q signaling and Cisco-proprietary Dynamic Trunking Protocol (DTP) signaling to trunk with the connecting switch. If successful, the switch establishes a trunk link with the host, as shown in the figure. Now the threat actor can access all the VLANs on the switch. The threat actor can send and receive traffic on any VLAN, effectively hopping between VLANs.
+
+
+
+An attacker is connected to a switch which is connected to another switch via an 802.1Q trunk. The second switch has a connection to Server 1 on V LAN 10 and a connection to Server 2 at V LAN 20. The attacker established an unauthorized 802.1Q trunk link to the switch to gain access to the server V LAN. an arrow points from the attacker to the switch and is labeled unauthorized trunk.
+
+802.1QTrunk802.1QVLAN 20Server1VLAN 10Server 2Attacker
+
+14.4.2
+
+
+
+VLAN Double-Tagging Attack	A threat actor in specific situations could embed a hidden 802.1Q tag inside the frame that already has an 802.1Q tag. This tag allows the frame to go to a VLAN that the original 802.1Q tag did not specify.
+
+
+
+Click each step for an example and explanation of a double-tagging attack. (On cards 50-52).
+
+
+
+A VLAN double-tagging attack is unidirectional and works only when the attacker is connected to a port residing in the same VLAN as the native VLAN of the trunk port. The idea is that double tagging allows the attacker to send data to hosts or servers on a VLAN that otherwise would be blocked by some type of access control configuration. Presumably the return traffic will also be permitted, thus giving the attacker the ability to communicate with devices on the normally blocked VLAN.
+
+
+
+VLAN Attack Mitigation
+
+
+
+VLAN hopping and VLAN double-tagging attacks can be prevented by implementing the following trunk security guidelines, as discussed in a previous module:
+
+
+
+Disable trunking on all access ports.
+
+Disable auto trunking on trunk links so that trunks must be manually enabled.
+
+Be sure that the native VLAN is only used for trunk links.
+
+Step 1	The threat actor sends a double-tagged 802.1Q frame to the switch. The outer header has the VLAN tag of the threat actor, which is the same as the native VLAN of the trunk port. For the purposes of this example, assume that this is VLAN 10. The inner tag is the victim VLAN, in this example, VLAN 20.
+
+
+
+1
+
+EthernetVLAN 10VLAN 20DataTrunk Native VLAN = 10Target (VLAN 20)
+
+Step 2	The frame arrives on the first switch, which looks at the first 4-byte 802.1Q tag. The switch sees that the frame is destined for VLAN 10, which is the native VLAN. The switch forwards the packet out all VLAN 10 ports after stripping the VLAN 10 tag. The frame is not retagged because it is part of the native VLAN. At this point, the VLAN 20 tag is still intact and has not been inspected by the first switch.
+
+
+
+2
+
+Trunk Native VLAN = 10Target (VLAN 20)EthernetVLAN 20Data
+
+Step 3	The frame arrives at the second switch which has no knowledge that it was supposed to be for VLAN 10. Native VLAN traffic is not tagged by the sending switch as specified in the 802.1Q specification. The second switch looks only at the inner 802.1Q tag that the threat actor inserted and sees that the frame is destined for VLAN 20, the target VLAN. The second switch sends the frame on to the target or floods it, depending on whether there is an existing MAC address table entry for the target.
+
+
+
+3
+
+EthernetDataTrunk Native VLAN = 10Target (VLAN 20)
+
+14.4.3
+
+
+
+Mitigating VLAN Hopping Attacks	Use the following steps to mitigate VLAN hopping attacks:
+
+
+
+Step 1: Disable DTP (auto trunking) negotiations on non-trunking ports by using the switchport mode access interface configuration command.
+
+Step 2: Disable unused ports and put them in an unused VLAN. In the example it is VLAN 1000.
+
+Step 3: Manually enable the trunk link on a trunking port by using the switchport mode trunk command.
+
+Step 4: Disable DTP (auto trunking) negotiations on trunking ports by using the switchport nonegotiate command.
+
+Step 5: Set the native VLAN to a VLAN other than VLAN 1 by using the switchport trunk native vlan vlan_number command.
+
+
+
+For example, assume the following:
+
+
+
+FastEthernet ports 0/1 through fa0/16 are active access ports
+
+FastEthernet ports 0/17 through 0/20 are not currently in use
+
+FastEthernet ports 0/21 through 0/24 are trunk ports.
+
+
+
+VLAN hopping can be mitigated by implementing the following configuration.
+
+
+
+S1(config)# interface range fa0/1 - 16
+
+S1(config-if-range)# switchport mode access
+
+S1(config-if-range)# exit
+
+S1(config)#
+
+S1(config)# interface range fa0/17 - 20
+
+S1(config-if-range)# switchport mode access
+
+S1(config-if-range)# switchport access vlan 1000
+
+S1(config-if-range)# shutdown
+
+S1(config-if-range)# exit
+
+S1(config)#
+
+S1(config)# interface range fa0/21 - 24
+
+S1(config-if-range)# switchport mode trunk
+
+S1(config-if-range)# switchport nonegotiate
+
+S1(config-if-range)# switchport trunk native vlan 999
+
+S1(config-if-range)# end
+
+S1#
+
+
+
+FastEthernet ports 0/1 to 0/16 are access ports and therefore trunking is disabled by explicitly making them access ports.
+
+FastEthernet ports 0/17 to 0/20 are unused ports and are disabled and assigned to an unused VLAN.
+
+FastEthernet ports 0/21 to 0/24 are trunk links and are manually enabled as trunks with DTP disabled. The native VLAN is also changed from the default VLAN 1 to VLAN 999.
+
+14.4.4
+
+
+
+Syntax Checker - Mitigate VLAN Hopping Attacks	Mitigate VLAN hopping attacks on the switch based on the specified requirements.
+
+
+
+You are currently logged into S1. The ports status of the ports are as follows:
+
+
+
+FastEthernet ports 0/1 through 0/4 are used for trunking with other switches.
+
+FastEthernet ports 0/5 through 0/10 are unused.
+
+FastEthernet ports 0/11 through 0/24 are active ports currently in use.
+
+
+
+Use range fa0/1 - 4 to enter interface configuration mode for the trunks.
+
+
+
+S1(config)#interface range fa0/1 - 4
+
+
+
+Configure the interfaces as nonnegotiating trunks assigned to default VLAN 99.
+
+
+
+S1(config-if-range)#switchport mode trunk
+
+S1(config-if-range)#switchport nonegotiate
+
+S1(config-if-range)#switchport trunk native vlan 99
+
+S1(config-if-range)# exit
+
+
+
+Use range fa0/5 - 10 to enter interface configuration mode for the unused ports.
+
+
+
+S1(config)#interface range fa0/5 - 10
+
+
+
+Configure the unused ports as access ports, assign them to VLAN 86, and shutdown the ports.
+
+
+
+S1(config-if-range)#switchport mode access
+
+S1(config-if-range)#switchport access vlan 86
+
+% Access VLAN does not exist. Creating vlan 86
+
+S1(config-if-range)#shutdown
+
+*Mar 1 00:28:48.883: %LINK-5-CHANGED: Interface FastEthernet0/5, changed state to administratively down
+
+*Mar 1 00:28:48.900: %LINK-5-CHANGED: Interface FastEthernet0/6, changed state to administratively down
+
+*Mar 1 00:28:48.908: %LINK-5-CHANGED: Interface FastEthernet0/7, changed state to administratively down
+
+*Mar 1 00:28:48.917: %LINK-5-CHANGED: Interface FastEthernet0/8, changed state to administratively down
+
+*Mar 1 00:28:48.942: %LINK-5-CHANGED: Interface FastEthernet0/9, changed state to administratively down
+
+*Mar 1 00:28:48.950: %LINK-5-CHANGED: Interface FastEthernet0/10, changed state to administratively down
+
+*Mar 1 00:28:49.890: %LINEPROTO-5-UPDOWN: Line protocol on Interface FastEthernet0/5, changed state to down
+
+*Mar 1 00:28:49.907
+
+14.4.5
+
+
+
+Private VLANs	VLANs are broadcast domains. However, in some situations, it may useful to break this rule and allow only the minimum required L2 connectivity within the VLAN.
+
+
+
+Private VLANs (PVLAN) provide Layer 2 isolation between ports within the same broadcast domain. There are three types of PVLAN ports: (On cards 56-58).
+
+
+
+The example in the figure illustrates which ports can interconnect. The security provided by a PVLAN can be bypassed by using the router as a proxy.
+
+
+
+"P"Promiscous Port"C"Community Ports"I"Isolated PortsVLAN 102VLAN 105PrimaryVLAN 100
+
+
+
+For example, in the figure below, PC-A and PC-B are isolated from each other. However, PC-A can initiate an attack against PC-B by sending packets that have the source IP address and MAC address of PC-A, the destination IP address of PC-B, but the destination MAC address of R1. S1 will forward the frame to R1 because F0/5 is configured as a promiscuous port. R1 rebuilds the frame with PC-B's MAC address and forwards it to S1. S1 then forwards the frame to PC-B.
+
+
+
+Note: PVLANs are used mainly in service provider co-location sites. Another typical application can be found in hotels where each room would be connected on its own isolated port.
+
+
+
+PVLAN Proxy Attack
+
+
+
+PC-AS1PC-BR1G0/0F0/5F0/6F0/18
+
+Primary VLAN172.16.0.0/24Isolated PortsPromiscuous Port
+
+
+
+To mitigate this type of attack, configure an ACL that will deny traffic with a source and destination IP address that belongs to the same subnet, as shown in in the configuration below.
+
+
+
+R1(config)# ip access-list extended PVLAN
+
+R1(config-ext-nacl)# deny ip 172.16.0.0 0.0.0.255 172.16.0.0 0.0.0.255
+
+R1(config-ext-nacl)# permit ip any any
+
+R1(config-ext-nacl)# interface g0/0
+
+R1(config-if)# ip access-group PVLAN in
+
+R1(config-if)#
+
+Promiscuous	A promiscuous port can talk to everyone. It can communicate with all interfaces, including the isolated and community ports within a PVLAN.
+
+Isolated	An isolated port can only talk to promiscuous ports. An isolated port has complete Layer 2 separation from the other ports within the same PVLAN, but not from the promiscuous ports. PVLANs block all traffic to isolated ports except traffic from promiscuous ports. Traffic from an isolated port is forwarded only to promiscuous ports.
+
+Community	Community ports can talk to other community and promiscuous ports. These interfaces are separated at Layer 2 from all other interfaces in other communities or isolated ports within their PVLAN.
+
+14.4.6
+
+
+
+PVLAN Edge Feature	Some applications require that no traffic be forwarded at Layer 2 between ports on the same switch so that one neighbor does not see the traffic generated by another neighbor.
+
+
+
+In such an environment, the use of the PVLAN Edge feature ensures that there is no exchange of unicast, broadcast, or multicast traffic between PVLAN edge ports on the switch, as shown in the figure. The PLVAN Edge feature is also called Protected Ports.
+
+
+
+The PVLAN Edge feature has the following characteristics:
+
+
+
+A protected port does not forward any traffic, such as unicast, multicast, or broadcast, to any other port that is also a protected port. Data traffic cannot be forwarded between protected ports at Layer 2; only control traffic is forwarded because these packets are processed by the CPU and forwarded in software. All data traffic passing between protected ports must be forwarded through a Layer 3 device.
+
+
+
+Forwarding behavior between a protected port and a non-protected port proceeds as usual.
+
+
+
+The default is to have no protected ports defined.
+
+
+
+Restricting Layer 2 Traffic between Switch Ports
+
+
+
+Unprotected Ports (Default)Protected Ports
+
+14.4.7
+
+
+
+Configure PVLAN Edge	To configure the PVLAN Edge feature, enter the switchport protected interface configuration mode command.
+
+
+
+The PVLAN Edge feature can be configured on a physical interface or an EtherChannel group. When the PVLAN Edge feature is enabled for a port channel, it is enabled for all ports in the port-channel group. To disable protected port, use the no switchport protected interface configuration mode command.
+
+
+
+To verify the configuration of the PVLAN Edge feature, use the show interfaces interface-id switchport global configuration mode command, as shown in the example below.
+
+
+
+Switch# show interfaces gigabitethernet1/0/1 switchport
+
+Name: G1/0/1
+
+Switchport: Enabled
+
+Administrative Mode: dynamic auto
+
+Operational Mode: static access
+
+Administrative Trunking Encapsulation: negotiate
+
+Operational Trunking Encapsulation: native
+
+Negotiation of Trunking: On
+
+Access Mode VLAN: 1 (default)
+
+Trunking Native Mode VLAN: 1 (default)
+
+Voice VLAN: none
+
+(output omitted)
+
+
+
+Operational private-vlan: none
+
+Trunking VLANs Enabled: ALL
+
+Pruning VLANs Enabled: 2-1001
+
+Capture Mode Disabled
+
+Capture VLANs Allowed: ALL
+
+
+
+Protected: false
+
+Unknown unicast blocked: disabled
+
+Unknown multicast blocked: disabled
+
+
+
+Voice VLAN: none (Inactive)
+
+Appliance trust: none
+
+
+
+The PVLAN edge is a feature that has only local significance to the switch, and there is no isolation provided between two protected ports located on different switches. A protected port does not forward any traffic (unicast, multicast, or broadcast) to any other port that is also a protected port on the same switch. Traffic cannot be forwarded between protected ports at Layer 2 (L2); all traffic passing between protected ports must be forwarded through a Layer 3 (L3) device.
+
+14.4.8
+
+
+
+Video - Private VLAN Tutorial and Demonstration	This video and tutorial demonstrates Private VLAN configuration and includes the following:
+
+
+
+Advantages of Private VLANs
+
+Examples of Private VLAN implementation
+
+Types of Private VLAN ports
+
+Configuration of Private VLANS on a 3560 Multilayer switch
+
+Use of the switchport protected command on a 2960 switch
+
+Mitigate DHCP Attacks
+
+
+
+14.5.1
+
+
+
+DHCP Attacks	Two types of DHCP attacks are DHCP starvation and DHCP spoofing. Both attacks are mitigated by implementing DHCP snooping.
+
+
+
+DHCP Starvation Attack
+
+
+
+The goal of the DHCP starvation attack is DoS for connecting clients. DHCP starvation attacks require an attack tool such as Gobbler.
+
+
+
+Gobbler has the ability to look at the entire scope of leasable IP addresses and tries to lease them all. Specifically, it creates DHCP discovery messages with bogus MAC addresses.
+
+
+
+DHCP Spoofing Attack
+
+
+
+A DHCP spoofing attack occurs when a rogue DHCP server is connected to the network and provides false IP configuration parameters to legitimate clients. A rogue server can provide a variety of misleading information: (On cards 63-65).
+
+Wrong default gateway	The rogue server provides an invalid gateway, or its own IP address, to create a man-in-the-middle attack. This may go entirely undetected as the intruder intercepts the data flow through the network and then forwards it on to the real default gateway.
+
+Wrong DNS server	The rogue server provides an incorrect DNS server address that points the user to a nefarious website.
+
+Wrong IP address	The rogue server provides an invalid IP address which effectively creates a DoS attack on the DHCP client.
+
+Click each step for an example and explanation of a DHCP spoofing attack.	
+
+Step 1	Threat Actor Connects Rogue DHCP Server
+
+
+
+A threat actor successfully connects a rogue DHCP server to a switch port on the same subnet and VLANs as the target clients. The goal of the rogue server is to provide clients with false IP configuration information.
+
+
+
+a rogue D H C P server is connected to a switch on a network
+
+DHCP ServerRogue DHCP Server
+
+Step 2	Client Broadcasts DHCP Discovery Messages
+
+
+
+A legitimate client connects to the network and requires IP configuration parameters. Therefore, the client broadcasts a DHCP Discovery request looking for a response from a DHCP server. Both servers will receive the message and respond.
+
+
+
+DHCP ClientDHCP ServerRogue DHCP ServerDHCP DiscoverDHCP DiscoverDHCP DiscoverDHCP DiscoverDHCP DiscoverDHCP DiscoverDHCP DiscoverDHCP Discover
+
+Step 3	Legitimate and Rogue DHCP Reply
+
+
+
+The legitimate DHCP server responds with valid IP configuration parameters. However, the rogue server also responds with a DHCP offer containing IP configuration parameters defined by the threat actor. The client will reply to the first offer received.
+
+
+
+DHCP ClientDHCP ServerRogue DHCP ServerDHCP OfferDHCP OfferDHCP OfferDHCP OfferDHCP OfferDHCP Offer
+
+Step 4	Client Accepts Rogue DHCP Offer
+
+
+
+The rogue offer was received first, and therefore, the client broadcasts a DHCP request accepting the IP parameters defined by the threat actor. The legitimate and rogue server will receive the request.
+
+
+
+DHCP ClientDHCP ServerRogue DHCP ServerDHCP RequestDHCP RequestDHCP RequestDHCP RequestDHCP RequestDHCP RequestDHCP RequestDHCP Request
+
+Step 5	Rogue Server Acknowledges
+
+
+
+The rogue server unicasts a reply to the client to acknowledge its request. The legitimate server will cease communicating with the client.
+
+
+
+DHCP ClientDHCP ServerRogue DHCP ServerDHCP AckDHCP AckDHCP AckDHCP Ack
+
+14.5.2
+
+
+
+DHCP Attacks Mitigation	It is easy to mitigate DHCP starvation attacks by using port security. However, mitigating DHCP spoofing attacks requires more protection.
+
+
+
+For instance, Gobbler uses a unique MAC address for each DHCP request and port security. Port security could be configured to mitigate this. However, Gobbler can also be configured to use the same interface MAC address with a different hardware address for every request. This would render port security ineffective.
+
+
+
+DHCP spoofing attacks can be mitigated using DHCP snooping on trusted ports. DHCP snooping also helps mitigate against DHCP starvation attacks by rate limiting the number of DHCP discovery messages that an untrusted port can receive. DHCP snooping builds and maintains a DHCP snooping binding database that the switch can use to filter DHCP messages from untrusted sources. The DHCP snooping binding table includes the client MAC address, IP address, DHCP lease time, binding type, VLAN number, and interface information on each untrusted switchport or interface.
+
+
+
+Devices under your administrative control, such as switches, routers, and servers, are trusted sources. Any device beyond the firewall or outside your network is an untrusted source. In addition, all access ports are generally treated as untrusted sources. The figure shows an example of trusted and untrusted ports.
+
+
+
+DHCP ClientDHCP ServerRogue DHCP ServerTrusted portUntrusted port
+
+
+
+Note: In a large network, the DHCP binding table may take time to build after it is enabled. For example, it could take 2 days for DHCP snooping to complete the table if DHCP lease time is 4 days.
+
+
+
+When DHCP snooping is enabled on an interface or VLAN, and a switch receives a packet on an untrusted port, the switch compares the source packet information with that held in the DHCP snooping binding table. The switch will deny packets contai
+
+14.5.3
+
+
+
+Steps to Implement DHCP Snooping	Use the following steps to enable DHCP snooping:
+
+
+
+Step 1. Enable DHCP snooping by using the ip dhcp snooping global configuration command.
+
+Step 2. On trusted ports, use the ip dhcp snooping trust interface configuration command.
+
+Step 3. Limit the number of DHCP discovery messages that can be received per second on untrusted ports by using the ip dhcp snooping limit rate interface configuration command.
+
+Step 4. Enable DHCP snooping by VLAN, or by a range of VLANs, by using the ip dhcp snooping vlan global configuration command.
+
+14.5.4
+
+
+
+DHCP Snooping Configuration Example	The reference topology for this DHCP snooping example is shown in the figure. Notice that F0/5 is an untrusted port because it connects to a PC. F0/1 is a trusted port because it connects to the DHCP server.
+
+
+
+192.168.10.10F0/5S1F0/1
+
+DHCP ServerTrusted PortUntrusted Port
+
+
+
+The following is an example of how to configure DHCP snooping on S1. Notice how DHCP snooping is first enabled. Then the upstream interface to the DHCP server is explicitly trusted. Next, the range of FastEthernet ports from F0/5 to F0/24 are untrusted by default, so a rate limit is set to six packets per second. Finally, DHCP snooping is enabled on VLANS 5, 10, 50, 51, and 52.
+
+
+
+S1(config)# ip dhcp snooping
+
+S1(config)# interface f0/1
+
+S1(config-if)# ip dhcp snooping trust
+
+S1(config-if)# exit
+
+S1(config)# interface range f0/5 - 24
+
+S1(config-if-range)# ip dhcp snooping limit rate 6
+
+S1(config-if-range)# exit
+
+S1(config)# ip dhcp snooping vlan 5,10,50-52
+
+S1(config)# end
+
+S1#
+
+
+
+Use the show ip dhcp snooping privileged EXEC command to verify DHCP snooping and show ip dhcp snooping binding to view the clients that have received DHCP information, as shown in the example.
+
+
+
+Note: DHCP snooping is also required by Dynamic ARP Inspection (DAI), which is the next topic.
+
+
+
+S1# show ip dhcp snooping
+
+Switch DHCP snooping is enabled
+
+DHCP snooping is configured on following VLANs:
+
+5,10,50-52
+
+DHCP snooping is operational on following VLANs:
+
+none
+
+DHCP snooping is configured on the following L3 Interfaces:
+
+Insertion of option 82 is enabled
+
+circuit-id default format: vlan-mod-port
+
+remote-id: 0cd9.96d2.3f80 (MAC)
+
+Option 82 on untrusted port is not allowed
+
+Verification of hwaddr field is enabled
+
+Verification of giaddr field is enabled
+
+DHCP snooping trust/rate is configured on the following Interfaces:
+
+Interface Trusted Allow option Rate limit (pps)
+
+  -
+
+14.5.5
+
+
+
+Syntax Checker - Mitigate DHCP Attacks	Implement DHCP snooping for a switch based on the following topology and specified requirements.
+
+
+
+S1F0/1G0/1G0/2
+
+DHCP Server
+
+
+
+You are currently logged into S1. Enable DHCP snooping globally for the switch.
+
+
+
+S1(config)#ip dhcp snooping
+
+
+
+Enter interface configuration mode for g0/1 - 2, trust the interfaces, and return to global configuration mode.
+
+
+
+S1(config)#interface range g0/1 - 2
+
+S1(config-if-range)#ip dhcp snooping trust
+
+S1(config-if-range)#exit
+
+
+
+Enter interface configuration mode for f0/1 - 24, limit the DHCP messages to no more than 10 per second, and return to global configuration mode.
+
+
+
+S1(config)#interface range f0/1 - 24
+
+S1(config-if-range)#ip dhcp snooping limit rate 10
+
+S1(config-if-range)#exit
+
+
+
+Enable DHCP snooping for VLANs 10,20,30-49.
+
+
+
+S1(config)#ip dhcp snooping vlan 10,20,30-49
+
+S1(config)# exit
+
+
+
+Enter the command to verify DHCP snooping.
+
+
+
+S1#show ip dhcp snooping
+
+Switch DHCP snooping is enabled
+
+DHCP snooping is configured on following VLANs:
+
+10,20,30-49
+
+DHCP snooping is operational on following VLANs:
+
+none
+
+DHCP snooping is configured on the following L3 Interfaces:
+
+Insertion of option 82 is enabled
+
+circuit-id default format: vlan-mod-port
+
+remote-id: 0cd9.96d2.3f80 (MAC)
+
+Option 82 on untrusted port is not allowed
+
+Verification of hwaddr field is enabled
+
+Verification of giaddr field is enabled
+
+DHCP snooping trust/rate is configured on the following Interfaces:
+
+Interface Trusted Allow option Rate limit (pps)
+
+   
+
+GigabitEthernet0/1 yes yes unlimited
+
+Custom circuit-ids:
+
+GigabitEthernet0/2 yes yes unlimited
+
+Custom circuit-ids:
+
+FastEthernet0/1 no no 10
+
+Custom circuit-ids:
+
+
+
+Enter the command to verify the current DHCP bindings logged by DHCP snooping
+
+
+
+S1#show ip dhcp snooping binding
+
+MacAddress IpAddress Lease(sec) Type VLAN Interface
+
+ -
+
+Mitigate ARP Attacks
+
+
+
+14.6.1
+
+
+
+ARP Attacks	Recall that hosts broadcast ARP Requests to determine the MAC address of a host with a particular IPv4 address. This is typically done to discover the MAC address of the default gateway. All hosts on the subnet receive and process the ARP Request. The host with the matching IPv4 address in the ARP Request sends an ARP Reply.
+
+
+
+According to the ARP RFC, a client is allowed to send an unsolicited ARP Request called a "gratuitous ARP." When a host sends a gratuitous ARP, other hosts on the subnet store the MAC address and IPv4 address contained in the gratuitous ARP in their ARP tables.
+
+
+
+The problem is that an attacker can send a gratuitous ARP message containing a spoofed MAC address to a switch, and the switch would update its MAC table accordingly. Therefore, any host can claim to be the owner of any IP and MAC address combination they choose. In a typical attack, a threat actor can send unsolicited ARP Replies to other hosts on the subnet with the MAC Address of the threat actor and the IPv4 address of the default gateway.
+
+
+
+There are many tools available on the internet to create ARP man-in-the-middle attacks including dsniff, Cain & Abel, ettercap, Yersinia, and others. IPv6 uses ICMPv6 Neighbor Discovery Protocol for Layer 2 address resolution. IPv6 includes strategies to mitigate Neighbor Advertisement spoofing, similar to the way IPv6 prevents a spoofed ARP Reply.
+
+
+
+ARP spoofing and ARP poisoning are mitigated by implementing Dynamic ARP Inspection (DAI).
+
+Click each step for an example and explanation of ARP spoofing and ARP poisoning.	(On cards 78-80).
+
+Step 1	Normal State with Converged MAC Tables
+
+
+
+Each device has an accurate MAC table with the correct IPv4 and MAC addresses for the other devices on the LAN.
+
+
+
+A network consists of two hosts - P C1 and P C2, a threat actor - connected to a switch connected to a router R 1. P C1 has an IP of 10.0.0.11 and a MAC of BB:BB:BB. The threat actor, P C2, has an IP of 10.0.0.12 and a MAC of CC:CC:CC. R 1 has an IP of 10.0.0.1 and a MAC of AA:AA:AA. Currently, the ARP table on P C1 maps IP address 10.0.0.1 to MAC address AA:AA:AA and IP Address 10.0.0.12 to MAC address CC:CC:CC. The ARP table on P C2 maps IP 10.0.0.1 to MAC address AA:AA:AA and IP address 10.0.0.11 to MAC address BB:BB:BB. The ARP table of R 1 maps IP address 10.0.0.11 to MAC address BB:BB:BB and IP address 10.0.0.12 to MAC address CC:CC:CC.
+
+PC1PC2R1
+
+Note: MAC addresses are shown as 24 bits for simplicity.R1 ARP CachePC1 ARP CachePC2 ARP CacheMAC: CC:CC:CCIP: 10.0.0.12MAC: BB:BB:BBIP: 10.0.0.11MAC: AA:AA:AAIP: 10.0.0.1IP AddressMAC Address10.0.0.1AA:AA:AA10.0.0.11BB:BB:BBIP AddressMAC Address10.0.0.11BB:BB:BB10.0.0.12CC:CC:CCIP AddressMAC Address10.0.0.1AA:AA:AA10.0.0.12CC:CC:CC
+
+Step 2	ARP Spoofing Attack
+
+
+
+The threat actor sends two spoofed gratuitous ARP Replies in an attempt to replace R1 as the default gateway:
+
+
+
+1. The first one informs all devices on the LAN that the threat actor's MAC address (CC:CC:CC) maps to R1's IPv4 address, 10.0.0.1.
+
+
+
+2. The second one informs all devices on the LAN that the threat actor's MAC address (CC:CC:CC) maps to PC1's IPv4 address, 10.0.0.11.
+
+
+
+A network consists of two hosts - P C1 and P C2, a threat actor - connected to a switch connected to a router R 1. P C1 has an IP of 10.0.0.11 and a MAC of BB:BB:BB. The threat actor, P C2, has an IP of 10.0.0.12 and a MAC of CC:CC:CC. R 1 has an IP of 10.0.0.1 and a MAC of AA:AA:AA. Currently, the ARP table on P C1 maps IP address 10.0.0.1 to MAC address AA:AA:AA and IP Address 10.0.0.12 to MAC address CC:CC:CC. The ARP table on P C2 maps IP 10.0.0.1 to MAC address AA:AA:AA and IP address 10.0.0.11 to MAC address BB:BB:BB. The ARP table of R 1 maps IP address 10.0.0.1 to MAC address BB:BB:BB and IP address 10.0.0.12 to MAC address CC:CC:CC. The threat agent has sent two spoofed gratuitous ARP replies telling all devices to map the MAC address of CC:CC:CC to both 10.0.0.1 and 10.0.0.11.
+
+21PC1PC2R1
+
+Note: MAC addresses are shown as 24 bits for simplicityR1 ARP CachePC1 ARP CachePC2 ARP CacheMAC: CC:CC:CCIP: 10.0.0.12MAC: BB:BB:BBIP: 10.0.0.11MAC: AA:AA:AAIP: 10.0.0.1IP AddressMAC Address10.0.0.1AA:AA:AA10.0.0.11BB:BB:BBIP AddressMAC Address10.0.0.11BB:BB:BB10.0.0.12CC:CC:CCIP AddressMAC Address10.0.0.1AA:AA:AA10.0.0.12CC:CC:CC"10.0.0.1 is CC:CC:CC.""10.0.0.11 is CC:CC:CC."
+
+Step 3	ARP Poisoning Attack with Man-in-the-Middle Attack
+
+
+
+R1 and PC1 remove the correct entry for each other's MAC address and replace it with PC2's MAC address. The threat actor has now poisoned the ARP caches of all devices on the subnet. ARP poisoning leads to various man-in-the-middle attacks, posing a serious security threat to the network.
+
+
+
+A network consists of two hosts - P C1 and P C2, a threat actor - connected to a switch connected to a router R 1. P C1 has an IP of 10.0.0.11 and a MAC of BB:BB:BB. The threat actor, P C2, has an IP of 10.0.0.12 and a MAC of CC:CC:CC. R 1 has an IP of 10.0.0.1 and a MAC of AA:AA:AA. The ARP table on P C2 maps IP 10.0.0.1 to MAC address AA:AA:AA and IP address 10.0.0.11 to MAC address BB:BB:BB. The ARP tables on both P C1 and R 1 map IP address 10.0.0.12 to MAC address CC:CC:CC. In addition, P C1 has also mapped 10.0.0.1 to MAC address CC:CC:CC and R 1 has mapped IP address 10.0.0.11 to MAC address CC:CC:CC.
+
+PC1PC2R1
+
+Note: MAC addresses are shown as 24 bits for simplicity.R1 ARP CachePC1 ARP CachePC2 ARP CacheMAC: CC:CC:CCIP: 10.0.0.12MAC: BB:BB:BBIP: 10.0.0.11MAC: AA:AA:AAIP: 10.0.0.1IP AddressMAC Address10.0.0.1AA:AA:AA10.0.0.11BB:BB:BBIP AddressMAC Address10.0.0.11CC:CC:CC10.0.0.12CC:CC:CCIP AddressMAC Address10.0.0.1CC:CC:CC10.0.0.12CC:CC:CC
+
+14.6.2
+
+
+
+Video - ARP Spoofing	
+
+14.6.3
+
+
+
+Dynamic ARP Inspection	In a typical ARP attack, a threat actor can send unsolicited ARP requests to other hosts on the subnet with the MAC Address of the threat actor and the IP address of the default gateway. To prevent ARP spoofing and the resulting ARP poisoning, a switch must ensure that only valid ARP Requests and Replies are relayed.
+
+
+
+Dynamic ARP inspection (DAI) requires DHCP snooping and helps prevent ARP attacks by:
+
+
+
+Not relaying invalid or gratuitous ARP Requests out to other ports in the same VLAN
+
+Intercepting all ARP Requests and Replies on untrusted ports
+
+Verifying each intercepted packet for a valid IP-to-MAC binding
+
+Dropping and logging ARP Requests coming from invalid sources to prevent ARP poisoning
+
+Error-disabling the interface if the configured DAI number of ARP packets is exceeded
+
+14.6.4
+
+
+
+DAI Implementation Guidelines	To mitigate the chances of ARP spoofing and ARP poisoning, follow these DAI implementation guidelines:
+
+
+
+Enable DHCP snooping globally.
+
+Enable DHCP snooping on selected VLANs.
+
+Enable DAI on selected VLANs.
+
+Configure trusted interfaces for DHCP snooping and ARP inspection.
+
+
+
+It is generally advisable to configure all access switch ports as untrusted and to configure all uplink ports that are connected to other switches as trusted.
+
+
+
+The sample topology in the figure identifies trusted and untrusted ports.
+
+
+
+The graphic shows a legend with a Purple square Trusted Port and a red circle Untrusted Port, above that is a LAN diagram showing Dynamic ARP Inspection Trust. The diagram illustrates a LAN network with trusted and untrusted ports. On one interface to the lower left is an attacker on one P C and to the upper left is a regular P C. Both devices are connected to the switch and both have a red circle on the switch port for an untrusted port. To the right of the switch is a router that is also connected to the switch. The router connection has a purple square on the switch that symbolizes a trusted connection for ARP.
+
+PC-AS1R1F0/1F0/2F0/24
+
+Untrusted PortTrusted PortVLAN 10
+
+14.6.5
+
+
+
+DAI Configuration Example	In the previous topology, S1 is connecting two users on VLAN 10. DAI will be configured to mitigate against ARP spoofing and ARP poisoning attacks.
+
+
+
+As shown in the example, DHCP snooping is enabled because DAI requires the DHCP snooping binding table to operate. Next, DHCP snooping and ARP inspection are enabled for the PCs on VLAN10. The uplink port to the router is trusted, and therefore, is configured as trusted for DHCP snooping and ARP inspection.
+
+
+
+S1(config)# ip dhcp snooping
+
+S1(config)# ip dhcp snooping vlan 10
+
+S1(config)# ip arp inspection vlan 10
+
+S1(config)# interface fa0/24
+
+S1(config-if)# ip dhcp snooping trust
+
+S1(config-if)# ip arp inspection trust
+
+
+
+DAI can also be configured to check for both destination or source MAC and IP addresses: (On cards 85-87).
+
+
+
+The ip arp inspection validate {src-mac [dst-mac] [ip]} global configuration command is used to configure DAI to drop ARP packets when the IP addresses are invalid. It can be used when the MAC addresses in the body of the ARP packets do not match the addresses that are specified in the Ethernet header. Notice in the following example how only one command can be configured. Therefore, entering multiple ip arp inspection validate commands overwrites the previous command. To include more than one validation method, enter them on the same command line as shown and verified in the following output.
+
+
+
+S1(config)# ip arp inspection validate ?
+
+dst-mac Validate destination MAC address
+
+ip Validate IP addresses
+
+src-mac Validate source MAC address
+
+S1(config)# ip arp inspection validate src-mac
+
+S1(config)# ip arp inspection validate dst-mac
+
+S1(config)# ip arp inspection validate ip
+
+S1(config)# do show run | include validate
+
+ip arp inspection validate ip
+
+S1(config)# ip arp inspection validate src-mac dst-mac ip
+
+S1(config)# do show run | include validate
+
+ip arp inspection
+
+Destination MAC	Checks the destination MAC address in the Ethernet header against the target MAC address in the ARP packet body
+
+Source MAC	Checks the source MAC address in the Ethernet header against the sender MAC address in the ARP packet body
+
+IP address	Checks the ARP packet body for invalid and unexpected IP addresses including addresses 0.0.0.0, 255.255.255.255, and all IP multicast addresses
+
+14.6.6
+
+
+
+Syntax Checker - Mitigate ARP Attacks	Implement DAI for a switch based on the following topology and specified requirements.
+
+
+
+S1F0/1G0/1G0/2
+
+DHCP Server
+
+
+
+You are currently logged into S1. Enable DHCP snooping globally for the switch.
+
+
+
+S1(config)#ip dhcp snooping
+
+
+
+Enter interface configuration mode for g0/1 - 2, trust the interfaces for both DHCP snooping and DAI, and then return to global configuration mode.
+
+
+
+S1(config)#interface range g0/1 - 2
+
+S1(config-if-range)#ip dhcp snooping trust
+
+S1(config-if-range)#ip arp inspection trust
+
+S1(config-if-range)#exit
+
+
+
+Enable DHCP snooping and DAI for VLANs 10,20,30-49.
+
+
+
+S1(config)#ip dhcp snooping vlan 10,20,30-49
+
+S1(config)#ip arp inspection vlan 10,20,30-49
+
+S1(config)#
+
+
+
+You have successfully configured DAI for the switch.
+
+Mitigate Address Spoofing Attacks
+
+
+
+14.7.1
+
+
+
+Address Spoofing Attacks	MAC addresses and IP addresses can be spoofed for a variety of reasons. Spoofing attacks occur when one host poses as another to receive otherwise inaccessible data, or to circumvent security configurations.
+
+
+
+The method used by switches to populate the MAC address table leads to a vulnerability known as MAC address spoofing. MAC address spoofing attacks occur when attackers alter the MAC address of their host to match another known MAC address of a target host, as shown in the figure. The attacking host then sends a frame throughout the network with the newly-configured MAC address.
+
+
+
+Attacker Spoofs a Server's MAC Address
+
+
+
+AABBCC21
+
+MAC Address:AABBCCAttackerSpoofed MAC Address:AABBCCPort 2Port 1Switch Port
+
+
+
+When the switch receives the frame, it examines the source MAC address. The switch overwrites the current MAC table entry and assigns the MAC address to the new port, as shown in the figure below. It then inadvertently forwards frames destined for the target host to the attacking host.
+
+
+
+Switch Updates MAC Table with Spoofed Address
+
+
+
+21AABBCC
+
+MAC Address:AABBCCAttackerSpoofed MAC Address:AABBCCPort 2Port 1Switch Port
+
+
+
+When the switch changes the MAC table, the target host does not receive any traffic until it sends traffic. When the target host sends traffic, the switch receives and examines the frame, resulting in the MAC table being rewritten once more, realigning the MAC address to the original port. To stop the switch from returning the spoofed MAC address port assignments to their correct state, the attacking host can create a program or script that will constantly send frames to the switch so that the switch maintains the incorrect or spoofed information. There is no security mechanism at Layer 2 that allows a switch to verify the source of MAC addresses, which is what makes it so vulnerable to spoofing.
+
+
+
+IP ad
+
+14.7.2
+
+
+
+Address Spoofing Attack Mitigation	To protect against MAC and IP address spoofing, configure the IP Source Guard (IPSG) security feature. IPSG operates just like DAI, but it looks at every packet, not just the ARP packets. Like DAI, IPSG also requires that DHCP snooping be enabled.
+
+
+
+Specifically, IPSG is deployed on untrusted Layer 2 access and trunk ports. IPSG dynamically maintains per-port VLAN ACLs (PVACL) based on IP-to-MAC-to-switch-port bindings. Initially, all IP traffic on the port is blocked, except for DHCP packets that are captured by the DHCP snooping process. A PVACL is installed on the port when a client receives a valid IP address from the DHCP server or when a static IP source binding is configured by the user.
+
+
+
+This process restricts the client IP traffic to those source IP addresses that are configured in the binding. Any IP traffic with a source IP address other than that in the IP source binding will be filtered out. This filtering limits the ability of a host to attack the network by claiming the IP address of a neighbor host.
+
+
+
+For each untrusted port, there are two possible levels of IP traffic security filtering: (On cards 91-92).
+
+Source IP address filter	IP traffic is filtered based on its source IP address and only IP traffic with a source IP address that matches the IP source binding entry is permitted. When a new IP source entry binding is created or deleted on the port, the PVACL automatically adjusts itself to reflect the IP source binding change.
+
+Source IP and MAC address filter	IP traffic is filtered based on its source IP address in addition to its MAC address. Only IP traffic with source IP and MAC addresses that match the IP source binding entry are permitted.
+
+14.7.3
+
+
+
+Configure IP Source Guard	Examine the IP Source Guard reference topology that is shown in the figure.
+
+
+
+PC-APC-AF0/24192.168.10.10/24F0/2S1R1192.168.10.11/24F0/1
+
+VLAN 10
+
+
+
+IP Source Guard is enabled on untrusted ports using the ip verify source command as shown in the configuration below. Remember that the feature can only be configured on a Layer 2 access or trunk port and that DHCP snooping is required to learn valid IP address and MAC address pairs.
+
+
+
+S1(config)# interface range fastethernet 0/1 - 2
+
+S1(config-if-range)# ip verify source
+
+S1(config-if-range)# end
+
+S1#
+
+
+
+Use the show ip verify source command to verify the IP Source Guard configuration, as shown below. In the example, the F0/1 and F0/2 ports are configured with IP Source Guard. Each interface has one valid DHCP binding
+
+
+
+S1# show ip verify source
+
+Interface Filter-type Filter-mode IP-address Mac-address Vlan
+
+     
+
+F0/1 ip active 192.168.10.10 10
+
+F0/2 ip active 192.168.10.11 10
+
+S1#
+
+14.7.4
+
+
+
+Syntax Checker - Configure IP Source Guard	Use this Syntax Checker to configure IP Source Guard.
+
+
+
+Enable IP source guard on untrusted interfaces F0/1 - 2.
+
+
+
+S1(config)#interface range F0/1 - 2
+
+S1(config-if-range)#ip verify source
+
+
+
+Use the do command from inside global config mode to display the IP source guard settings.
+
+
+
+S1(config-if-range)#do show ip verify source
+
+Interface Filter-type Filter-mode IP-address Mac-address Vlan
+
+     
+
+F0/1 ip active 192.168.10.10 10
+
+F0/2 ip active 192.168.10.11 10
+
+S1(config-if-range)#
+
+
+
+You have successfully configured IP source guard.
+
+Spanning Tree Protocol
+
+
+
+14.8.1
+
+
+
+Spanning Tree Protocol	Spanning Tree Protocol (STP) is a loop-prevention network protocol that allows for redundancy while creating a loop-free Layer 2 topology. IEEE 802.1D is the original IEEE MAC Bridging standard for STP.
+
+
+
+Click Play in the figure to view an animation of STP in action.
+
+
+
+STP Normal Operation
+
+
+
+PC1 sends a broadcast frame.
+
+S2 forwards the broadcast out all ports, except the originating port and the blocked port.
+
+S1 forwards the broadcast out all ports, except the origination port.
+
+S3 receives the frame and forwards it back to S2.
+
+S2 drops the frame because it received it on a blocked port.
+
+Trunk 2
+
+Trunk1
+
+Trunk 3
+
+14.8.2
+
+
+
+STP Recalculation	Click Play in the next figure to view an animation of STP recalculation when a failure occurs.
+
+
+
+STP Compensates for Network Failure
+
+
+
+The trunk link between S2 and S1 has failed.
+
+S2 unblocks the port for Trunk2.
+
+PC1 sends a broadcast frame to S2.
+
+S2 forwards the broadcast out all switch ports, except the originating port and the failed link for Trunk1.
+
+S3 forwards the broadcast out all available switch ports, except the originating port.
+
+S1 forwards the broadcast only out of F0/3.
+
+Trunk 2
+
+Trunk1
+
+Trunk 3
+
+14.8.3
+
+
+
+Layer 2 Loops	Without STP enabled, Layer 2 loops can form, causing broadcast, multicast and unknown unicast frames to loop endlessly. This can bring down a network within a very short amount of time, sometimes in just a few seconds. For example, broadcast frames, such as an ARP Request are forwarded out all of the switch ports, except the original ingress port. This ensures that all devices in a broadcast domain are able to receive the frame. If there is more than one path for the frame to be forwarded out of, an endless loop can result. When a loop occurs, the MAC address table on a switch will constantly change with the updates from the broadcast frames, which results in MAC database instability. This can cause high CPU utilization, which makes the switch unable to forward frames.
+
+
+
+Broadcast frames are not the only type of frames that are affected by loops. Unknown unicast frames sent onto a looped network can result in duplicate frames arriving at the destination device. An unknown unicast frame is when the switch does not have the destination MAC address in its MAC address table and must forward the frame out all ports, except the ingress port.
+
+
+
+Click Play in the figure to view the animation. When the animation pauses, read the text describing the action. The animation will continue after the short pause.
+
+14.8.4
+
+
+
+STP Port Roles	The spanning tree algorithm designates a single switch as the root bridge and uses it as the reference point for all path calculations. In the figure, the root bridge (switch S1) is chosen through an election process. All switches that participate in STP exchange BPDU frames to determine which switch has the lowest bridge ID (BID) on the network. The switch with the lowest BID automatically becomes the root bridge for the spanning tree algorithm calculations.
+
+
+
+Note: For simplicity, assume until otherwise indicated that all ports on all switches are assigned to VLAN 1. The switches are configured with the default PVST+. Each switch has a unique MAC address associated with VLAN 1.
+
+
+
+STP Ports
+
+
+
+F0/1172.17.10.21172.17.10.23172.17.10.22F0/2172.17.10.27F0/3F0/11F0/18F0/6F0/2F0/1F0/2F0/1PC2PC1PC3S3S1S2PC4
+
+Trunk3Trunk1Trunk2Root BridgeRoot PortDesignated PortDesignated PortRoot PortDesignated PortAlternate Port
+
+
+
+A BPDU is a messaging frame that is exchanged by switches for STP. Each BPDU contains a BID that identifies the switch that sent the BPDU. The BID contains a priority value, the MAC address of the sending switch, and an optional extended system ID. The lowest BID value is determined by the combination of these three fields.
+
+
+
+After the root bridge has been determined, the spanning tree algorithm calculates the shortest path to it. Each switch uses the spanning tree algorithm to determine which ports to block. While the spanning tree algorithm determines the best paths to the root bridge for all switch ports in the broadcast domain, traffic is prevented from being forwarded through the network. The spanning tree algorithm considers both path and port costs when determining which ports to block. The path costs are calculated using port cost values associated with port speeds for each switch port along a given path. The sum
+
+Alternate	Alternate or backup ports are configured to be in a blocking state to prevent loops. Alternate ports are selected only on trunk links where neither end is a root port.
+
+Root	Root ports are switch ports that are closest to the root bridge.
+
+Designated	Designated ports are all non-root ports that STP permits to forward traffic on the network. Designated ports are selected on a per-trunk basis. If one end of a trunk is a root port, then the other end is a designated port. All ports on the root bridge are designated ports
+
+The figure above shows the relationship of the port roles in the network to the root bridge and whether they are allowed to forward traffic. In the figure, only one end of Trunk2 is blocked. This allows for faster transition to a forwarding state when a change in the network makes it necessary.	Note: A port that is administratively shut down is referred to as a disabled port.
+
+14.8.5
+
+
+
+STP Root Bridge	As shown in the figure, every spanning tree instance (switched LAN or broadcast domain) has a switch designated as the root bridge. The root bridge serves as a reference point for all spanning tree calculations to determine which redundant paths to block.
+
+
+
+An election process determines which switch becomes the root bridge.
+
+
+
+PC2PC1PC3S3S2F0/1172.17.10.21172.17.10.23172.17.10.22F0/2PC4172.17.10.27F0/3F0/18F0/2F0/1F0/2F0/1F0/11F0/6S1
+
+Trunk3Bridge ID:Priority = 32769MAC Address = 000A00222222Trunk1Trunk2Root BridgeBridge ID:Priority = 24577MAC Address = 000A00333333Bridge ID:Priority = 32769MAC Address = 000A00111111
+
+
+
+The figure below shows the BID fields. The BID is made up of a priority value, an extended system ID, and the MAC address of the switch.
+
+
+
+Bridge ID (BID) Fields
+
+
+
+Bridge PriorityExtendedSystem IDMAC AddressRoot BridgeBridge ID with the Extended System ID4 bits12 bits48 bits
+
+
+
+All switches in the broadcast domain participate in the election process. After a switch boots, it begins to send out BPDU frames every two seconds. These BPDU frames contain the switch BID and the root ID.
+
+
+
+As the switches forward their BPDU frames, switches in the broadcast domain read the root ID information from the BPDU frames. If the root ID from a BPDU that has been received is lower than the root ID on the receiving switch, then the receiving switch updates its root ID, which identifies the adjacent switch as the root bridge. The switch then forwards new BPDU frames with the lower root ID to the other switches. Eventually, the switch with the lowest BID ends up being identified as the root bridge for the spanning tree instance.
+
+
+
+There is a root bridge elected for each spanning tree instance. It is possible to have multiple distinct root bridges. If all ports on all switches are members of VLAN 1, then there is only one spanning tr
+
+14.8.6
+
+
+
+STP Path Cost	When the root bridge has been elected for the spanning tree instance, the spanning tree algorithm starts the process of determining the best paths to the root bridge from all destinations in the broadcast domain. The path information is determined by summing up the individual port costs along the path from the destination to the root bridge. Each "destination" is actually a switch port.
+
+
+
+The default port costs are defined by the speed at which the port operates. As shown in the table, 10 Gb/s Ethernet ports have a port cost of 2, 1 Gb/s Ethernet ports have a port cost of 4, 100 Mb/s Fast Ethernet ports have a port cost of 19, and 10 Mb/s Ethernet ports have a port cost of 100.
+
+
+
+Link Speed and Name
+
+
+
+10 Gb/s
+
+
+
+Cost (Revised IEEE Specification)
+
+
+
+2
+
+
+
+Cost (Previous IEEE Specification)
+
+
+
+1
+
+
+
+
+
+Link Speed and Name
+
+
+
+1 Gb/s
+
+
+
+Cost (Revised IEEE Specification)
+
+
+
+4
+
+
+
+Cost (Previous IEEE Specification)
+
+
+
+1
+
+
+
+
+
+Link Speed and Name
+
+
+
+100 Mb/s
+
+
+
+Cost (Revised IEEE Specification)
+
+
+
+19
+
+
+
+Cost (Previous IEEE Specification)
+
+
+
+10
+
+
+
+
+
+Link Speed and Name
+
+
+
+10 Mb/s
+
+
+
+Cost (Revised IEEE Specification)
+
+
+
+100
+
+
+
+Cost (Previous IEEE Specification)
+
+
+
+100
+
+
+
+
+
+Note: As newer, faster Ethernet technologies become available, the path cost values may change to accommodate the new speeds. The non-linear numbers in the table accommodate some improvements to the older Ethernet standard. The values have changed to accommodate the 10 Gb/s Ethernet standard. To illustrate the continued change associated with high-speed networking, Catalyst 4500 and 6500 switches support a longer path cost method; for example, 10 Gb/s has a 2000 path cost, 100 Gb/s has a 200 path cost, and 1 Tb/s has a 20 path cost.
+
+
+
+Although switch ports have a default port cost associated with them, the port cost is configurable. The ability to configure individual port costs gives the administrator the flexibilit
+
+14.8.7
+
+
+
+Select the Root Bridge	When an administrator wants a specific switch to become a root bridge, the bridge priority value must be adjusted to ensure it is lower than the bridge priority values of all the other switches on the network. There are two different methods to configure the bridge priority value on a Cisco Catalyst switch.
+
+
+
+S2S3S1F0/2F0/2F0/1F0/2F0/1F0/1
+
+Trunk1Trunk2Trunk3
+
+
+
+Refer to the topology above. Click the buttons to view examples of the two methods of configuring bridge priority and how to verify that a bridge is acting as root. (On cards 106-108).
+
+Method 1	To ensure that the switch has the lowest bridge priority value, use the spanning-tree vlan vlan-id root primary command in global configuration mode. The priority for the switch is set to the predefined value of 24,576 or to the highest multiple of 4,096, less than the lowest bridge priority detected on the network.
+
+
+
+If an alternate root bridge is desired, use the spanning-tree vlan vlan-id root secondary global configuration mode command. This command sets the priority for the switch to the predefined value of 28,672. This ensures that the alternate switch becomes the root bridge if the primary root bridge fails. This assumes that the rest of the switches in the network have the default 32,768 priority value defined.
+
+
+
+In this example, S1 has been assigned as the primary root bridge using the spanning-tree vlan 1 root primary command, and S2 has been configured as the secondary root bridge using the spanning-tree vlan 1 root secondary command.
+
+
+
+S1(config)# spanning-tree VLAN 1 root primary
+
+S1(config)# end
+
+
+
+S2(config)# spanning-tree root secondary
+
+S2(config)# end
+
+Method 2	Another method for configuring the bridge priority value is using the spanning-tree vlan vlan-id priority value global configuration mode command. This command gives more granular control over the bridge priority value. The priority value is configured in increments of 4,096 between 0 and 61,440.
+
+
+
+In the example, S3 has been assigned a bridge priority value of 24,576 for VLAN 1 using the spanning-tree vlan 1 priority 24576 command. This is the equivalent value of the root primary setting.
+
+
+
+S3(config)# spanning-tree VLAN 1 priority 24576
+
+Verify Root Bridge	To verify the bridge priority of a switch, use the show spanning-tree command. In example in Method 2, the priority of the switch was set to 24,576. Also notice that the switch is designated as the root bridge for the spanning tree instance.
+
+
+
+S3# show spanning-tree
+
+VLAN0001
+
+Spanning tree enabled protocol ieee
+
+Root ID Priority 24577
+
+Address 00A.0033.3333
+
+This bridge is the root
+
+Hello Time 2 sec Max Age 20 sec Forward Delay 15 sec
+
+Bridge ID Priority 24577 (priority 24576 sys-id-ext 1)
+
+Address 000A.0033.3333
+
+Hello Time 2 sec Max Age 20 sec Forward Delay 15 sec
+
+Aging Time 300
+
+
+
+Interface Role Sts Cost Prio.Nbr Type
+
+     
+
+Fa0/1 Desg FWD 4 128.1 p2p
+
+Fa0/2 Desg FWD 4 128.2 p2p
+
+S3#
+
+14.8.8
+
+
+
+Syntax Checker - Configure and Verify the Root Bridge	Introductory text. Can be a bulleted list of what they'll do or any other appropriate text
+
+
+
+You are logged into S3:
+
+
+
+Configure the priority for VLAN 1 on S3 to 24567.
+
+Enter the end command to return to privileged EXEC mode.
+
+
+
+S3(config)#spanning-tree vlan 1 priority 24576
+
+S3(config)#end
+
+
+
+
+
+You are now logged into S2:
+
+
+
+Configure S2 to be the secondary root for VLAN 1.
+
+Enter the end command to return to privileged EXEC mode.
+
+
+
+S2(config)#spanning-tree vlan 1 root secondary
+
+S2(config)#end
+
+
+
+
+
+You are now logged into S1:
+
+
+
+Configure S1 to be the primary root for VLAN 1.
+
+Enter the end command to return to privileged EXEC mode.
+
+
+
+S1(config)#spanning-tree vlan 1 root primary
+
+S1(config)#end
+
+
+
+Display the current spanning tree status on S1.
+
+
+
+S1#show spanning-tree
+
+VLAN0001
+
+Spanning tree enabled protocol ieee
+
+Root ID Priority 24577
+
+Address 000A.0033.0033
+
+This bridge is the root
+
+Hello Time 2 sec Max Age 20 sec Forward Delay 15 sec
+
+
+
+
+
+Bridge ID Priority 24577 (priority 24576 sys-id-ext 1)
+
+Address 000A.0033.0033
+
+Hello Time 2 sec Max Age 20 sec Forward Delay 15 sec
+
+Aging Time 15 sec
+
+
+
+Interface Role Sts Cost Prio.Nbr Type
+
+     
+
+Fa0/1 Desg FWD 4 128.1 P2p
+
+Fa0/2 Desg FWD 4 128.2 P2p
+
+
+
+S1#
+
+
+
+You have successfully configured and verified the Root Bridge.
+
+14.8.9
+
+
+
+Video - Observe STP Operation	
+
+14.8.10
+
+
+
+Packet Tracer - Investigate STP Loop Prevention	In this Packet Tracer activity, you will complete the following objectives:
+
+
+
+Create and configure a simple three switch network with STP.
+
+View STP operation
+
+Disable STP and view operation again.
+
+14.8.11
+
+
+
+Check Your Understanding - Purpose of STP	Check your understanding of the purpose of STP by choosing the correct answer to the following questions.
+
+1. Which statement describes STP?	STP is a Layer 2 loop prevention protocol for Ethernet LANs.
+
+2. Without STP on the Ethernet LAN, which three types of frames could cause a catastrophic loop in the network? (Choose three.)	Unknown unicast
+
+
+
+Multicast
+
+
+
+Broadcast
+
+3. What device is elected by the Spanning Tree Algorithm? All other switches determine a single least-cost path to this device.	root bridge
+
+Mitigate STP Attacks
+
+
+
+14.9.1
+
+
+
+STP Attack	Threat actors can manipulate the Spanning Tree Protocol (STP) to conduct an attack by spoofing the root bridge and changing the topology of a network. Attackers can make their hosts appear as root bridges; and therefore, capture all traffic for the immediate switched domain.
+
+
+
+To conduct an STP manipulation attack, the attacking host broadcasts STP bridge protocol data units (BPDUs) containing configuration and topology changes that will force spanning-tree recalculations, as shown in the figure. The BPDUs that are sent by the attacking host announce a lower bridge priority in an attempt to be elected as the root bridge.
+
+
+
+Note: These issues can occur when someone adds an Ethernet switch to the network without any malicious intent.
+
+
+
+STP BDPU Priority = 0Root BridgeSTP BDPU Priority = 0ForwardBlockPriority = 8192
+
+
+
+If successful, the attacking host becomes the root bridge, as shown in the figure below, and can now capture a variety of frames that would otherwise not be accessible.
+
+
+
+ForwardBlockRoot Bridge
+
+
+
+This STP attack is mitigated by implementing BPDU Guard on all access ports.
+
+14.9.2
+
+
+
+Mitigating STP Attacks	To mitigate STP manipulation attacks, use the Cisco STP stability mechanisms to enhance the overall performance of the switches and to reduce the time that is lost during topology changes.
+
+
+
+These are the STP stability mechanisms: (On cards 118-121).
+
+
+
+These features enforce the placement of the root bridge in the network and enforce the STP domain borders.
+
+
+
+The figure highlights the ports on which these features should be implemented.
+
+
+
+STP Stability Mechanisms
+
+
+
+S1
+
+PrimaryRoot BridgeSecondaryRoot BridgePortFastBPDU GuardRoot GuardLoop Guard
+
+PortFast	PortFast immediately brings an interface that is configured as an access or trunk port to the forwarding state from a blocking state. This bypasses the listening and learning states. It should be applied to all end-user ports. PortFast should only be configured when there is a host attached to the port, and not another switch.
+
+BPDU Guard	BPDU guard immediately error disables a port that receives a BPDU. It is typically used on PortFast enabled ports. Apply to all end-user ports.
+
+Root Guard	Root guard prevents an inappropriate switch from becoming the root bridge. Root guard limits the switch ports out of which the root bridge may be negotiated. Apply to all ports which should not become root ports.
+
+Loop Guard	Loop guard prevents alternate or root ports from becoming designated ports because of a failure that leads to a unidirectional link. Apply to all ports that are or can become non-designated.
+
+14.9.3
+
+
+
+Configure PortFast	PortFast bypasses the STP listening and learning states to minimize the time that access ports must wait for STP to converge. If PortFast is enabled on a port connecting to another switch, there is a risk of creating a spanning-tree loop.
+
+
+
+PortFast can be enabled on an interface by using the spanning-tree portfast interface configuration command. Alternatively, Portfast can be configured globally on all access ports by using the spanning-tree portfast default global configuration command.
+
+
+
+To verify whether PortFast is enabled globally you can use either the show running-config | begin span command or the show spanning-tree summary command. To verify if PortFast is enabled on an interface, use the show running-config interface type/number command, as shown in the following example. The show spanning-tree interface type/number detail command can also be used for verification.
+
+
+
+Notice the warning messages that are displayed when PortFast is enabled.
+
+
+
+S1(config)# interface fa0/1
+
+S1(config-if)# switchport mode access
+
+S1(config-if)# spanning-tree portfast
+
+%Warning: portfast should only be enabled on ports connected to a single host. Connecting hubs, concentrators, switches, bridges, etc... to this interface when portfast is enabled, can cause temporary bridging loops. Use with CAUTION
+
+%Portfast has been configured on FastEthernet0/1 but will only have effect when the interface is in a non-trunking mode.
+
+S1(config-if)# exit
+
+S1(config)# spanning-tree portfast default
+
+%Warning: this command enables portfast by default on all interfaces. You should now disable portfast explicitly on switched ports leading to hubs, switches and bridges as they may create temporary bridging loops.
+
+S1(config)# exit
+
+S1# show running-config | begin span
+
+spanning-tree mode pvst
+
+spanning-tree portfast default
+
+spanning-tree extend system-id
+
+!
+
+interface
+
+14.9.4
+
+
+
+Configure BPDU Guard	Even though PortFast is enabled, the interface will still listen for BPDUs. Unexpected BPDUs might be accidental, or part of an unauthorized attempt to add a switch to the network.
+
+
+
+If any BPDUs are received on a BPDU Guard enabled port, that port is put into error-disabled state. This means the port is shut down and must be manually re-enabled or automatically recovered through the errdisable recovery cause bpduguard global command.
+
+
+
+BPDU Guard can be enabled on a port by using the spanning-tree bpduguard enable interface configuration command. Alternatively, use the spanning-tree portfast bpduguard default global configuration command to globally enable BPDU guard on all PortFast-enabled ports.
+
+
+
+To display information about the state of spanning tree, use the show spanning-tree summary command. In the example, PortFast default and BPDU Guard are both enabled as the default state for ports that are configured in access mode.
+
+
+
+Note: Always enable BPDU Guard on all PortFast-enabled ports.
+
+
+
+S1(config)# interface fa0/1
+
+S1(config-if)# spanning-tree bpduguard enable
+
+S1(config-if)# exit
+
+S1(config)# spanning-tree portfast bpduguard default
+
+S1(config)# end
+
+S1# show spanning-tree summary
+
+Switch is in pvst mode
+
+Root bridge for: none
+
+Extended system ID is enabled
+
+Portfast Default is enabled
+
+PortFast BPDU Guard Default is enabled
+
+Portfast BPDU Filter Default is disabled
+
+Loopguard Default is disabled
+
+EtherChannel misconfig guard is enabled
+
+UplinkFast is disabled
+
+BackboneFast is disabled
+
+Configured Pathcost method used is short
+
+(output omitted)
+
+S1#
+
+14.9.5
+
+
+
+Syntax Checker -Mitigate STP Attacks	Implement PortFast and BPDU Guard for a switch based on the following topology and specified requirements
+
+
+
+G0/1G0/2F0/1 - F0/24S1
+
+TrunkTrunkTrunkAccess Ports
+
+
+
+You are currently logged into S1. Complete the following steps to implement PortFast and BPDU Guard on all access ports:
+
+
+
+Enter interface configuration mode for fa0/1 - 24.
+
+Configure the ports for access mode.
+
+Return to global configuration mode.
+
+Enable PortFast by default for all access ports.
+
+Enable BPDU Guard by default for all access ports.
+
+
+
+S1(config)#interface range fa0/1 - 24
+
+S1(config-if-range)#switchport mode access
+
+S1(config-if-range)#exit
+
+S1(config)#spanning-tree portfast default
+
+S1(config)#spanning-tree portfast bpduguard default
+
+S1(config)# exit
+
+
+
+Verify that PortFast and BPDU Guard is enabled by default by viewing STP summary information.
+
+
+
+S1#show spanning-tree summary
+
+Switch is in pvst mode
+
+Root bridge for: none
+
+Extended system ID is enabled
+
+Portfast Default is enabled
+
+PortFast BPDU Guard Default is enabled
+
+Portfast BPDU Filter Default is disabled
+
+Loopguard Default is disabled
+
+EtherChannel misconfig guard is enabled
+
+UplinkFast is disabled
+
+BackboneFast is disabled
+
+Configured Pathcost method used is short
+
+(output omitted)
+
+S1#
+
+
+
+You have successfully configured and verified PortFast and BPDU Guard for the switch.
+
+14.9.6
+
+
+
+Configure Root Guard	There are some switches in a network that should never, under any circumstances, become the STP root bridge. Root Guard provides a way to enforce the placement of root bridges in the network by limiting which switch can become the root bridge.
+
+
+
+Root guard is best deployed on ports that connect to switches that should not be the root bridge. If a root-guard-enabled port receives BPDUs that are superior to those that the current root bridge is sending, that port is moved to a root-inconsistent state. This is effectively equal to an STP listening state, and no data traffic is forwarded across that port. Recovery occurs as soon as the offending device ceases to send superior BPDUs.
+
+
+
+Use the spanning-tree guard root interface configuration command to configure root guard on an interface.
+
+
+
+In the figure, D1 is the root bridge. If D1 fails, only D2 switch should become the root bridge. To ensure that S1 never becomes a root bridge, the F0/1 interfaces of D1 and D2 should be enabled for Root guard.
+
+
+
+F0/1F0/1S1D1D2
+
+Root BridgeRoot Guard
+
+
+
+To view Root Guard ports that have received superior BPDUs and are in a root-inconsistent state, use the show spanning-tree inconsistent ports command.
+
+
+
+Note: Root guard may seem unnecessary because an administrator can manually set the bridge priority of a switch to zero. However, this does not guarantee that this switch will be elected as the root bridge. Another switch may still become the root if it also has a priority of zero and a lower MAC address.
+
+14.9.7
+
+
+
+Configure Loop Guard	Traffic on bidirectional links flows in both directions. If for some reason one-direction traffic flow fails, this creates a unidirectional link which can result in a Layer 2 loop. STP relies on continuous reception or transmission of BPDUs based on the port role. The designated port transmits BPDUs, and the non-designated port receives BPDUs. A Layer 2 loop is usually created when an STP port in a redundant topology stops receiving BPDUs and erroneously transitions to the forwarding state.
+
+
+
+The STP Loop Guard feature provides additional protection against Layer 2 loops. If BPDUs are not received on a non-designated Loop Guard-enabled port, the port transitions to a loop-inconsistent blocking state, instead of the listening / learning / forwarding state. Without the Loop Guard feature, the port would assume a designated port role and create a loop.
+
+
+
+As shown here, Loop Guard is enabled on all non-Root Guard ports using the spanning-tree guard loop interface configuration command.
+
+
+
+Note: Loop Guard can also be enabled globally using the spanning-tree loopguard default global configuration command. This enables Loop Guard on all point-to-point links.
+
+
+
+D1S1D2F0/1F0/1
+
+Root BridgeRoot GuardLoop Guard
+
+14.9.8
+
+
+
+Syntax Checker -Configuring Loop Guard	Implement PortFast, BPDU Guard, and Loop guard for a switch.
+
+
+
+Configure S1 using the following instructions:
+
+
+
+Configure PortFast globally for all non-trunking ports on the switch.
+
+Enable BPDU guard globally on all ports with PortFast enabled.
+
+Enable Loop guard globally on all point-to-point links.
+
+Exit global configuration mode.
+
+
+
+S1(config)#spanning-tree portfast default
+
+%Warning: this command enables portfast by default on all interfaces. You should now disable portfast explicitly on switched ports leading to hubs, switches and bridges as they may create temporary bridging loops.
+
+S1(config)#spanning-tree portfast bpduguard default
+
+S1(config)#spanning-tree loopguard default
+
+S1(config)#end
+
+
+
+Verify that PortFast, BPDU guard, and Loop guard are enabled on switch S1.
+
+
+
+S1#show spanning-tree summary
+
+Switch is in pvst mode
+
+Root bridge for: none
+
+Extended system ID is enabled
+
+Portfast Default is enabled
+
+PortFast BPDU Guard Default is enabled
+
+Portfast BPDU Filter Default is disabled
+
+Loopguard Default is enabled
+
+EtherChannel misconfig guard is enabled
+
+UplinkFast is disabled
+
+BackboneFast is disabled
+
+Configured Pathcost method used is short
+
+
+
+Name Blocking Listening Learning Forwarding STP Active
+
+     
+
+VLAN0001 1 0 0 5 6
+
+     
+
+1 vlan 1 0 0 5 6
+
+
+
+S1#
+
+
+
+You have successfully configured and verified PortFast, BPDU guard, and Loop guard.
+
+14.9.9
+
+
+
+Lab - Configure STP Security	In this lab, you will complete the following objectives:
+
+
+
+Part 1: Configure basic switch settings.
+
+Part 2: Configure secure trunks ports.
+
+Part 3: Protect against STP attacks.
+
+Part 4: Configure port security and disable unused ports.
+
+14.9.10
+
+
+
+Packet Tracer - Implement STP Security	In this Packet Tracer, you will complete the following objectives:
+
+
+
+Assign the Central switch as the root bridge.
+
+Secure spanning-tree parameters to prevent STP manipulation attacks.
+
+Enable port security to prevent MAC table overflow attacks.
+
+14.9.11
+
+
+
+Packet Tracer - Layer 2 VLAN Security	In this Packet Tracer, you will complete the following objectives to configure security on Layer 2 switches:
+
+
+
+Configure basic settings.
+
+Configure SSH.
+
+Configure secure trunks and access ports by enabling features including port security, root guard, BPDU guard, loop guard and PVLAN Edge.
+
+Configure DHCP Snooping.
+
+Layer 2 Security Considerations Summary
+
+
+
+14.10.1
+
+
+
+What Did I Learn in this Module?	Layer 2 Security Threats
+
+
+
+Security is implemented at all layers of the OSI model. However, if Layer 2 is disrupted by a cyber attack, all layers above it will be affected. There are a number of attacks that can happen at Layer 2 including MAC table attacks, VLAN attacks, DHCP attacks, ARP attacks, address spoofing attacks, and STP attacks. It is important to protect Layer 2 by always using secure variants of protocols such as SSH, SCP, and SSL. Using out-of-band management whenever possible and creating a dedicated VLAN for management traffic are also means to make successful Layer 2 attacks less likely. In addition, ACLs should be used to filter unwanted access. Port security, DHCP Snooping, DAI, and IP Source Guard are available on Cisco switches to directly mitigate Layer 2 attacks.
+
+
+
+MAC Table Attacks
+
+
+
+Layer 2 switches use MAC addresses to make forwarding decisions. The switch uses a MAC table that maps MAC addresses to switchports. The switch looks for the destination MAC address in the MAC table for the frames that it receives. It then forwards the traffic to the corresponding port. If the switch does not recognize a destination MAC address, it floods the frames for the unknown destination out of all ports except the port from which the frames originated. These are called unknown unicast messages. The switch dynamically learns MAC addresses from the source addresses of the frames that originate on its ports. One type of Layer 2 attack floods the switch with frames with random MAC source addresses. The switch attempts to add all of these frames to the MAC table until the table is full. Subsequent frames are then treated as unknown unicast messages and sent out all but the receiving port. Since these frames are flooded, a threat actor can receive all traffic that is sent on the network. Threat actor tools such as ma
+
+14.10.2
+
+
+
+Module 14 - Layer 2 Security Considerations Quiz	
+
+1. What is the only type of traffic that is forwarded by a PVLAN protected port to other protected ports?	control
+
+2. A network administrator is configuring DAI on a switch with the command ip arp inspection validate src-mac. What is the purpose of this configuration command?	It checks the source MAC address in the Ethernet header against the sender MAC address in the ARP body.
+
+3. What mitigation plan is best for thwarting a DoS attack that is creating a MAC address table overflow?	Enable port security
+
+4. What network attack seeks to create a DoS for clients by preventing them from being able to obtain a DHCP lease?	DHCP starvation
+
+5. When security is a concern, which OSI Layer is considered to be the weakest link in a network system?​	Layer 2
+
+6. If two switches are configured with the same priority and the same extended system ID, what determines which switch becomes the root bridge?	the Layer 2 address with the lowest hexadecimal value
+
+7. Which statement describes the behavior of a switch when the MAC address table is full?	It treats frames as unknown unicast and floods all incoming frames to all ports within the local VLAN.
+
+8. A cybersecurity analyst is using the macof tool to evaluate configurations of switches deployed in the backbone network of an organization. Which type of LAN attack is the analyst targeting during this evaluation?	MAC address table overflow
+
+9. What determines which switch becomes the STP root bridge for a given VLAN?	the lowest bridge ID
+
+10. What action can a network administrator take to help mitigate the threat of VLAN hopping attacks?	Disable automatic trunking negotiation.
+
+11. Which two Cisco solutions help prevent DHCP starvation attacks? (Choose two.)	DHCP snooping 
+
+
+
+Port Security
+
+12. What is the only type of port that an isolated port can forward traffic to on a private VLAN?	a promiscuous port
+
+13. What additional security measure must be enabled along with IP Source Guard to protect against address spoofing?	DHCP snooping

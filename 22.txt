@@ -1,0 +1,330 @@
+
+Network Security Testing Techniques
+
+
+
+22.1.1
+
+
+
+Operations Security	Operations security is concerned with the day-to-day practices necessary to first deploy and later maintain a secure system. All networks are vulnerable to attack if the planning, implementation, operations, and maintenance of the network do not adhere to operational security practices.
+
+
+
+Operations security starts with the planning and implementation process of a network. During these phases, the operations team analyzes designs, identifies risks and vulnerabilities, and makes the necessary adaptations. The actual operational tasks begin after the network is set up and include the continual maintenance of the environment. These activities enable the environment, systems, and applications to continue to run correctly and securely.
+
+
+
+Some security testing techniques are predominantly manual, and others are highly automated. Regardless of the type of testing, the staff that sets up and conducts the security testing should have significant security and networking knowledge in these areas:
+
+
+
+Operating systems
+
+Basic programming
+
+Networking protocols, such as TCP/IP
+
+Network vulnerabilities and risk mitigation
+
+Device hardening
+
+Firewalls
+
+IPSs
+
+22.1.2
+
+
+
+Testing and Evaluating Network Security	The effectiveness of an operations security solution can be tested without waiting for a real threat to take place. Network security testing makes this possible. Network security testing is performed on a network to ensure all security implementations are operating as expected. Typically, network security testing is conducted during the implementation and operational stages, after the system has been developed, installed, and integrated.
+
+
+
+Security testing provides insight into various administrative tasks, such as risk analysis and contingency planning. It is important to document the results of security testing and make them available for staff involved in other IT areas.
+
+
+
+During the implementation stage, security testing is conducted on specific parts of the network. After a network is fully integrated and operational, a Security Test and Evaluation (ST&E) is performed. An ST&E is an examination of the protective measures that are placed on an operational network.
+
+
+
+Objectives of ST&E include the following:
+
+
+
+Uncover design, implementation, and operational flaws that could lead to the violation of the security policy.
+
+Determine the adequacy of security mechanisms, assurances, and device properties to enforce the security policy.
+
+Assess the degree of consistency between the system documentation and its implementation.
+
+
+
+Tests should be repeated periodically and whenever a change is made to the system. For security systems that protect critical information or protect hosts that are exposed to constant threat, security testing should be conducted more frequently.
+
+22.1.3
+
+
+
+Types of Network Tests	After a network is operational, you must access its security status. Many security tests can be conducted to assess the operational status of the network: (On cards 4-10).
+
+
+
+Note: Other tests, including Wardialing and Wardriving, are considered to be legacy, but should still be accounted for in network testing.
+
+Penetration testing	Network penetration tests, or pen testing, simulate attacks from malicious sources. The goal is to determine the feasibility of an attack and possible consequences if one were to occur. Some pen testing may involve accessing a client's premises and using social engineering skills to test their overall security posture.
+
+Network scanning	Includes software that can ping computers, scan for listening TCP ports, and display which types of resources are available on the network. Some scanning software can also detect usernames, groups, and shared resources. Network administrators can use this information to strengthen their networks.
+
+Vulnerability scanning	This includes software that can detect potential weaknesses in the tested systems. These weaknesses can include misconfiguration, blank or default passwords, or potential targets for DoS attacks. Some software allows administrators to attempt to crash the system through the identified vulnerability.
+
+Password cracking	This includes software that is used to test and detect weak passwords that should be changed. Password policies must include guidelines to prevent weak passwords.
+
+Log review	System administrators should review security logs to identify potential security threats. Filtering software to scan lengthy log files should be used to help discover abnormal activity to investigate.
+
+Integrity checkers	An integrity checking system detects and reports on changes in the system. Most of the monitoring is focused on the file system. However, some checking systems can report on login and logout activities.
+
+Virus detection	Virus or antimalware detection software should be used to identify and remove computer viruses and other malware.
+
+22.1.4
+
+
+
+Applying Network Test Results	Network security testing results can be used in several ways:
+
+
+
+To define mitigation activities to address identified vulnerabilities
+
+As a benchmark to trace the progress of an organization in meeting security requirements
+
+To assess the implementation status of system security requirements
+
+To conduct cost and benefit analysis for improvements to network security
+
+To enhance other activities, such as risk assessments, certification and authorization (C&A), and performance improvement efforts
+
+As a reference point for corrective action
+
+Network Security Testing Tools
+
+
+
+22.2.1
+
+
+
+Network Testing Tools	There are many tools available to test the security of systems and networks. Some of these tools are open source while others are commercial tools that require licensing.
+
+
+
+Software tools that can be used to perform network testing include: (On cards 13-20).
+
+
+
+Note: Network testing tools evolve at a rapid pace. The preceding list includes legacy tools, and its intent is to provide an awareness of the different types of tools available.
+
+Nmap/Zenmap	This is used to discover computers and their services on a network, therefore creating a map of the network.
+
+SuperScan	This port scanning software is designed to detect open TCP and UDP ports, determine what services are running on those ports, and to run queries, such as whois, ping, traceroute, and hostname lookups.
+
+SIEM (Security Information Event Management)	This is a technology used in enterprise organizations to provide real time reporting and long-term analysis of security events.
+
+GFI LANguard	This is a network and security scanner which detects vulnerabilities.
+
+Tripwire	This tool assesses and validates IT configurations against internal policies, compliance standards, and security best practices.
+
+Nessus	This is a vulnerability scanning software, focusing on remote access, misconfigurations, and DoS against the TCP/IP stack.
+
+L0phtCrack	This is a password auditing and recovery application.
+
+Metasploit	This tool provides information about vulnerabilities and aids in penetration testing and IDS signature development.
+
+22.2.2
+
+
+
+Nmap and Zenmap	Nmap is a commonly used, low-level scanner that is available to the public. It has an array of excellent features which can be used for network mapping and reconnaissance.
+
+
+
+The basic functionality of Nmap allows the user to accomplish several tasks, as follows: (On cards 22-25).
+
+
+
+Advanced features of Nmap include protocol scanning, known as Layer 3 port scanning. This feature identifies Layer 3 protocol support on a host. Examples of protocols that can be identified include GRE and OSPF.
+
+
+
+While Nmap can be used for security testing, it can also be used for malicious purposes. Nmap has an additional feature that allows it to use decoy hosts on the same LAN as the target host, to mask the source of the scan.
+
+
+
+Nmap has no application layer features and runs on UNIX, Linux, Windows, and OS X. Both console and graphical versions are available. The Nmap program and Zenmap GUI can be downloaded from the internet.
+
+Classic TCP and UDP port scanning	This searches for different services on one host.
+
+Classic TCP and UDP port sweeping	This searches for the same service on multiple hosts.
+
+Stealth TCP and UDP port scans and sweeps	This is similar to classic scans and sweeps, but harder to detect by the target host or IPS.
+
+Remote operating system identification	This is also known as OS fingerprinting.
+
+22.2.3
+
+
+
+SuperScan	SuperScan is a Microsoft Windows port scanning tool. It runs on most versions of Windows and requires administrator privileges.
+
+
+
+SuperScan version 4 has a number of useful features:
+
+
+
+Adjustable scanning speed
+
+Support for unlimited IP ranges
+
+Improved host detection using multiple ICMP methods
+
+TCP SYN scanning
+
+UDP scanning (two methods)
+
+Simple HTML report generation
+
+Source port scanning
+
+Fast hostname resolution
+
+Extensive banner grabbing capabilities
+
+Massive built-in port list description database
+
+IP and port scan order randomization
+
+A selection of useful tools, such as ping, traceroute, and whois
+
+Extensive Windows host enumeration capability
+
+
+
+Tools, such as Nmap and SuperScan, can provide effective penetration testing on a network and determine network vulnerabilities while helping to anticipate possible attack mechanisms. However, network testing cannot prepare a network administrator for every security problem.
+
+22.2.4
+
+
+
+SIEM	Security Information Event Management (SIEM) is a technology used in enterprise organizations to provide real time reporting and long-term analysis of security events. SIEM evolved from two previously separate products: Security Information Management (SIM) and Security Event Management (SEM). SIEM can be implemented as software, integrated with Cisco Identity Services Engine (ISE) or as a managed service.
+
+
+
+SIEM combines the essential functions of SIM and SEM to provide: (On cards 28-31).
+
+
+
+SIEM provides details on the source of suspicious activity, including:
+
+
+
+User information (name, authentication status, location, authorization group, quarantine status)
+
+Device information (manufacturer, model, OS version, MAC address, network connection method, location)
+
+Posture information (device compliance with corporate security policy, antivirus version, OS patches, compliance with mobile device management policy)
+
+
+
+Using this information, network security engineers can quickly and accurately assess the significance of any security event and answer the critical questions:
+
+
+
+Who is associated with this event?
+
+Is it an important user with access to intellectual property or sensitive information?
+
+Is the user authorized to access that resource?
+
+Does the user have access to other sensitive resources?
+
+What kind of device is being used?
+
+Does this event represent a potential compliance issue?
+
+Correlation	Examines logs and events from disparate systems or applications, speeding detection of and reaction to security threats.
+
+Aggregation	Aggregation reduces the volume of event data by consolidating duplicate event records.
+
+Forensic analysis	The ability to search logs and event records from sources throughout the organization provides more complete information for forensic analysis.
+
+Retention	Reporting presents the correlated and aggregated event data in real-time monitoring and long-term summaries.
+
+22.2.5
+
+
+
+Check Your Understanding - Identify Network Security Testing Tools	Check your understanding of network security testing tools by choosing the correct answer to the following questions.
+
+1. Which tool provides information about vulnerabilities and aids in penetration testing and IDS signature development?	Metasploit
+
+2. Which tool discovers computers and services on a computer network, therefore creating a map of the network?	Nmap/Zenmap
+
+3. Which tool is a vulnerability scanning software, focusing on remote access, misconfigurations, and DoS against the TCP/IP stack?	Nessus
+
+Network Security Testing Summary
+
+
+
+22.3.1
+
+
+
+What Did I Learn in this Module?	Network Security Testing Techniques
+
+
+
+Operations security starts with the planning and implementation process of a network. During these phases, the operations team analyzes designs, identifies risks and vulnerabilities, and makes the necessary adaptations. The actual operational tasks begin after the network is set up and include the continual maintenance of the environment. The staff that sets up and conducts the security testing should have significant security and networking knowledge in these areas: device hardening, firewalls, IPSs, operating systems, basic programming, networking protocols, such as TCP/IP, and network vulnerabilities and risk mitigation. An ST&E is an examination of the protective measures that are placed on an operational network. Many security tests can be conducted to assess the operational status of the network and include: penetration testing, network scanning, vulnerability scanning, password cracking, log review, integrity checkers, and virus detection.
+
+
+
+Network Security Testing Tools
+
+
+
+There are many tools available to test the security of systems and networks including: Nmap/Zenmap, SuperScan, SIEM, GFI LANguard, Tripwire, Nessus, L0phtCrack, and Metasploit. Nmap and Zenmap (its graphical frontend) are commonly used and free low-level scanners. SuperScan is also a free Microsoft Windows port scanning tool. Security Information Event Management (SIEM) is a technology used in enterprise organizations to provide real time reporting and long-term analysis of security events. SIEMs provide correlation, aggregation, forensic analysis, and retention.
+
+22.3.2
+
+
+
+Module 22 - Network Security Testing Quiz	
+
+1. Each day, a security analyst spends time examining logs and events from different systems and applications to quickly detect security threats. What function of the Security Information Event Management (SIEM) technology does this action represent?	correlation
+
+2. Which network security tool can detect open TCP and UDP ports on most versions of Microsoft Windows?	SuperScan
+
+3. A security technician is evaluating a new operations security proposal designed to limit access to all servers. What is an advantage of using network security testing to evaluate the new proposal?	Network security testing proactively evaluates the effectiveness of the proposal before any real threat occurs.
+
+4. What information does the SIEM network security management tool provide to network administrators?	real time reporting and analysis of security events
+
+5. What network scanning tool has advanced features that allows it to use decoy hosts to mask the source of the scan?	Nmap
+
+6. A new person has joined the security operations team for a manufacturing plant. What is a common scope of responsibility for this person?	day-to-day maintenance of network security
+
+7. Which security test is appropriate for detecting system weaknesses such as misconfiguration, default passwords, and potential DoS targets?	vulnerability scanning
+
+8. What type of network security test would be used by network administrators for detection and reporting of changes to network systems?	integrity checking
+
+9. Which network security tool allows an administrator to test and detect weak passwords?	L0phtcrack
+
+10. What are two tasks that can be accomplished with the Nmap and Zenmap network tools? (Choose two.)	identification of Layer 3 protocol support on hosts
+
+
+
+TCP and UDP port scanning
+
+11. What type of security test uses simulated attacks to determine possible consequences of a real threat?	penetration testing
+
+12. What function is provided by the Tripwire network security tool?	security policy compliance

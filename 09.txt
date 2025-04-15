@@ -1,0 +1,562 @@
+
+Secure Networks with Firewalls
+
+
+
+9.1.1
+
+
+
+Firewalls	A firewall is a system, or group of systems, that enforces an access control policy between networks.
+
+
+
+Play the animation in the figure to view a firewall in operation.
+
+
+
+Firewall Operation
+
+
+
+Allow traffic from any external address to the web server.
+
+
+
+Allow traffic to FTP server.
+
+
+
+Allow traffic to SMTP server.
+
+
+
+Allow traffic to internal IMAP server.
+
+
+
+Deny all inbound traffic with network addresses matching internal-registered IP addresses.
+
+
+
+Deny all inbound traffic to server from external addresses.
+
+
+
+Deny all inbound ICMP echo request traffic.
+
+
+
+Deny all inbound MS Active Directory queries.
+
+
+
+Deny all inbound traffic to MS SQL server queries. 
+
+
+
+Deny all MS Domain Local Broadcasts.
+
+Click each button to learn more about firewalls.	
+
+Common Firewall Properties	All firewalls share some common properties:
+
+
+
+Firewalls are resistant to network attacks.
+
+
+
+Firewalls are the only transit point between internal corporate networks and external networks because all traffic flows through the firewall.
+
+
+
+Firewalls enforce the access control policy.
+
+Firewall Benefits	There are several benefits of using a firewall in a network:
+
+
+
+They prevent the exposure of sensitive hosts, resources, and applications to untrusted users.
+
+
+
+They sanitize protocol flow, which prevents the exploitation of protocol flaws.
+
+
+
+They block malicious data from servers and clients.
+
+
+
+They reduce security management complexity by off-loading most of the network access control to a few firewalls in the network.
+
+Firewall Limitations	Firewalls also have some limitations:
+
+
+
+A misconfigured firewall can have serious consequences for the network, such as becoming a single point of failure.
+
+
+
+The data from many applications cannot be passed over firewalls securely.
+
+
+
+Users might proactively search for ways around the firewall to receive blocked material, which exposes the network to potential attack.
+
+
+
+Network performance can slow down.
+
+
+
+Unauthorized traffic can be tunneled or hidden as legitimate traffic through the firewall.
+
+9.1.2
+
+
+
+Types of Firewalls	It is important to understand the different types of firewalls and their specific capabilities so that the right firewall is used for each situation.
+
+Packet Filtering (Stateless) Firewall	Packet filtering firewalls are usually part of a router firewall, which permits or denies traffic based on Layer 3 and Layer 4 information. They are stateless firewalls that use a simple policy table look-up that filters traffic based on specific criteria.
+
+
+
+For example, SMTP servers listen to port 25 by default. An administrator can configure the packet filtering firewall to block port 25 from a specific workstation to prevent it from broadcasting an email virus
+
+
+
+The packet filtering (stateless) firewall figure shows the 7 layers of the o s i model with layers 3 and 4 highlighted. Coming out of these two rows are the following: source i p address, destination i p address, protocol source port number, destination port number, synchronize/start (S Y N) packet receipt.
+
+
+
+Layer 7: Application
+
+
+
+Layer 6: Presentation
+
+
+
+Layer 5: Session
+
+
+
+Layer 4: Transport Source IP Address
+
+ Destination IP Address
+
+ Protocol
+
+ Source port number
+
+ Destination port number
+
+ Synchronize/Start (SYN)
+
+ packet receipt
+
+Layer 3: Network
+
+
+
+Layer 2: Data Link
+
+
+
+Layer 1: Physical
+
+Other methods of implementing firewalls include:	
+
+Host-based (server and personal) firewall	A PC or server with firewall software running on it.
+
+Transparent firewall	Filters IP traffic between a pair of bridged interfaces.
+
+Hybrid firewall	A combination of the various firewall types. For example, an application inspection firewall combines a stateful firewall with an application gateway firewall.
+
+9.1.3
+
+
+
+Check Your Understanding - Identify the Type of Firewall	Check your understanding of the types of firewalls by answering the following questions.
+
+1. Which type of firewall filters information at Layers 3, 4, 5, and 7 of the OSI reference model?	Application gateway
+
+2. Which type of firewall is a combination of various firewall types?	Hybrid
+
+3. Which type of firewall is part of a router firewall, permitting or denying traffic based on Layer 3 and Layer 4 information?	Packet filtering
+
+4. Which type of firewall is a PC or server with firewall software running on it?	Host-based
+
+5. Which type of firewall filters IP traffic between a pair of bridged interfaces?	Transparent
+
+9.1.4
+
+
+
+Packet Filtering Firewall Benefits and Limitations	Packet filtering firewalls are usually part of a router firewall, which permits or denies traffic based on Layer 3 and Layer 4 information. They are stateless firewalls that use a simple policy table look-up that filters traffic based on specific criteria, as shown in the figure. For example, SMTP servers listen to port 25 by default. An administrator can configure the packet filtering firewall to block port 25 from a specific workstation to prevent it from broadcasting an email virus.
+
+
+
+Layer 7: Application
+
+
+
+Layer 6: Presentation
+
+
+
+Layer 5: Session
+
+
+
+Layer 4: Transport Source IP Address
+
+ Destination IP Address
+
+ Protocol
+
+ Source port number
+
+ Destination port number
+
+ Synchronize/Start (SYN)
+
+ packet receipt
+
+Layer 3: Network 
+
+
+
+Layer 2: Data Link
+
+
+
+Layer 1: Physical
+
+
+
+There are several advantages of using a packet filtering firewall:
+
+
+
+Packet filters implement simple permit or deny rule sets.
+
+Packet filters have a low impact on network performance.
+
+Packet filters are easy to implement, and are supported by most routers.
+
+Packet filters provide an initial degree of security at the network layer.
+
+Packet filters perform almost all the tasks of a high-end firewall at a much lower cost.
+
+
+
+Packet filters do not represent a complete firewall solution, but they are an important element of a firewall security policy. There are several disadvantages of using a packet filtering firewall:
+
+
+
+Packet filters are susceptible to IP spoofing. Threat actors can send arbitrary packets that meet ACL criteria and pass through the filter.
+
+Packet filters do not reliably filter fragmented packets. Because fragmented IP packets carry the TCP header in the first fragment and packet filters filter on TCP header information, all fragments after the first fragment are passed unconditionally. Decisions to use packet filters assume that the filter of the first fr
+
+9.1.5
+
+
+
+Stateful Firewall Benefits and Limitations	There are several benefits to using a stateful firewall in a network:
+
+
+
+Stateful firewalls are often used as a primary means of defense by filtering unwanted, unnecessary, or undesirable traffic.
+
+Stateful firewalls strengthen packet filtering by providing more stringent control over security.
+
+Stateful firewalls improve performance over packet filters or proxy servers.
+
+Stateful firewalls defend against spoofing and DoS attacks by determining whether packets belong to an existing connection or are from an unauthorized source.
+
+Stateful firewalls provide more log information than a packet filtering firewall.
+
+
+
+Stateful firewalls also present some limitations:
+
+
+
+Stateful firewalls cannot prevent application layer attacks because they do not examine the actual contents of the HTTP connection.
+
+Not all protocols are stateful. For example, UDP and ICMP do not generate connection information for a state table, and, therefore, do not garner as much support for filtering.
+
+It is difficult to track connections that use dynamic port negotiation. Some applications open multiple connections. This requires a whole new range of ports that must be opened to allow this second connection.
+
+Stateful firewalls do not support user authentication.
+
+
+
+Benefits
+
+
+
+Primary means of defense
+
+
+
+Strong packet filtering
+
+
+
+Improved performance over packet filters
+
+
+
+Defends against spoofing and DoS attacks
+
+
+
+Richer data log
+
+
+
+
+
+Limitations
+
+
+
+No Application Layer inspection
+
+
+
+Limited tracking of stateless protocols
+
+
+
+Difficult to defend against dynamic port negotiation
+
+
+
+No authentication support
+
+Firewalls in Network Design
+
+
+
+9.2.1
+
+
+
+Common Security Architectures	Firewall design is primarily about device interfaces permitting or denying traffic based on the source, the destination, and the type of traffic. Some designs are as simple as designating an outside network and inside network, which are determined by two interfaces on a firewall.
+
+
+
+Here are three common firewall designs.
+
+Private and Public	As shown in the figure, the public network (or outside network) is untrusted, and the private network (or inside network) is trusted.
+
+
+
+Typically, a firewall with two interfaces is configured as follows:
+
+
+
+Traffic originating from the private network is permitted and inspected as it travels toward the public network. Inspected traffic returning from the public network and associated with traffic that originated from the private network is permitted.
+
+
+
+Traffic originating from the public network and traveling to the private network is generally blocked.
+
+Demilitarized Zone (DMZ)	A demilitarized zone (DMZ) is a firewall design where there is typically one inside interface connected to the private network, one outside interface connected to the public network, and one DMZ interface, as shown in the figure.
+
+
+
+Traffic originating from the private network is inspected as it travels toward the public or DMZ network. This traffic is permitted with little or no restriction. Inspected traffic returning from the DMZ or public network to the private network is permitted.
+
+
+
+Traffic originating from the DMZ network and traveling to the private network is usually blocked.
+
+
+
+Traffic originating from the DMZ network and traveling to the public network is selectively permitted based on service requirements.
+
+
+
+Traffic originating from the public network and traveling toward the DMZ is selectively permitted and inspected. This type of traffic is typically email, DNS, HTTP, or HTTPS traffic. Return traffic from the DMZ to the public network is dynamically permitted.
+
+
+
+Traffic originating from the public network and traveling to the private network is blocked.
+
+
+
+The demilitarized zone figure shows an internet cloud within a circle labeled public (untrusted). The cloud connects to a firewall. The firewall connects to a circle labeled d m z that has two servers in it as well as a circle labeled private (inside) that has a server and two pc's in it. There is an arrow going between the private circle and the public circle as well as an arrow to the d m z circle. There are arrows going between the d m z circle and the public circle in both directions. There is an arrow going between the d m z into a circle with a line across it indicating no access to the private circle. There is the same type of arrow denying access between the public circle and the private circle.
+
+Private(inside)Public(outside)InternetDMZSelectively permit
+
+Zone-based policy firewalls (ZPF)	Zone-based policy firewalls (ZPFs) use the concept of zones to provide additional flexibility. A zone is a group of one or more interfaces that have similar functions or features. Zones help you specify where a Cisco IOS firewall rule or policy should be applied. In the figure, security policies for LAN 1 and LAN 2 are similar and can be grouped into a zone for firewall configurations. By default, the traffic between interfaces in the same zone is not subject to any policy and passes freely. However, all zone-to-zone traffic is blocked. In order to permit traffic between zones, a policy allowing or inspecting traffic must be configured.
+
+
+
+The only exception to this default deny any policy is the router self zone. The self zone is the router itself and includes all the router interface IP addresses. Policy configurations that include the self zone would apply to traffic destined to and sourced from the router. By default, there is no policy for this type of traffic. Traffic that should be considered when designing a policy for the self zone includes management plane and control plane traffic, such as SSH, SNMP, and routing protocols.
+
+
+
+The zone-based policy firewalls figure shows an internet cloud within a circle labeled public. The cloud connects to a firewall. The firewall connects to a circle labeled d m z that has two servers in it, a circle labeled private lan 1 that has a server and two pc's in it, as well as a circle with a server and two pc's in it labeled private lan 2. There is a textbox with an arrow going to private lan 1 and a separate arrow going to private lan 2 with the words members of the same zone.
+
+DMZInternetPrivate LAN 1PublicPrivate LAN 2Members of the same zone
+
+9.2.2
+
+
+
+Layered Defense	A layered defense uses different types of firewalls that are combined in layers to add depth to the security of an organization. Policies can be enforced between the layers and inside the layers. These policy enforcement points determine whether traffic is forwarded or discarded. For example, traffic that comes in from the untrusted network first encounters a packet filter on the edge router. If allowed by the policy, the traffic goes to the screened firewall or bastion host system that applies more rules to the traffic and discards suspect packets. A bastion host is a hardened computer that is typically located in the DMZ. Then the traffic goes to an interior screening router. The traffic moves to the internal destination host only after successfully passing through all policy enforcement points between the outside router and the inside network. This type of DMZ setup is called a screened subnet configuration.
+
+
+
+A layered defense approach is not all that is needed to ensure a safe internal network. A network administrator must consider many factors when building a complete in-depth defense:
+
+
+
+Firewalls typically do not stop intrusions that come from hosts within a network or zone.
+
+Firewalls do not protect against rogue access point installations.
+
+Firewalls do not replace backup and disaster recovery mechanisms resulting from attack or hardware failure.
+
+Firewalls are no substitute for informed administrators and users.
+
+
+
+Considerations for Layered Network Defense
+
+
+
+1. Network Core security- Protects against malicious software and traffic anomalies, enforces network policies, and ensures survivability
+
+
+
+2. Perimeter security- Secures boundaries between zones
+
+
+
+3. Communications security- Provides information assurance
+
+
+
+4. Endpoint security- Provides identity and device security policy compliance
+
+
+
+This partial list of best pra
+
+9.2.3
+
+
+
+Check Your Understanding - Network Security Design Concepts	Check your understanding of firewalls in network design by answering the following questions.
+
+1. Which network security design typically uses one inside interface, one outside interface, and one DMZ interface?	demilitarized
+
+2. Which security design uses different types of firewalls and security measures that are combined at different areas of the network to add depth to the security of an organization ?	layered defense
+
+3. Which three statements describe trusted and untrusted areas of the network? (Choose three.)	The public internet is generally considered untrusted.
+
+
+
+Internal networks, except the DMZ, are considered trusted.
+
+
+
+In a ZPF network, traffic that moves within zones is generally considered trusted.
+
+4. Which network design groups interfaces into zones with similar functions or features?	ZPF
+
+5. What are two best practices when implementing firewall security policies?	Disable unnecessary network services.
+
+9.2.4
+
+
+
+Packet Tracer - Identify Packet Flow	In this Packet Tracer activity, you will observe packet flow in a LAN and WAN topology. You will also observe how the packet flow path may change when there is a change in the network topology.
+
+
+
+Identify Packet Flow
+
+Identify Packet Flow
+
+Firewall Technologies Summary
+
+
+
+9.3.1
+
+
+
+What Did I Learn in this Module?	Secure Networks with Firewalls
+
+
+
+There are several different types of firewalls. Packet filtering (stateless) firewalls provide Layer 3 and sometimes Layer 4 filtering. A stateful inspection firewall allows or blocks traffic based on state, port, and protocol. Application gateway firewalls (proxy firewall) filter information at Layers 3, 4, 5, and 7. Next-generation firewalls provide additional services beyond application gateways such as Integrated intrusion prevention, application awareness and control to see and block risky apps, access to future information feeds, and techniques to address evolving security threats.
+
+
+
+
+
+Firewalls in Network Designs
+
+
+
+Common security architectures define the boundaries of traffic entering and leaving the network. When looking at a topology that has access to outside or public networks, you should be able to determine the security architecture. Some designs are as simple as designating an outside network and inside network which are determined by two interfaces on a firewall. Networks that require public access to services will often include a DMZ that the public can access, while strictly blocking access to the inside network. ZPFs use the concept of zones to provide additional flexibility. A zone is a group of one or more interfaces that have similar functions, features, and security requirements. A layered security approach uses firewalls and other security measures to provide security at different functional layers of the network.
+
+9.3.2 
+
+
+
+Module 9 - Firewall Technologies Quiz	
+
+1. What is one benefit of using a next-generation firewall rather than a stateful firewall?	Integrated use of an intrusion prevention system (IPS)
+
+2. Which three layers of the OSI model include information that is commonly inspected by a stateful firewall? (Choose three.)	Layer 4
+
+
+
+Layer 3
+
+
+
+Layer 5
+
+3. Which statement is a characteristic of a packet filtering firewall?	They are susceptible to IP spoofing.
+
+4. Which type of firewall is supported by most routers and is the easiest to implement?	packet filtering firewall
+
+5. Which type of traffic is usually blocked when implementing a demilitarized zone?	traffic originating from the DMZ network and traveling to the private network.
+
+6. What are two characteristics of an application gateway firewall? (Choose two.)	Performs most filtering and firewall control in software.
+
+
+
+Analyzes traffic at Layers 3, 4, 5 and 7 of the OSI model.
+
+7. Which type of firewall generally has a low impact on network performance?	stateless firewall
+
+8. Which type of firewall is commonly part of a router firewall and allows or blocks traffic based on Layer 3 or 4 information?	packet filtering firewall
+
+9. How does a firewall handle traffic that is originating from the DMZ network and traveling to a private network?	Traffic is usually blocked when it is originating from the DMZ network and traveling to a private network.
+
+10. Which two protocols are stateless and do not generate connection information needed to build a state table? (Choose two.)	ICMP
+
+
+
+UDP
+
+11. What are two benefits of implementing a firewall in a network? (Choose two.)	A firewall will sanitize protocol flow.
+
+
+
+A firewall will reduce security management complexity.
+
+12. When implementing a ZPF, which statement describes a zone?	A zone is a group of one or more interfaces that have similar functions or features.

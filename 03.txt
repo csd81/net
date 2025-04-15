@@ -1,0 +1,1064 @@
+
+Defending the Network
+
+
+
+3.1.1
+
+
+
+Network Security Professionals	Organizations experience productivity loss when their networks are slow or unresponsive. Business goals and profits are negatively impacted by data loss and data corruption. Therefore, from a business perspective, it is necessary to minimize the effects of hackers with bad intentions.
+
+
+
+Network security professionals are responsible for maintaining data assurance for an organization and ensuring the integrity and confidentiality of information. Ironically, hacking has had the unintended effect of creating a high demand for network security professionals. As a result of increasing hacker exploits, the sophistication of hacker tools, and because of government legislation, network security solutions developed rapidly in the 1990s, creating new job opportunities in the field of network security.
+
+
+
+Security specialist job roles within an enterprise include Chief Information Officer (CIO), Chief Information Security Officer (CISO), Security Operations (SecOps) Manager, Chief Security Officer (CSO), Security Manager, and Network Security Engineer. Regardless of job titles, network security professionals must always stay one step ahead of the hackers:
+
+
+
+They must constantly upgrade their skill set to keep abreast of the latest threats.
+
+
+
+They must attend training and workshops.
+
+
+
+They must subscribe to real-time feeds regarding threats.
+
+
+
+They must peruse security websites on a daily basis.
+
+
+
+They must maintain familiarity with network security organizations. These organizations often have the latest information on threats and vulnerabilities.
+
+
+
+The Cyber Security Education organization describes a number of Cyber Security careers and provides resources that can help prepare you for those careers.
+
+
+
+Note: Relative to other technology professions, network security has a very steep learning curve and requires a commitment to continuous p
+
+3.1.2
+
+
+
+Network Intelligence Communities	To effectively protect a network, security professionals must stay informed about threats and vulnerabilities as they evolve. There are many security organizations which provide network intelligence. They provide resources, workshops, and conferences to help security professionals. These organizations often have the latest information on threats and vulnerabilities.
+
+
+
+The table lists a few important network security organizations.
+
+
+
+To remain effective, a network security professional must:
+
+
+
+Keep abreast of the latest threats - This includes subscribing to real-time feeds regarding threats, routinely perusing security-related websites, following security blogs and podcasts, and more.
+
+
+
+Continue to upgrade skills - This includes attending security-related training, workshops, and conferences.
+
+
+
+Note: Network security has a very steep learning curve and requires a commitment to continuous professional development.
+
+SANS	SysAdmin, Audit, Network, Security (SANS) Institute resources are largely free upon request and include:
+
+
+
+The Internet Storm Center - the popular internet early warning system
+
+
+
+NewsBites, the weekly digest of news articles about computer security.
+
+
+
+@RISK, the weekly digest of newly discovered attack vectors, vulnerabilities with active exploits, and explanations of how recent attacks worked
+
+
+
+Flash security alerts
+
+
+
+Reading Room - more than 1,200 award-winning, original research papers.
+
+
+
+SANS also develops security courses.
+
+Mitre	The Mitre Corporation maintains a list of common vulnerabilities and exposures (CVE) used by prominent security organizations making it easier for them to share data. The CVE serves as a dictionary of common names (i.e., CVE Identifiers) for known cybersecurity vulnerabilities.
+
+FIRST	Forum of Incident Response and Security Teams (FIRST) is a security organization that brings together a variety of computer security incident response teams from government, commercial, and educational organizations to foster cooperation and coordination in information sharing, incident prevention and rapid reaction.
+
+SecurityNewsWire	A security news portal that aggregates the latest breaking news pertaining to alerts, exploits, and vulnerabilities.
+
+(ISC)2	International Information Systems Security Certification Consortium (ISC2) provides vendor neutral education products and career services to more than 75,000+ industry professionals in more than 135 countries.
+
+CIS	The Center for Internet Security (CIS) is a focal point for cyber threat prevention, protection, response, and recovery for state, local, tribal, and territorial (SLTT) governments through the Multi-State Information Sharing and Analysis Center (MS-ISAC). The MS-ISAC offers 24x7 cyber threat warnings and advisories, vulnerability identification, and mitigation and incident response.
+
+Keep abreast of the latest threats	This includes subscribing to real-time feeds regarding threats, routinely perusing security-related websites, following security blogs and podcasts, and more.
+
+Continue to upgrade skills	This includes attending security-related training, workshops, and conferences.
+
+3.1.3
+
+
+
+Network Security Certifications	Hundreds of thousands of network security-related jobs go unfilled each year. The demand for network security professionals greatly outstrips the number of qualified applicants. Obtaining recognized network security certifications greatly enhances your qualifications for these positions. Numerous certifications exist. Certifications for network security professionals are offered by the following organizations:
+
+
+
+Global Information Assurance Certification (GIAC)
+
+
+
+International Information System Security Certification Consortium (ISC)2
+
+
+
+Information Systems Audit and Control Association (ISACA)
+
+
+
+International Council of E-Commerce Consultants (EC-Council)
+
+
+
+Certified Wireless Security Professional (CWSP)
+
+
+
+Cisco has replaced the Cisco Certified Network Associate Security (210-260 IINS) certification with a new CCNP Security certification. This certification consists of two exams, a security core exam, and a concentration exam. Only one concentration exam is required. The Implementing and Operating Cisco Security Core Technologies (350-701 SCOR) exam serves as a gateway to both CCNP and CCIE Security certifications. It also provides security core certification. The core exam covers security concepts, threats, and mitigation techniques and technologies. The specializations place in-depth focus on specific Cisco security technologies. The Cisco Certified Specialist security concentration exams are as follows:
+
+
+
+300-710 SNCF - Network Security Firepower
+
+
+
+300-715 SISE - Implementing and Configuring Cisco Identity Services Engine
+
+
+
+300-720 SESA - Securing Email with Cisco Email Security Appliance
+
+
+
+300-725 SWSA - Securing the Web with Cisco Web Security Appliance
+
+
+
+300-730 SVPN - Implementing Secure Solutions with Virtual Private Networks
+
+
+
+300-735 SAUTO - Automating and Programming Cisco Security Solutions
+
+
+
+There are many ways to pre
+
+3.1.4
+
+
+
+Communications Security: CIA	Information security deals with protecting information and information systems from unauthorized access, use, disclosure, disruption, modification, or destruction. The CIA Triad serves as a conceptual foundation for the field.
+
+
+
+CIA Triad
+
+
+
+As shown in the figure, the CIA triad consists of three components of information security:
+
+
+
+Confidentiality - Only authorized individuals, entities, or processes can access sensitive information.
+
+
+
+Integrity - This refers to the protection of data from unauthorized alteration.
+
+
+
+Availability - Authorized users must have uninterrupted access to the network resources and data that they require.
+
+
+
+Network data can be encrypted (made unreadable to unauthorized users) using various cryptography applications. The conversation between two IP phone users can be encrypted. The files on a computer can also be encrypted. These are just a few examples. Cryptography can be used almost anywhere that there is data communication. In fact, the trend is toward all communication being encrypted.
+
+Confidentiality	Only authorized individuals, entities, or processes can access sensitive information.
+
+Integrity	This refers to the protection of data from unauthorized alteration.
+
+Availability	Authorized users must have uninterrupted access to the network resources and data that they require.
+
+Network Security Policies
+
+
+
+3.2.1
+
+
+
+Network Security Domains	It is vital for network security professionals to understand the reasons for network security. They must also be familiar with the organizational requirements for network security as embodied by the 14 network security domains.
+
+
+
+Domains provide a framework for discussing network security and understanding the operational needs that should be addressed by each organization.
+
+
+
+There are 14 network security domains specified by the International Organization for Standardization (ISO)/International Electrotechnical Commission (IEC). Described by ISO/IEC 27001, these 14 domains serve to organize, at a high level, the vast realm of information and activities under the umbrella of network security. These domains have some significant parallels with domains defined by the Certified Information Systems Security Professional (CISSP) certification.
+
+
+
+The 14 domains are intended to serve as a common basis for developing organizational security standards and effective security management practices. They also help to facilitate communication between organizations.
+
+
+
+These 14 domains provide a convenient separation of the elements of network security. While it is not important to memorize these 14 domains, it is important to be aware of their existence and formal declaration by the ISO. In the ISO 27001 standard these are known as the 14 control sets of Annex A. They will serve as a useful reference in your work as a network security professional.
+
+
+
+The table below gives a brief description of each domain.
+
+Information Security Policies	This annex is designed to ensure that security policies are created, reviewed, and maintained.
+
+Organization of Information Security	This is the governance model set out by an organization for information security. It assigns responsibilities for information security tasks within an organization.
+
+Human Resources Security	This addresses security responsibilities relating to employees joining, moving within, and leaving an organization.
+
+Asset Management	This concerns the way that organizations create an inventory of and classification scheme for information assets.
+
+Access Control	This describes the restriction of access rights to networks, systems, applications, functions, and data.
+
+Cryptography	This concerns data encryption and the management of sensitive information to protect confidentiality, integrity, and availability of data.
+
+Physical and Environmental Security	This describes the protection of the physical computer facilities and equipment within an organization.
+
+Operations Security	This describes the management of technical security controls in systems and networks including malware defenses, data backup, logging and monitoring, vulnerability management, and audit considerations. This domain is also concerned with the integrity of software that is used in business operations.
+
+Communications Security	This concerns the security of data as it is communicated on networks, both within an organization or between and organization and third parties such as customers or suppliers.
+
+System Acquisition, Development, and Maintenance	This ensures that information security remains a central concern in an organization's processes across the entire lifecycle, in both private and public networks.
+
+Supplier Relationships	This concerns the specification of contractual agreements that protect an organization's information and technology assets that are accessible by third parties that provide supplies and services to the organization.
+
+Information Security Incident Management	This describes how to anticipate and respond to information security breaches.
+
+Business Continuity Management	This describes the protection, maintenance, and recovery of business-critical processes and systems.
+
+Compliance	This describes the process of ensuring conformance with information security policies, standards, and regulations.
+
+3.2.2
+
+
+
+Business Policies	Business policies are the guidelines that are developed by an organization to govern its actions. The policies define standards of correct behavior for the business and its employees. In networking, policies define the activities that are allowed on the network. This sets a baseline of acceptable use. If behavior that violates business policy is detected on the network, it is possible that a security breach has occurred.
+
+
+
+An organization may have several guiding policies, as listed in the table.
+
+Company policies	These policies establish the rules of conduct and the responsibilities of both employees and employers.
+
+
+
+Policies protect the rights of workers as well as the business interests of employers.
+
+
+
+Depending on the needs of the organization, various policies and procedures establish rules regarding employee conduct, attendance, dress code, privacy and other areas related to the terms and conditions of employment.
+
+Employee policies	These policies are created and maintained by human resources staff to identify employee salary, pay schedule, employee benefits, work schedule, vacations, and more.
+
+
+
+They are often provided to new employees to review and sign.
+
+Security policies	These policies identify a set of security objectives for a company, define the rules of behavior for users and administrators, and specify system requirements.
+
+
+
+These objectives, rules, and requirements collectively ensure the security of a network and the computer systems in an organization.
+
+
+
+Much like a continuity plan, a security policy is a constantly evolving document based on changes in the threat landscape, vulnerabilities, and business and employee requirements.
+
+3.2.3
+
+
+
+Security Policy	A comprehensive security policy has a number of benefits, including the following:
+
+
+
+Demonstrates an organization's commitment to security
+
+
+
+Sets the rules for expected behavior
+
+
+
+Ensures consistency in system operations, software and hardware acquisition and use, and maintenance
+
+
+
+Defines the legal consequences of violations
+
+
+
+Gives security staff the backing of management
+
+
+
+Security policies are used to inform users, staff, and managers of an organization's requirements for protecting technology and information assets. A security policy also specifies the mechanisms that are needed to meet security requirements and provides a baseline from which to acquire, configure, and audit computer systems and networks for compliance.
+
+
+
+The table lists policies that may be included in a security policy.
+
+
+
+One of the most common security policy components is an AUP. This can also be referred to as an appropriate use policy. This component defines what users are allowed and not allowed to do on the various system components. This includes the type of traffic that is allowed on the network. The AUP should be as explicit as possible to avoid misunderstanding.
+
+
+
+For example, an AUP might list specific websites, newsgroups, or bandwidth-intensive applications that are prohibited from being accessed by company computers or from the company network. Every employee should be required to sign an AUP, and the signed AUPs should be retained for the duration of employment.
+
+Identification and authentication policy	Specifies authorized persons that can have access to network resources and identity verification procedures.
+
+Password policies	Ensures passwords meet minimum requirements and are changed regularly.
+
+Acceptable Use Policy (AUP)	Identifies network applications and uses that are acceptable to the organization. It may also identify ramifications if this policy is violated.
+
+Remote access policy	Identifies how remote users can access a network and what is accessible via remote connectivity.
+
+Network maintenance policy	Specifies network device operating systems and end user application update procedures.
+
+Incident handling procedures	Describes how security incidents are handled.
+
+3.2.4
+
+
+
+BYOD Policies	Many organizations must now also support Bring Your Own Device (BYOD). This enables employees to use their own mobile devices to access company systems, software, networks, or information. BYOD provides several key benefits to enterprises, including increased productivity, reduced IT and operating costs, better mobility for employees, and greater appeal when it comes to hiring and retaining employees.
+
+
+
+However, these benefits also bring an increased information security risk because BYOD can lead to data breaches and greater liability for the organization.
+
+
+
+A BYOD security policy should be developed to accomplish the following:
+
+
+
+Specify the goals of the BYOD program.
+
+
+
+Identify which employees can bring their own devices.
+
+
+
+Identify which devices will be supported.
+
+
+
+Identify the level of access employees are granted when using personal devices.
+
+
+
+Describe the rights to access and activities permitted to security personnel on the device.
+
+
+
+Identify which regulations must be adhered to when using employee devices.
+
+
+
+Identify safeguards to put in place if a device is compromised.
+
+
+
+The table lists BYOD security best practices to help mitigate BYOD vulnerabilities.
+
+Password protected access	Use unique passwords for each device and account.
+
+Manually control wireless connectivity	Turn off Wi-Fi and Bluetooth connectivity when not in use. Connect only to trusted networks.
+
+Keep updated	Always keep the device OS and other software updated. Updated software often contains security patches to mitigate against the latest threats or exploits.
+
+Back up data	Enable backup of the device in case it is lost or stolen.
+
+Enable "Find my Device"	Subscribe to a device locator service with remote wipe feature.
+
+Provide antivirus software	Provide antivirus software for approved BYOD devices.
+
+Use Mobile Device Management (MDM) software	MDM software enables IT teams to implement security settings and software configurations on all devices that connect to company networks.
+
+3.2.5
+
+
+
+Regulatory and Standards Compliance	There are also external regulations regarding network security. Network security professionals must be familiar with the laws and codes of ethics that are binding on Information Systems Security (INFOSEC) professionals.
+
+
+
+Many organizations are mandated to develop and implement security policies. Compliance regulations define what organizations are responsible for providing and the liability if they fail to comply. The compliance regulations that an organization is obligated to follow depend on the type of organization and the data that the organization handles. Specific compliance regulations will be discussed later in the course.
+
+Security Tools, Platforms, and Services
+
+
+
+3.3.1
+
+
+
+The Security Onion and The Security Artichoke	There are two common analogies that are used to describe a defense-in-depth approach.
+
+
+
+Security Onion
+
+
+
+A common analogy used to describe a defense-in-depth approach is called "the security onion." As illustrated in figure, a threat actor would have to peel away at a network's defenses layer by layer in a manner similar to peeling an onion. Only after penetrating each layer would the threat actor reach the target data or system.
+
+
+
+Note: The security onion described on this page is a way of visualizing defense-in-depth. This is not to be confused with the Security Onion suite of network security tools.
+
+
+
+
+
+Security Artichoke
+
+
+
+The changing landscape of networking, such as the evolution of borderless networks, has changed this analogy to the "security artichoke", which benefits the threat actor.
+
+
+
+As illustrated in the figure, threat actors no longer have to peel away each layer. They only need to remove certain "artichoke leaves." The bonus is that each "leaf" of the network may reveal sensitive data that is not well secured.
+
+
+
+For example, it's easier for a threat actor to compromise a mobile device than it is to compromise an internal computer or server that is protected by layers of defense. Each mobile device is a leaf. And leaf after leaf, it all leads the hacker to more data. The heart of the artichoke is where the most confidential data is found. Each leaf provides a layer of protection while simultaneously providing a path to attack.
+
+
+
+Not every leaf needs to be removed in order to get at the heart of the artichoke. The hacker chips away at the security armor along the perimeter to get to the "heart" of the enterprise.
+
+
+
+While internet-facing systems are usually very well protected and boundary protections are typically solid, persistent hackers, aided by a mix of skill and luck, do eventually find a gap in that hard-cor
+
+3.3.2
+
+
+
+Security Testing Tools	Ethical hacking involves using many different types of tools to test the network and end devices. To validate the security of a network and its systems, many network security testing tools have been developed. Penetration testing involves the use of hacker techniques and tools to evaluate the strength of network security measures. However, many of these tools can also be used by threat actors for exploitation.
+
+
+
+Threat actors have also created various hacking tools. These tools are explicitly written for nefarious reasons. Cybersecurity personnel must also know how to use these tools when performing network penetration tests.
+
+
+
+Explore the categories of common network penetration testing tools. Notice how some tools are used by white hats and black hats. Keep in mind that the list is not exhaustive as new tools are continually being developed.
+
+
+
+Note: Many of these tools are UNIX or Linux based; therefore, a security professional should have a strong UNIX and Linux background.
+
+password crackers	Passwords are the most vulnerable security threat. Password cracking tools are often referred to as password recovery tools and can be used to crack or recover the password. This is accomplished either by removing the original password, after bypassing the data encryption, or by outright discovery of the password. Password crackers repeatedly make guesses in order to crack the password and access the system. Examples of password cracking tools include John the Ripper, Ophcrack, L0phtCrack, THC Hydra, RainbowCrack, and Medusa.
+
+wireless hacking tools	Wireless networks are more susceptible to network security threats. Wireless hacking tools are used to intentionally hack into a wireless network to detect security vulnerabilities. Examples of wireless hacking tools include Aircrack-ng, Kismet, InSSIDer, KisMAC, Firesheep, and NetStumbler.
+
+network scanning and hacking tools	Network scanning tools are used to probe network devices, servers, and hosts for open TCP or UDP ports. Examples of scanning tools include Nmap, SuperScan, Angry IP Scanner, and NetScanTools.
+
+packet crafting tools	Packet crafting tools are used to probe and test a firewall's robustness using specially crafted forged packets. Examples of such tools include Hping, Scapy, Socat, Yersinia, Netcat, Nping, and Nemesis.
+
+packet sniffers	Packet sniffers tools are used to capture and analyze packets within traditional Ethernet LANs or WLANs. Tools include Wireshark, Tcpdump, Ettercap, Dsniff, EtherApe, Paros, Fiddler, Ratproxy, and SSLstrip.
+
+rootkit detectors	A rootkit detector is a directory and file integrity checker used by white hats to detect installed root kits. Example tools include AIDE, Netfilter, and PF: OpenBSD Packet Filter.
+
+fuzzers to search vulnerabilities	Fuzzers are tools used by threat actors when attempting to discover a computer system's security vulnerabilities. Examples of fuzzers include Skipfish, Wapiti, and W3af.
+
+forensic tools	White hat hackers use forensic tools to sniff out any trace of evidence existing in a particular computer system. Example of tools include Sleuth Kit, Helix, Maltego, and Encase.
+
+debuggers	Debugger tools are used by black hats to reverse engineer binary files when writing exploits. They are also used by white hats when analyzing malware. Debugging tools include GDB, WinDbg, IDA Pro, and Immunity Debugger.
+
+hacking operating systems	Hacking operating systems are specially designed operating systems preloaded with tools and technologies optimized for hacking. Examples of specially designed hacking operating systems include Kali Linux, SELinux, Knoppix, Parrot OS, and BackBox Linux.
+
+encryption tools	These tools safeguard the contents of an organization's data when it is stored or transmitted. Encryption tools use algorithm schemes to encode the data to prevent unauthorized access to the data. Examples of these tools include VeraCrypt, CipherShed, Open SSH, OpenSSL, OpenVPN, and Stunnel.
+
+vulnerability exploitation tools	These tools identify whether a remote host is vulnerable to a security attack. Examples of vulnerability exploitation tools include Metasploit, Core Impact, Sqlmap, Social Engineer Tool Kit, and Netsparker.
+
+vulnerability scanners	These tools scan a network or system to identify open ports. They can also be used to scan for known vulnerabilities and scan VMs, BYOD devices, and client databases. Examples of these tools include Nipper, Securia PSI, Core Impact, Nessus, SAINT, and Open VAS.
+
+3.3.3
+
+
+
+Data Security Platforms	Data Security Platforms (DSP) are an integrated security solution that combines traditionally independent tools into a suite of tools that are made to work together. Security tools that protect and monitor networks are often made by different vendors. It can be difficult to integrate these tools in such a way that a single view of network security can be achieved. Significant resources can be required to have different devices and software under a single controlling solution. In addition, integrating data from such diverse tools into a comprehensive monitoring view of the network can be very difficult to create and maintain.
+
+
+
+One such DSP is the Helix platform from FireEye. FireEye Helix is a cloud-based security operations platform that enables organizations to integrate many security functionalities into a single platform. Helix provides event management, network behavior analytics, advanced threat detection, and incident security orchestration, automation, and response (SOAR) for response to threats as they are detected. Helix also draws on FireEye Mandiant threat intelligence, incident response, and security expertise.
+
+
+
+Another integrated DSP is Cisco SecureX. SecureX goes a step farther with its strong integration with the Cisco Secure portfolio. The Cisco Secure portfolio consists of a broad set of technologies that function as a team - providing interoperability with the security infrastructure, including third-party technologies. This results in unified visibility, automation, and stronger defenses. The Cisco SecureX platform works with diverse products that combine to safeguard your network, users and endpoints, cloud edge, and applications. SecureX functionality is built in to a large and diverse portfolio of Cisco security products including next-generation firewalls, VPN, network analytics, identity service
+
+3.3.4
+
+
+
+Video - Cisco SecureX Demonstration	
+
+3.3.5
+
+
+
+Security Services	Threat intelligence and security services allow the exchange of threat information such as vulnerabilities, indicators of compromise (IOC), and mitigation techniques. This information is not only shared with personnel, but also with security systems. As threats emerge, threat intelligence services create and distribute firewall rules and IOCs to the devices that have subscribed to the service.
+
+
+
+One such service is the Cisco Talos Threat Intelligence Group, shown in the figure. Talos is one of the largest commercial threat intelligence teams in the world, and is comprised of world-class researchers, analysts, and engineers. The goal of Talos is to help protect enterprise users, data, and infrastructure from active adversaries. The Talos team collects information about active, existing, and emerging threats. Talos then provides comprehensive protection against these attacks and malware to its subscribers.
+
+
+
+Cisco Security products can use Talos threat intelligence in real time to provide fast and effective security solutions. Cisco Talos also provides free software, services, resources, and data. Talos maintains the security incident detection rule sets for the Snort.org, ClamAV, and SpamCop network security tools.
+
+
+
+A number of managed network security services are available from providers such as Cisco, Sentinel Intrusion Prevention Systems, IBM, AT&T, and Core Security. These organizations provide a wide range of services including comprehensive managed Security as a Service (SECcaaS or SaaS)
+
+Mitigating Common Network Attacks
+
+
+
+3.4.1
+
+
+
+Defending the Network	Constant vigilance and ongoing education are required to defend your network against attack. The following are best practices for securing a network:
+
+
+
+Develop a written security policy for the company.
+
+
+
+Educate employees about the risks of social engineering, and develop strategies to validate identities over the phone, via email, or in person.
+
+
+
+Control physical access to systems.
+
+
+
+Use strong passwords and change them often.
+
+
+
+Encrypt and password-protect sensitive data.
+
+
+
+Implement security hardware and software such as firewalls, IPSs, virtual private network (VPN) devices, antivirus software, and content filtering.
+
+
+
+Perform backups and test the backed-up files on a regular basis.
+
+
+
+Shut down unnecessary services and ports.
+
+
+
+Keep patches up-to-date by installing them weekly or daily, if possible, to prevent buffer overflow and privilege escalation attacks.
+
+
+
+Perform security audits to test the network.
+
+3.4.2
+
+
+
+Mitigating Malware	Malware, including viruses, worms, and Trojan horses, can cause serious problems on networks and end devices. Network administrators have several means of mitigating these attacks.
+
+
+
+Note: Mitigation techniques are often referred to in the security community as "countermeasures".
+
+
+
+One way of mitigating virus and Trojan horse attacks is antivirus software. Antivirus software helps prevent hosts from getting infected and spreading malicious code. It requires much more time to clean up infected computers than it does to maintain up-to-date antivirus software and antivirus definitions on the same machines.
+
+
+
+Antivirus software is the most widely deployed security product on the market today. Several companies that create antivirus software, such as Symantec, McAfee, and Trend Micro, have been in the business of detecting and eliminating viruses for more than a decade. Many corporations and educational institutions purchase volume licensing for their users. The users are able to log in to a website with their account and download the antivirus software on their desktops, laptops, or servers.
+
+
+
+Antivirus products have update automation options so that new virus definitions and new software updates can be downloaded automatically or on demand. This practice is the most critical requirement for keeping a network free of viruses and should be formalized in a network security policy.
+
+
+
+Antivirus products are host-based. These products are installed on computers and servers to detect and eliminate viruses. However, they do not prevent viruses from entering the network, so a network security professional must be aware of the major viruses and keep track of security updates regarding emerging viruses.
+
+
+
+Another way to mitigate malware threats is to prevent malware files from entering the network at all. Security devices at the network p
+
+3.4.3
+
+
+
+Mitigating Worms	Worms are more network-based than viruses. Worm mitigation requires diligence and coordination on the part of network security professionals.
+
+
+
+As shown in the figure, the response to a worm attack can be broken down into four phases: containment, inoculation, quarantine, and treatment.
+
+1. Containment	The containment phase involves limiting the spread of a worm infection to areas of the network that are already affected. This requires compartmentalization and segmentation of the network to slow down or stop the worm and to prevent currently infected hosts from targeting and infecting other systems. Containment requires using both outgoing and incoming ACLs on routers and firewalls at control points within the network.
+
+2. Inoculation	The inoculation phase runs parallel to or subsequent to the containment phase. During the inoculation phase, all uninfected systems are patched with the appropriate vendor patch. The inoculation process further deprives the worm of any available targets.
+
+3. Quarantine	The quarantine phase involves tracking down and identifying infected machines within the contained areas and disconnecting, blocking, or removing them. This isolates these systems appropriately for the treatment phase.
+
+4. Treatment	The treatment phase involves actively disinfecting infected systems. This can involve terminating the worm process, removing modified files or system settings that the worm introduced, and patching the vulnerability the worm used to exploit the system. Alternatively, in more severe cases, the system may need to be reinstalled to ensure that the worm and its by-products are removed.
+
+3.4.4
+
+
+
+Mitigating Reconnaissance Attacks	Reconnaissance attacks are typically the precursor to other attacks that have the intent of gaining unauthorized access to a network or disrupting network functionality. A network security professional can detect when a reconnaissance attack is underway by receiving notifications from preconfigured alarms. These alarms are triggered when certain parameters are exceeded, such as the number of ICMP requests per second. A variety of technologies and devices can be used to monitor this type of activity and generate an alarm. Cisco's Adaptive Security Appliance (ASA) provides intrusion prevention in a standalone device. Additionally, the Cisco ISR supports network-based intrusion prevention through the Cisco IOS security image.
+
+
+
+Reconnaissance attacks can be mitigated in several ways, including the following:
+
+
+
+Implementing authentication to ensure proper access.
+
+
+
+Using encryption to render packet sniffer attacks useless.
+
+
+
+Using anti-sniffer tools to detect packet sniffer attacks.
+
+
+
+Implementing a switched infrastructure.
+
+
+
+Using a firewall and IPS.
+
+
+
+Anti-sniffer software and hardware tools detect changes in the response time of hosts to determine whether the hosts are processing more traffic than their own traffic loads would indicate. While this does not completely eliminate the threat, as part of an overall mitigation system, it can reduce the number of instances of threat.
+
+
+
+Encryption is also effective for mitigating packet sniffer attacks. If traffic is encrypted, using a packet sniffer is of little use because captured data is not readable.
+
+
+
+It is impossible to mitigate port scanning, but using an intrusion prevention system (IPS) and firewall can limit the information that can be discovered with a port scanner. Ping sweeps can be stopped if ICMP echo and echo-reply are turned off on edge routers; however, when these ser
+
+3.4.5
+
+
+
+Mitigating Access Attacks	Several techniques are available for mitigating access attacks. These include strong password security, principle of minimum trust, cryptography, applying operating system and application patches.
+
+
+
+A surprising number of access attacks are carried out through simple password guessing or brute-force dictionary attacks against passwords. To defend against this, create and enforce a strong authentication policy which includes:
+
+
+
+Use strong passwords - Strong passwords are at least eight characters and contain uppercase letters, lowercase letters, numbers, and special characters.
+
+
+
+Disable accounts after a specified number of unsuccessful logins has occurred - This practice helps to prevent continuous password attempts.
+
+
+
+The network should also be designed using the principle of minimum trust. This means that systems should not use one another unnecessarily. For example, if an organization has a trusted server that is used by untrusted devices, such as web servers, the trusted server should not trust the untrusted devices unconditionally.
+
+
+
+Cryptography is a critical component of any modern secure network. Using encryption for remote access to a network is recommended. Routing protocol traffic should also be encrypted. The more that traffic is encrypted, the fewer opportunities hackers have for intercepting data with man-in-the-middle attacks.
+
+
+
+The use of encrypted or hashed authentication protocols, along with a strong password policy, greatly reduces the probability of successful access attacks.
+
+
+
+Finally, educate employees about the risks of social engineering, and develop strategies to validate identities over the phone, via email, or in person. Multifactor authentication (MFA) has become increasingly common. In this approach, authentication requires two or more independent means of verification. For example, a password ma
+
+Use strong passwords	Strong passwords are at least eight characters and contain uppercase letters, lowercase letters, numbers, and special characters.
+
+Disable accounts after a specified number of unsuccessful logins has occurred	This practice helps to prevent continuous password attempts.
+
+Multifactor authentication (MFA)	In this approach, authentication requires two or more independent means of verification. For example, a password may be combined with a code that is sent over a text message. Software or separate devices may be used to generate tokens that are good for only one use. These token values, when provided with a password, provide an additional layer of security that prevents the use of passwords that have been guessed or stolen by threat actors.
+
+3.4.6
+
+
+
+Mitigating DoS Attacks	One of the first signs of a DoS attack is a large number of user complaints about unavailable resources or unusually slow network performance. To minimize the number of attacks, a network utilization software package should be running at all times. Network behavior analysis can detect unusual patterns of usage that indicate that a DoS attack is occurring. A means of detecting unusual network behavior should be required by the organization's network security policy. A network utilization graph showing unusual activity could also indicate a DoS attack.
+
+
+
+DoS attacks could be a component of a larger offensive. DoS attacks can lead to problems in the network segments of the computers being attacked. For example, the packet-per-second capacity of a router between the internet and a LAN might be exceeded by an attack, compromising not only the target system but also the network devices that the traffic must pass through. If the attack is conducted on a sufficiently large scale, entire geographical regions of internet connectivity could be compromised.
+
+
+
+Historically, many DoS attacks were sourced from spoofed addresses. Cisco routers and switches support a number of antispoofing technologies, such as port security, Dynamic Host Configuration Protocol (DHCP) snooping, IP Source Guard, Dynamic Address Resolution Protocol (DAI) Inspection, and access control lists (ACLs).
+
+Cisco Network Foundation Protection Framework
+
+
+
+3.5.1
+
+
+
+NFP Framework	The Cisco Network Foundation Protection (NFP) framework provides comprehensive guidelines for protecting the network infrastructure. These guidelines form the foundation for continuous delivery of service.
+
+
+
+NFP logically divides routers and switches into three functional areas, as shown in the figure:
+
+
+
+Control plane - Responsible for routing data correctly. Control plane traffic consists of device-generated packets required for the operation of the network itself, such as ARP message exchanges, or OSPF routing advertisements.
+
+
+
+Management plane - Responsible for managing network elements. Management plane traffic is generated either by network devices or network management stations using processes and protocols such as Telnet, SSH, TFTP, FTP, NTP, AAA, SNMP, syslog, TACACS+, RADIUS, and NetFlow.
+
+
+
+Data plane (Forwarding plane) - Responsible for forwarding data. Data plane traffic normally consists of user-generated packets being forwarded between end devices. Most traffic travels through the router, or switch, via the data plane.
+
+
+
+Cisco NFP
+
+
+
+Management SessionsData PlaneIP Forwarding TableManagement ProcessesRouting ProtocolIP Routing TableControl PlaneManagement PlaneExchange of Routing InformationOutgoing IP PacketIncoming IP Packet
+
+Control plane	Responsible for routing data correctly. Control plane traffic consists of device-generated packets required for the operation of the network itself, such as ARP message exchanges, or OSPF routing advertisements.
+
+Management plane	Responsible for managing network elements. Management plane traffic is generated either by network devices or network management stations using processes and protocols such as Telnet, SSH, TFTP, FTP, NTP, AAA, SNMP, syslog, TACACS+, RADIUS, and NetFlow.
+
+Data plane (Forwarding plane)	Responsible for forwarding data. Data plane traffic normally consists of user-generated packets being forwarded between end devices. Most traffic travels through the router, or switch, via the data plane.
+
+3.5.2
+
+
+
+Securing the Control Plane	Control plane traffic consists of device-generated packets required for the operation of the network itself. Control plane security can be implemented using the following features, as shown in the figure:
+
+
+
+Routing protocol authentication - Routing protocol authentication, or neighbor authentication, prevents a router from accepting fraudulent routing updates. Most routing protocols support neighbor authentication.
+
+
+
+Control Plane Policing (CoPP) - CoPP is a Cisco IOS feature designed to allow users to control the flow of traffic that is handled by the route processor of a network device.
+
+
+
+AutoSecure - AutoSecure can lock down the management plane functions and the forwarding plane services and functions of a router.
+
+
+
+CoPP is designed to prevent unnecessary traffic from overwhelming the route processor. The CoPP feature treats the control plane as a separate entity with its own ingress (input) and egress (output) ports. A set of rules can be established and associated with the ingress and egress ports of the control plane.
+
+
+
+The Control Plane
+
+
+
+Data PlaneRouting ProtocolIP Routing TableControl PlaneExchange of Routing Information
+
+Routing protocol authentication	Routing protocol authentication, or neighbor authentication, prevents a router from accepting fraudulent routing updates. Most routing protocols support neighbor authentication.
+
+Control Plane Policing (CoPP)	CoPP is a Cisco IOS feature designed to allow users to control the flow of traffic that is handled by the route processor of a network device.
+
+AutoSecure	AutoSecure can lock down the management plane functions and the forwarding plane services and functions of a router.
+
+3.5.3
+
+
+
+Securing the Management Plane	Management plane traffic is generated either by network devices or network management stations using processes and protocols such as Telnet, SSH, and TFTP, etc. The management plane is a very attractive target to hackers. For this reason, the management module was built with several technologies designed to mitigate such risks.
+
+
+
+The information flow between management hosts and the managed devices can be out-of-band (OOB), where information flows within a network on which no production traffic resides. It can also be in-band, where information flows across the enterprise production network, the internet, or both.
+
+
+
+Management plane security can be implemented using the following features, as shown in the figure:
+
+
+
+Login and password policy - Restricts device accessibility. Limits the accessible ports and restricts the "who" and "how" methods of access.
+
+
+
+Present legal notification - Displays legal notices. These are often developed by legal counsel of a corporation.
+
+
+
+Ensure the confidentiality of data - Protects locally stored sensitive data from being viewed or copied. Uses management protocols with strong authentication to mitigate confidentiality attacks aimed at exposing passwords and device configurations.
+
+
+
+Role-based access control (RBAC) - Ensures access is only granted to authenticated users, groups, and services. RBAC and authentication, authorization, and accounting (AAA) services provide mechanisms to effectively manage access control.
+
+
+
+Authorize actions - Restricts the actions and views that are permitted by any particular user, group, or service.
+
+
+
+Enable management access reporting - Logs and accounts for all access. Records who accessed the device, what occurred, and when it occurred.
+
+
+
+RBAC restricts user access based on the role of the user. Roles are created according to job or task functions, and assigned
+
+Login and password policy	Restricts device accessibility. Limits the accessible ports and restricts the "who" and "how" methods of access.
+
+Present legal notification	Displays legal notices. These are often developed by legal counsel of a corporation.
+
+Ensure the confidentiality of data	Protects locally stored sensitive data from being viewed or copied. Uses management protocols with strong authentication to mitigate confidentiality attacks aimed at exposing passwords and device configurations.
+
+Role-based access control (RBAC)	Ensures access is only granted to authenticated users, groups, and services. RBAC and authentication, authorization, and accounting (AAA) services provide mechanisms to effectively manage access control.
+
+Authorize actions	Restricts the actions and views that are permitted by any particular user, group, or service.
+
+Enable management access reporting	Logs and accounts for all access. Records who accessed the device, what occurred, and when it occurred.
+
+3.5.4
+
+
+
+Securing the Data Plane	Data plane traffic consists mostly of user packets being forwarded through the router via the data plane. Data plane security can be implemented using ACLs, antispoofing mechanisms, and Layer 2 security features, as shown in the figure.
+
+
+
+The Data Plane
+
+
+
+Data PlaneIP Forwarding TableControl PlaneOutgoing IP PacketIncoming IP Packet
+
+
+
+ACLs perform packet filtering to control which packets move through the network and where those packets are allowed to go. ACLs are used to secure the data plane in a variety of ways:
+
+
+
+Blocking unwanted traffic or users - ACLs can filter incoming or outgoing packets on an interface. They can be used to control access based on source addresses, destination addresses, or user authentication.
+
+
+
+Reducing the chance of DoS attacks - ACLs can be used to specify whether traffic from hosts, networks, or users, can access the network. The ASA TCP intercept feature is a mechanism that can be used to protect end hosts, especially servers, from TCP SYN-flooding attacks.
+
+
+
+Mitigating spoofing attacks - ACLs allow security practitioners to implement recommended practices to mitigate spoofing attacks.
+
+
+
+Providing bandwidth control - ACLs on a slow link can prevent excess traffic.
+
+
+
+Classifying traffic to protect the Management and Control planes - ACLs can be applied on the vty lines.
+
+
+
+ACLs can also be used as an antispoofing mechanism by discarding traffic that has an invalid source address. This means that attacks must be initiated from valid, reachable IP addresses, which allows the packets to be traced to the originator of an attack.
+
+
+
+Features, such as Unicast Reverse Path Forwarding (uRPF), can be used to complement the antispoofing strategy.
+
+
+
+Cisco Catalyst switches can use integrated features to help secure the Layer 2 infrastructure. The following Layer 2 security tools are integrated into the Cisco Ca
+
+Blocking unwanted traffic or users	ACLs can filter incoming or outgoing packets on an interface. They can be used to control access based on source addresses, destination addresses, or user authentication.
+
+Reducing the chance of DoS attacks	ACLs can be used to specify whether traffic from hosts, networks, or users, can access the network. The ASA TCP intercept feature is a mechanism that can be used to protect end hosts, especially servers, from TCP SYN-flooding attacks.
+
+Mitigating spoofing attacks	ACLs allow security practitioners to implement recommended practices to mitigate spoofing attacks.
+
+Providing bandwidth control	ACLs on a slow link can prevent excess traffic.
+
+Classifying traffic to protect the Management and Control planes	ACLs can be applied on the vty lines.
+
+Port security	Prevents MAC address spoofing and MAC address flooding attacks.
+
+DHCP snooping	Prevents client attacks on the DHCP server and switch.
+
+Dynamic ARP Inspection (DAI)	Adds security to ARP by using the DHCP snooping table to minimize the impact of ARP poisoning and spoofing attacks.
+
+IP Source Guard (IPSG)	Prevents spoofing of IP addresses by using the DHCP snooping table.
+
+3.5.5
+
+
+
+Check Your Understanding - Cisco Network Foundation Protection Framework	Check your understanding of the Cisco Network Foundation Protection Framework by choosing the correct answer to the following questions.
+
+1. Which NFP plane would typically use out-of-band (OOB) access?	Management plane
+
+2. Which NFP plane uses CoPP?	Control plane
+
+3. Which NFP plane is responsible for applying access control lists (ACLs)?	Data plane
+
+4. The control plane is responsible for which of the following features? (Choose three.)	Routing protocol authentication
+
+
+
+Route processor traffic
+
+
+
+Role-based access control
+
+5. The management plane is responsible for which of the following features? (Choose three.)	Logs and accounts for all access
+
+
+
+Password policy
+
+
+
+AutoSecure
+
+6. The data plane is responsible for which of the following features? (Choose three.)	Blocking unwanted traffic or users
+
+
+
+Port security
+
+
+
+Mitigating spoof attacks
+
+Mitigating Threats Summary
+
+
+
+3.6.1
+
+
+
+What Did I Learn in this Module?	Defending the Network
+
+
+
+Network security professionals are responsible for maintaining data assurance for an organization and ensuring the integrity and confidentiality of information. A security professional must stay informed about threats and vulnerabilities as they evolve. There are several network security organizations to keep you informed, including SANS, Mitre, FIRST, SecurityNewsWire, ISC2, and CIS. Certifications for network security professionals are offered by the following organizations:
+
+
+
+GIAC
+
+ISC2
+
+ISACA
+
+EC-Council
+
+CWSP
+
+
+
+Information security deals with protecting information and information systems from unauthorized access, use, disclosure, disruption, modification, or destruction. The CIA Triad serves as a conceptual foundation for the field. The CIA triad consists of three components of information security: Confidentiality, Integrity, and Availability.
+
+
+
+Network Security Policies
+
+
+
+There are 14 network security domains specified by the ISO/IEC. Described by ISO/IEC 27002, these 14 domains serve to organize, at a high level, the vast realm of information under the umbrella of network security. These domains have some significant parallels with domains defined by the CISSP certification. The 14 domains are intended to serve as a common basis for developing organizational security standards and effective security management practices. They also help to facilitate communication between organizations. In networking, policies define the activities that are allowed on the network. Policies that may be included in a security policy include identification and authentication policy, password policies, acceptable use policy, remote access policy, network maintenance policy, and incident handling procedures. A security policy is a "living document", meaning that the document is regularly updated as technology, busines
+
+3.6.2
+
+
+
+Module 3 - Mitigating Threats Quiz	
+
+1. What is the primary means for mitigating virus and Trojan horse attacks?	Antivirus software
+
+2. What three items are components of the CIA triad? (Choose three.)	Availability
+
+
+
+Integrity
+
+
+
+Confidentiality
+
+3. Which security implementation will provide control plane protection for a network device?	Routing protocol authentication
+
+4. What threat intelligence group provides blogs and podcasts to help network security professionals remain effective and up-to-date?	Talos
+
+5. Which section of a security policy is used to specify that only authorized individuals should have access to enterprise data?	Identification and authentication policy
+
+6. What worm mitigation phase involves actively disinfecting infected systems?	Treatment
+
+7. With the evolution of borderless networks, which vegetable is now used to describe a defense-in-depth approach?	Artichoke
+
+8. How does BYOD change the way in which businesses implement networks?​	BYOD provides flexibility in where and how users can access network resources.
+
+9. What functional area of the Cisco Network Foundation Protection framework uses protocols such as Telnet and SSH to manage network devices?	Management plane
+
+10. What security tool allows a threat actor to hack into a wireless network and detect security vulnerabilities?	KisMac
+
+11. What is the primary function of SANS?	To maintain the Internet Storm Center
+
+12. What method can be used to mitigate ping sweeps?	Blocking ICMP echo and echo-replies at the network edge

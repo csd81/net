@@ -1,0 +1,622 @@
+
+Secure Communications
+
+
+
+15.1.1
+
+
+
+Authentication, Integrity, and Confidentiality	To ensure secure communications across both the public and private infrastructure, the network administrator's first goal is to secure the network infrastructure, including routers, switches, servers, and hosts. This can be accomplished using device hardening, AAA access control, ACLs, firewalls, monitoring threats using IPS, securing endpoints using Advanced Malware Protection (AMP), and enforcing email and web security using the Cisco Email Security Appliance (ESA) and Cisco Web Security Appliance (WSA). The figure shows an example of a secure network topology.
+
+
+
+Remote BranchFirewallIPSWeb ServerEmail ServerDNS ServerVPNESA/WSAVPN
+
+
+
+The next goal is to secure the data as it travels across various links. This may include internal traffic, but of greater concern is protecting the data that travels outside of the organization to branch sites, telecommuter sites, and partner sites.
+
+
+
+There are three primary objectives of securing communications:
+
+
+
+Authentication - This guarantees that the message is not a forgery and actually comes from the authentic source. Modern networks ensure authentication using hash message authentication code (HMAC).
+
+
+
+Integrity - This guarantees that no one intercepted the message and altered it; similar to a checksum function in a frame. This is provided by implementing the SHA-2 or SHA-3 family of hash-generating algorithms.
+
+
+
+Confidentiality - This guarantees that if the message is captured, it cannot be deciphered. This is provided using symmetric or asymmetric encryption algorithms.
+
+
+
+Note: These primary objectives are similar but not identical to the three primary issues in securing and maintaining a computer network which are confidentiality, integrity, and availability.
+
+
+
+The most popular symmetric encryption algorithm is the Advanced Encryption Standard (AES). Symmetric encryption algorithms a
+
+Authentication	This guarantees that the message is not a forgery and actually comes from the authentic source. Modern networks ensure authentication using hash message authentication code (HMAC).
+
+Integrity	This guarantees that no one intercepted the message and altered it; similar to a checksum function in a frame. This is provided by implementing the SHA-2 or SHA-3 family of hash-generating algorithms.
+
+Confidentiality	This guarantees that if the message is captured, it cannot be deciphered. This is provided using symmetric or asymmetric encryption algorithms.
+
+15.1.2
+
+
+
+Authentication	There are two primary methods for validating a source in network communications: authentication services and data nonrepudiation services.
+
+
+
+Authentication guarantees that a message comes from the source that it claims to come from. Authentication is similar to entering a secure personal identification number (PIN) for banking at an ATM, as shown in the figure. The PIN should only be known to the user and the financial institution. The PIN is a shared secret that helps protect against forgeries.
+
+
+
+Entering an ATM Authentication PIN
+
+
+
+In network communications, authentication can be accomplished using cryptographic methods. This is especially important for applications or protocols, such as email or IP, that do not have built-in mechanisms to prevent spoofing of the source.
+
+
+
+Data nonrepudiation is a similar service that allows the sender of a message to be uniquely identified. With nonrepudiation services in place, a sender cannot deny having been the source of that message. It might appear that the authenticity service and the nonrepudiation service are fulfilling the same function. Although both address the question of the proven identity of the sender, there is a difference between the two.
+
+
+
+The most important part of nonrepudiation is that a device cannot repudiate, or refute, the validity of a message sent. Nonrepudiation relies on the fact that only the sender has the unique characteristics or signature for how that message is treated. Not even the receiving device can know how the sender treated this message to prove authenticity because the receiver could then pretend to be the source.
+
+
+
+If the major concern is for the receiving device to validate the source and there is no concern about the receiving device imitating the source, it does not matter whether the sender and receiver both know how to treat a message to
+
+15.1.3
+
+
+
+Data Integrity	Data integrity ensures that messages are not altered in transit. With data integrity, the receiver can verify that the received message is identical to the sent message and that no manipulation occurred.
+
+
+
+European nobility ensured the data integrity of documents by creating a wax seal to close an envelope, as shown in the figure. The seal was often created using a signet ring. These bore the family crest, initials, a portrait, or a personal symbol or motto of the owner of the signet ring. An unbroken seal on an envelope guaranteed the integrity of its contents. It also guaranteed authenticity based on the unique signet ring impression.
+
+
+
+Wax Seal Ensuring Integrity
+
+15.1.4
+
+
+
+Data Confidentiality	Data confidentiality ensures privacy so that only the receiver can read the message. This can be achieved through encryption. Encryption is the process of scrambling data so that it cannot be easily read by unauthorized parties.
+
+
+
+When enabling encryption, readable data is called plaintext, or cleartext, while the encrypted version is called encrypted text or ciphertext. In this course, we will use the term ciphertext. The plaintext readable message is converted to ciphertext, which is the unreadable, disguised message. Decryption reverses the process. A key is required to encrypt and decrypt a message. The key is the link between the plaintext and ciphertext.
+
+
+
+Historically, various encryption algorithms and methods have been used. Julius Caesar is said to have secured messages by putting two sets of the alphabet, side-by-side, and then shifting one of them by a specific number of places. The number of places in the shift serves as the key. He converted plaintext into ciphertext using this key, and only his generals, who also had the key, knew how to decipher the messages. This method is now known as the Caesar cipher. An encoded message using the Caesar cipher is shown in the figure.
+
+
+
+Encoded Caesar Cipher Message
+
+
+
+Using a hash function is another way to ensure data confidentiality. A hash function transforms a string of characters into a usually shorter, fixed-length value or key that represents the original string. The difference between hashing and encryption is in how the data is stored. With encrypted text, the data can be decrypted with a key. With the hash function, after the data is entered and converted using the hash function, the plaintext is gone. The hashed data is simply there for comparison. For example, when a user enters a password, the password is hashed and then compared to the stored hashed value. I
+
+15.1.5
+
+
+
+Check Your Understanding - Identify the Secure Communication Objective	Check your understanding of Confidentiality, Integrity, and Authentication by identifying the characteristics of each.
+
+1. Ensures privacy so that only the receiver can read the message.	Confidentiality
+
+2. Ensures that messages are not altered in transit.	Integrity
+
+3. Guarantees that a message comes from the source that it claims to come from.	Authentication
+
+4. In banking, it can be achieved by requiring a secure personal identification number (PIN) at an ATM.	Authentication
+
+5. Encryption and hashing are used to make certain that only authorized entities can read the message.	Confidentiality
+
+6. A key is required to encrypt and decrypt a message.	Confidentiality
+
+7. The receiver can verify that the received message is identical to the sent message and that no manipulation occurred.	Integrity
+
+Cryptography
+
+
+
+15.2.1
+
+
+
+Creating Cipher Text	The history of cryptography starts in diplomatic circles thousands of years ago. Messengers from a king's court took encrypted messages to other courts. Occasionally, other courts not involved in the communication, attempted to steal messages sent to a kingdom they considered an adversary. Not long after, military commanders started using encryption to secure messages.
+
+
+
+Click below to learn more about ciphers and cipher devices. (On cards 17-20).
+
+Scytale Cipher	A scytale is a device used to generate a transposition cipher. A strip of paper or other material is wrapped around a rod of a known diameter, as shown in the figure. The message is written on the paper across rows. When the strip is removed, the message is unreadable until it is wrapped around another rod of the same diameter.
+
+Caesar Cipher	The Caesar Cipher is a type of substitution cipher in which each letter is replaced by another letter that is a set number of places away in the alphabet. That number of places is the key. In the figure, the key is 3.
+
+Vigenere Cipher	The Vigenère cipher is a type of polyalphabetic substitution cipher. It was considered unbreakable until 1863. To use the cipher a key text is generated that repeats for the length of the message to be encrypted. A combination of the plaintext letter and the corresponding key letter are used to locate the ciphertext value for the letter in a table, shown in the figure, or other device. In the table, the row value would be the key letter, the plaintext would be located in the column. The location where the row and column intersect is the ciphertext letter to be used.
+
+Enigma Machine	The Enigma machine was an electromechanical encryption device that was developed and used by Nazi Germany during World War II. The device depended on the distribution of pre-shared keys that were used to encrypt and decrypt messages. The Enigma ciphers were broken by the Allies, and numerous Enigma-encoded messages were decoded during the war. This provided a significant advantage to the Allies and is estimated to have greatly shortened the war and saved many lives.
+
+15.2.2
+
+
+
+Transposition Ciphers	In transposition ciphers, no letters are replaced; they are simply rearranged. An example of this type of cipher is taking the FLANK EAST ATTACK AT DAWN message and transposing it to read NWAD TA KCATTA TSAE KNALF. In this example, the key is to reverse the letters.
+
+
+
+Another example of a transposition cipher is known as the rail fence cipher. In this transposition, the words are spelled out as if they were a rail fence. They are staggered, some in front, some in the middle and some in back, across several parallel lines.
+
+
+
+Modern encryption block cipher algorithms, such as AES and the legacy 3DES, still use transposition as part of the algorithm.
+
+
+
+Click below to learn about the use of a simple transposition cipher. (On cards 22-24).
+
+Plaintext Message	The plaintext message will be encoded using a key of 3. This key value specifies that three lines are required when creating the encrypted code.
+
+Encryption Process	A rail fence cipher is used with the key of 3.
+
+Encrypted Message	This is the encrypted text.
+
+15.2.3
+
+
+
+Substitution Ciphers	Substitution ciphers substitute one letter for another. In their simplest form, substitution ciphers retain the letter frequency of the original message.
+
+
+
+The Caesar cipher was a simple substitution cipher.
+
+
+
+Because the entire message relied on the same single key shift, the Caesar cipher is referred to as a monoalphabetic substitution cipher. It is also fairly easy to crack. For this reason, polyalphabetic ciphers, such as the Vigenère cipher, were invented. The method was originally described by Giovan Battista Bellaso in 1553, but the scheme was later misattributed to the French diplomat and cryptographer, Blaise de Vigenère.
+
+
+
+Click below to learn more about substitution ciphers. (On cards 26-28).
+
+Plaintext message	The plaintext message will be encoded with a key of 3.
+
+Encryption process	Shift the top scroll over by the three characters (a key of 3) and A becomes D, B becomes E, and so on. If the key used was 8, then A becomes I, B becomes J, and so on.
+
+The encrypted message	The process is reversed to de-encrypt the message.
+
+15.2.4
+
+
+
+A More Complex Substitution Cipher	The Vigenère cipher is based on the Caesar cipher, except that it encrypts text by using a different polyalphabetic key shift for every plaintext letter. The different key shift is identified using a shared key between sender and receiver. The plaintext message can be encrypted and decrypted using the Vigenère Cipher Table that is shown in the figure.
+
+
+
+To illustrate how the Vigenère Cipher Table works, suppose that a sender and receiver have a shared secret key composed of these letters: SECRETKEY. The sender uses this secret key to encode the plaintext FLANK EAST ATTACK AT DAWN:
+
+
+
+The F (FLANK) is encoded by looking at the intersection of column F and the row starting with S (SECRETKEY), resulting in the cipher letter X.
+
+
+
+The L (FLANK) is encoded by looking at the intersection of column L and the row starting with E (SECRETKEY), resulting in the cipher letter P.
+
+
+
+The A (FLANK) is encoded by looking at the intersection of column A and the row starting with C (SECRETKEY), resulting in the cipher letter C.
+
+
+
+The N (FLANK) is encoded by looking at the intersection of column N and the row starting with R (SECRETKEY), resulting in the cipher letter E.
+
+
+
+The K (FLANK) is encoded by looking at the intersection of column K and the row starting with E (SECRETKEY), resulting in the cipher letter O.
+
+
+
+The process continues until the entire text message FLANK EAST ATTACK AT DAWN is encrypted. The process can also be reversed. For instance, the F is still the cipher letter X if encoded by looking at the intersection of row F (FLANK) and the column starting with S (SECRETKEY).
+
+
+
+When using the Vigenère cipher, if the message is longer than the key, the key is repeated. For example, SECRETKEYSECRETKEYSEC is required to encode FLANK EAST ATTACK AT DAWN: (On cards 30-32).
+
+
+
+Although the Vigenère cipher uses a longer key, it can still be crac
+
+Secret key	SECRETKEYSECRETKEYSEC
+
+Plaintext	FLANKEASTATTACKATDAWN
+
+Cipher text	XPCEOXKURSXVRGDKXBSAP
+
+15.2.5
+
+
+
+One-Time Pad Ciphers	Gilbert Vernam was an AT&T Bell Labs engineer who, in 1917, invented, and later patented, the stream cipher. He also co-invented the one-time pad cipher. Vernam proposed a teletype cipher in which a prepared key consisting of an arbitrarily long, non-repeating sequence of numbers was kept on paper tape, shown in the figure. It was then combined character by character with the plaintext message to produce the ciphertext.
+
+
+
+Example of One-Time Pad Device
+
+
+
+To decipher the ciphertext, the same paper tape key was again combined character by character, producing the plaintext. Each tape was used only once; hence, the name one-time pad. As long as the key tape does not repeat or is not reused, this type of cipher is immune to cryptanalytic attack. This is because the available ciphertext does not display the pattern of the key.
+
+
+
+Several difficulties are inherent in using one-time pads in the real world. One difficulty is the challenge of creating random data. Computers, because they have a mathematical foundation, are incapable of creating true random data. Additionally, if the key is used more than once, it is easy to break. RC4 is an example of this type of cipher that is widely used on the internet. Again, because the key is generated by a computer, it is not truly random. In addition to these issues, key distribution is also challenging with this type of cipher.
+
+Cryptanalysis
+
+
+
+15.3.1
+
+
+
+Cracking Code	For as long as there has been cryptography, there has been cryptanalysis. Cryptanalysis is the practice and study of determining the meaning of encrypted information (cracking the code), without access to the shared secret key. This is also known as codebreaking.
+
+
+
+Throughout history, there have been many instances of cryptanalysis:
+
+
+
+The Vigenère cipher had been absolutely secure until it was broken in the 19th century by English cryptographer Charles Babbage.
+
+Mary, Queen of Scots, was plotting to overthrow Queen Elizabeth I from the throne and sent encrypted messages to her co-conspirators. The cracking of the code used in this plot led to the beheading of Mary in 1587.
+
+The Enigma-encrypted communications were used by the Germans to navigate and direct their U-boats in the Atlantic. Polish and British cryptanalysts broke the German Enigma code. Winston Churchill was of the opinion that it was a turning point in WWII.
+
+15.3.2
+
+
+
+Methods of Cracking Code	Several methods are used in cryptanalysis: (On cards 36-41).
+
+
+
+Brute-force method - The attacker tries every possible key knowing that eventually one of them will work.
+
+Ciphertext method - The attacker has the ciphertext of several encrypted messages but no knowledge of the underlying plaintext.
+
+Known-Plaintext method - The attacker has access to the ciphertext of several messages and knows something about the plaintext underlying that ciphertext.
+
+Chosen-Plaintext method - The attacker chooses which data the encryption device encrypts and observes the ciphertext output.
+
+Chosen-Ciphertext method - The attacker can choose different ciphertext to be decrypted and has access to the decrypted plaintext.
+
+Meet-in-the-Middle method - The attacker knows a portion of the plaintext and the corresponding ciphertext.
+
+
+
+Note: Details of how these methods are implemented is beyond the scope of this course.
+
+
+
+The simplest method to understand is the brute-force method. For example, if a thief attempted to steal a bicycle secured with the combination lock displayed in the figure, they would have to attempt a maximum of 10,000 different possibilities (0000 to 9999). All encryption algorithms are vulnerable to this attack. On average, a brute-force attack succeeds about 50 percent of the way through the keyspace, which is the set of all possible keys.
+
+
+
+The objective of modern cryptographers is to have a keyspace large enough that it takes too much time and money to accomplish a brute-force attack.
+
+15.3.3
+
+
+
+Cracking Code Example	When choosing a cryptanalysis method, consider the Caesar cipher encrypted code. The best way to crack the code is to use brute force. Because there are only 25 possible rotations, the effort is relatively small to try all possible rotations and see which one returns something that makes sense.
+
+
+
+A more scientific approach is to use the fact that some characters in the English alphabet are used more often than others. This method is called frequency analysis. For example, the graph in the figure below shows the frequency of letters in the English language. The letters E, T, and A are the most popular letters used in the English language. The letters J, Q, X, and Z are the least popular. Understanding this pattern can help discover which letters are probably included in the cipher message.
+
+
+
+Frequency Analysis of the English Alphabet
+
+
+
+14.00%12.00%10.00%8.00%6.00%4.00%2.00%0.00%ABCDEFGHIJKLMNOPQRSTUVWXYZ
+
+The graph outlines the frequency of letters in the English language.
+
+For example, the letters E, T, and A are the most popular.
+
+
+
+In the Caesar ciphered message IODQN HDVW DWWDFN DW GDZQ, shown in the figure, the cipher letter D appears six times while the cipher letter W appears four times. There is a good possibility that the cipher letters D and W represent either the plaintext E, T or A. In this case, the D represents the letter A, and the W represents the letter T.
+
+
+
+An attacker would only have to replace the cipher letter D first with popular plaintext letters including E, T, and finally A. Trying A would reveal the shift pattern of 3, and the attacker could then decipher the entire message.
+
+
+
+IODQN HDVWDWWDFN DW GDZQ
+
+
+
+Ciphered Text
+
+
+
+In this ciphered message, there are 6 occurrences of the cipher letter D and 4 occurrences of the cipher letter W.
+
+15.3.4
+
+
+
+Check Your Understanding - Crack the Code	In this activity, you will use the tables below to find the encrypted values for different words. In the last question, you will decode encrypted text to reveal the cleartext word. The cleartext is in the top row and the encoded text values are in the bottom row.
+
+
+
+Chart 1
+
+
+
+WXYZABCDEFGHIJKLMNOPQRSTUVABCDEFGHIJKLMNOPQRSTUVWXYZ
+
+
+
+Chart 2
+
+
+
+WXYZABCDEFGHIJKLMNOPQRSTUVABCDEFGHIJKLMNOPQRSTUVWXYZ
+
+
+
+Chart 3
+
+
+
+WXYZABCDEFGHIJKLMNOPQRSTUVVUTSRQPONMLKJIHGFEDCBAZYXW
+
+
+
+Practice encoding and decoding text by completing the tasks below.
+
+1. Refer to Chart 1. What is the encrypted text for the term ENCRYPTION?	AJYNULPEKJ
+
+2. Refer to Chart 2. What is the encrypted text for the word AUTHENCITY?
+
+UONBILCNCYMR	UONBYHNCWCNS
+
+3. Refer to Chart 3. What is the encrypted value of the word INTEGRITY?	RMGVTIRGB
+
+4. Refer to Chart 3. What is the plaintext value for the encrypted text FMVMXIBKGVW?	UNENCRYPTED
+
+Cryptology
+
+
+
+15.4.1
+
+
+
+Making and Breaking Secret Codes	Cryptology = Cryptography + Cryptanalysis
+
+
+
++
+
+CryptographyCryptanalysisCryptology
+
+
+
+Cryptology is the science of making and breaking secret codes. As shown in the figure, cryptology combines two separate disciplines: (On cards 43-44).
+
+
+
+Cryptography - the development and use of codes
+
+Cryptanalysis - the breaking of those codes
+
+
+
+There is a symbiotic relationship between the two disciplines because each makes the other one stronger. National security organizations employ practitioners of both disciplines and put them to work against each other.
+
+
+
+There have been times when one of the disciplines has been ahead of the other. For example, during the Hundred Years War between France and England, the cryptanalysts were leading the cryptographers. France mistakenly believed that the Vigenère cipher was unbreakable, and then the British cracked it. Some historians believe that the successful cracking of encrypted codes and messages had a major impact on the outcome of World War II. Currently, it is believed that cryptographers are in the lead.
+
+Cryptography	The development and use of codes
+
+Cryptanalysis	The breaking of those codes
+
+15.4.2
+
+
+
+Cryptanalysts	Cryptanalysis is often used by governments in military and diplomatic surveillance, by enterprises in testing the strength of security procedures, and by malicious hackers in exploiting weaknesses in websites.
+
+
+
+Cryptanalysts are individuals who perform cryptanalysis to crack secret codes. A sample job description is displayed in the figure.
+
+
+
+While cryptanalysis is often linked to mischievous purposes, it is actually a necessity. It is an ironic fact of cryptography that it is impossible to prove that any algorithm is secure. It can only be proven that it is not vulnerable to known cryptanalytic attacks. Therefore, there is a need for mathematicians, scholars, and security forensic experts to keep trying to break the encryption methods.
+
+15.4.3
+
+
+
+The Secret is in the Keys	In the world of communications and networking, authentication, integrity, and data confidentiality are implemented in many ways using various protocols and algorithms. The choice of protocol and algorithm varies based on the level of security required to meet the goals of the network security policy.
+
+
+
+As an example, for message integrity, message-digest 5 (MD5) is faster than Secure Hash Algorithm 2 (SHA2). However, MD5 but is now considered to be insecure. Confidentiality can be implemented using the legacy 3DES or the more secure AES. Again, the choice varies depending on the security requirements specified in the network security policy document. Additional considerations are the computing power that is required to encrypt and decrypt data, and the acceptance of the protocol in the security community. The table lists some common cryptographic hashes, protocols, and algorithms.
+
+
+
+Integrity Authenticity Confidentiality
+
+
+
+MD5 (legacy) HMAC-MD5 (legacy) 3DES (legacy)
+
+
+
+SHA HMAC-SHA-256 AES
+
+
+
+ RSA and DSA
+
+
+
+Old encryption algorithms, such as the Caesar cipher or the Enigma machine, were based on the secrecy of the algorithm to achieve confidentiality. With modern technology, where reverse engineering is often simple, public-domain algorithms are frequently used. With most modern algorithms, successful decryption requires knowledge of the appropriate cryptographic keys. This means that the security of encryption lies in the secrecy of the keys, not the algorithm.
+
+15.4.4
+
+
+
+Check Your Understanding - Cryptology Terminology	Check your understanding of cryptography terminology by choosing the correct answer to the following questions.
+
+1. What is a cipher that replaces one letter for another, possibly retaining the letter frequency of the original message?	substitution
+
+2. What is a method of cryptanalysis in which an attacker tries every possible key knowing that eventually one of them will work?	brute-force
+
+3. What cipher method does 3DES use as part of the algorithm?	transposition
+
+4. What is the term for when a device cannot refute the validity of a message that it has received?	Nonrepudiation
+
+5. What is the practice and study of determining the meaning of encrypted information, without access to the shared secret key?	Cryptanalysis
+
+15.4.5
+
+
+
+Lab - Explore Encryption Methods	In this lab, you will complete the following objectives:
+
+
+
+Part 1: Decipher a pre-encrypted message using the Vigenère cipher.
+
+
+
+Part 2: Create a Vigenère cipher encrypted message and decrypt it.
+
+Cryptographic Services Summary
+
+
+
+15.5.1
+
+
+
+What Did I Learn in this Module?	Securing Communications
+
+
+
+In addition to ensuring that the network and network devices are secure and protected from attack, network security personnel also ensure that data is protected during transmission. The three primary objectives of securing communications are:
+
+
+
+Authentication - This guarantees that the message is not a forgery and actually comes from the authentic source.
+
+Integrity - This guarantees that no one intercepted the message and altered it; similar to a checksum function in a frame.
+
+Confidentiality - This guarantees that if the message is captured, it cannot be deciphered.
+
+
+
+Authentication may be secured by HMAC. Integrity is ensured through the use of the legacy MD5 or secure members of the SHA family of hash generating algorithms. Data confidentiality is ensured through symmetric encryption algorithms, including the legacy 3DES and AES. Symmetric encryption algorithms are based on the premise that communicating parties both know a pre-shared key. Asymmetric algorithms, such RSA and PKI, are based on the assumption that communicating parties do not know a pre-shared key and must establish a secure means of key exchange.
+
+
+
+In network communications, authentication proves that a message actually comes from a valid source. Data nonrepudiation is a similar service to authentication in that it allows the sender of a message to be uniquely identified. Data integrity ensures that messages are not altered in transit. Data confidentiality ensures privacy so that only the intended receiver can read the message.
+
+
+
+Cryptography
+
+
+
+Cryptography has been used to secure communications for thousands of years. Historic ciphers include the scytale from ancient Greece, the Caesar cipher, and the Vigenère cipher. The Vigenère cipher is a type of polyalphabetic substitution cipher that was considered unbreakable until 1863. Th
+
+Authentication	This guarantees that the message is not a forgery and actually comes from the authentic source.
+
+Integrity	This guarantees that no one intercepted the message and altered it; similar to a checksum function in a frame.
+
+Confidentiality	This guarantees that if the message is captured, it cannot be deciphered.
+
+Transposition	The rearranged letters are used for the encoded text. In order for the key to be sharable, the letters were shifted by a specific number of characters.
+
+Substitution	This is when different letters are substituted for the letters in the cleartext.
+
+One-time pad	This is a prepared key consisting of an arbitrarily long, non-repeating sequence of numbers was kept on paper tape. It was then combined character by character with the plaintext message to produce the ciphertext. The keys were only used once and were pre-shared.
+
+Brute-force method	The attacker tries every possible key knowing that eventually one of them will work.
+
+Ciphertext method	The attacker has the ciphertext of several encrypted messages but no knowledge of the underlying plaintext.
+
+Known-Plaintext method	The attacker has access to the ciphertext of several messages and knows something about the plaintext underlying that ciphertext.
+
+Chosen-Plaintext method	The attacker chooses which data the encryption device encrypts and observes the ciphertext output.
+
+Chosen-Ciphertext method	The attacker can choose different ciphertext to be decrypted and has access to the decrypted plaintext.
+
+Meet-in-the-Middle method	The attacker knows a portion of the plaintext and the corresponding ciphertext.
+
+Cryptology	Cryptology is the science of making and breaking secret codes. It combines cryptography and cryptanalysis. In the world of communications and networking, authentication, integrity, and data confidentiality are implemented in many ways using various protocols and algorithms. The choice of algorithm varies depending on the security requirements, the hardware resources that are available for encryption and decryption, and the acceptance of the algorithm in the security community. Public-domain algorithms are frequently used. With most modern algorithms, successful decryption requires knowledge of the appropriate cryptographic keys. This means that the security of encryption lies in the secrecy of the keys, not the algorithm.
+
+15.5.2
+
+
+
+Module 15 - Cryptographic Services Quiz	
+
+1. Refer to the exhibit. Which type of cipher method is depicted?	transposition cipher
+
+2. What are two objectives of ensuring data integrity? (Choose two.)	Data is not changed by authorized entities.
+
+
+
+Data is unaltered during transit.
+
+3. A network security specialist is tasked to implement a security measure that monitors the status of critical files in the data center and sends an immediate alert if any file is modified. Which aspect of secure communications is addressed by this security measure?	data integrity
+
+4. Which type of attack allows an attacker to use a brute force approach?	password cracking
+
+5. Why would HMAC be used to help secure the data as it travels across various links?	It is a hashing algorithm used to guarantee that the message is not a forgery and actually comes from the authentic source.
+
+6. What is the focus of cryptanalysis?	breaking encrypted codes
+
+7. What is cryptology?	the science of making and breaking secret codes
+
+8. Which objective of secure communications is achieved by encrypting data?	confidentiality
+
+9. What is the purpose of a nonrepudiation service in secure communications?	to ensure that the source of the communications is confirmed.
+
+10. What is an example of the transposition cipher?
+
+Caesar	rail fence
+
+11. A web server administrator is configuring access settings to require users to authenticate first before accessing certain web pages. Which requirement of information security is addressed through the configuration?	confidentiality
+
+12. As data is being stored on a local hard disk, which method would secure the data from unauthorized access?	data encryption
