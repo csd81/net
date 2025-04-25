@@ -1,5 +1,6 @@
 # extended ACL
 
+```bash
 can filter by source destination protocol
 
 access-list 100 permit/deny tcp/udp/ip/icmp host/any/[source ip] host/any/[destination ip] eq [port number]80/443/20/21/22/.../www/dns/ftp
@@ -33,3 +34,4 @@ R1(config)# int gi0/1
 R1(config-if)# ip access-group 100 out
 R1(config-if)# exit
 
+```

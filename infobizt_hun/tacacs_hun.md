@@ -9,6 +9,7 @@ USERS:
 Username: Admin2
 Password: Admin123
 
+```bash
 R1> enable
 R1# conf t
 R1(config)# 
@@ -22,3 +23,4 @@ R1(config-line)# login authentication default
 R1(config-line)# exit
 
 test it: Username, Password
+```

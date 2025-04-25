@@ -1,5 +1,6 @@
 #  allow management access on Switch
 
+```bash
 S1> en
 S1# conf t
 S1(config)# int vlan 50
@@ -67,7 +68,7 @@ R1(config-line)# exit
 R1(config)# 
 
 ! try to SSH from PC1 to R1
-
+```
 
 
 

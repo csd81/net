@@ -15,6 +15,7 @@ allowed on 100 ACL  1,3,4 networks  80.90.10.0/28
 crypto map          VPN-MAP         VPN-MAP
 SA on crypto map    ipsec-isakmp    ipsec-isakmp
 
+```bash
 ! license boot module needed.
 
 R1> enable
@@ -83,3 +84,4 @@ R3(config)# access-list 100 permit ip     192.168.2.0   0.0.0.255 192.168.4.0   
 R3(config)# 
 R3(config)# exit
 R3#  show crypto ipsec sa
+```

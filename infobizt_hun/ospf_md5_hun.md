@@ -1,6 +1,6 @@
 # OSPF - MD5
 
-
+```bash
 R1>
 R1# conf t
 R1(config)# router ospf 1
@@ -36,3 +36,4 @@ R3(config)# int s0/0/1
 R3(config-if)# ip ospf message-digest-key 1 md5 cisco123
 R3(config-if)# exit
 R3(config)# 
+```

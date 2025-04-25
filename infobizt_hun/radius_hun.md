@@ -3,7 +3,7 @@ Server1: AAA
 key: Radius123
 
 
-
+```bash
 R2> enable
 R2# conf t
 R2(config)# 
@@ -22,3 +22,4 @@ Test:
 User: Admin1
 pass: Admin123 
 R2>
+```

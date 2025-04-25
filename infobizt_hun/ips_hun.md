@@ -3,7 +3,7 @@
 
 R1> user Admin1 Admin123
 en conf t
-
+```bash
 R1(config)#
 R1(config)# do mkdir ipsdir
 R1(config)# ip ips config location flash:ipsdir
@@ -39,3 +39,4 @@ R1(config-sigdef-sig-engine)# exit
 R1(config-sigdef-sig)# exit
             [confirm]
 R1(config)# 
+```

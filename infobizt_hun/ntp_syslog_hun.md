@@ -2,6 +2,7 @@
 SRV1: Syslog server 
 SRV2: NTP server 192.168.1.8
 
+```bash
 ! NTP
 R1> enable
 R1# configure terminal
@@ -31,3 +32,4 @@ R1(config-if)# no shutdown
 
 ! finetuning
 R1(config)# service timestamps log datetime msec
+```

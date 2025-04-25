@@ -1,5 +1,5 @@
 # local AAA
-
+```bash
 R3> en
 R3# conf t
 R3(config)# username Admin3 secret admin123
@@ -21,5 +21,4 @@ R3(config)# line vty 0 4
 R3(config-line)# login authentication SSH-LOGIN  
 R3(config-line)# transport input ssh
 R3(config-line)# exit 
-
-
+```

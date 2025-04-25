@@ -9,7 +9,7 @@
 
 ciscoasa>
 Pass: none
-
+```bash
 ciscoasa# conf t
 ciscoasa(config)# hostname ASA
 ASA(config)#
@@ -99,3 +99,4 @@ ASA(config)#
 !!ping from SRV3 to PC1
 !!ssh from PC1 to 80.90.10.2
 !!ssh from PC2 to 192.168.2.1
+```

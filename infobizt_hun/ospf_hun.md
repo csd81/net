@@ -1,5 +1,6 @@
 #OSPF - routing protocol
 
+```bash
 R1> en
 R1# conf t
 R1(config)# router ospf 1
@@ -36,3 +37,4 @@ R4# conf t
 R4(config)# hostname ISP
 ISP(config)# ip route 0.0.0.0 0.0.0.0 s0/0/0
 ISP(config)# 
+```

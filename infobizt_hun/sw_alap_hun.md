@@ -1,5 +1,6 @@
 # switched network
 
+```bash
 Switch> en
 Switch# conf t
 Switch(config)# hostname S1
@@ -124,3 +125,4 @@ R1(config-subif)# exit
 ! ping from PC1 to SRV2 192.168.4.8
 ! ping from PC1 to PC2 192.168.2.10
 ! ping from PC1 to SRV3 192.168.2.11
+```

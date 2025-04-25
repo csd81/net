@@ -1,6 +1,7 @@
 # Switch port security
 # STP = Spanning Tree Protocol
 
+```bash
 S1> en, conf t
 S1(config)# int range fa0/3-24, gi0/2
 S1(config-if-range)# shutdown
@@ -59,3 +60,4 @@ S5(config-if-range)# exit
 S5(config)# int range fa0/22-23
 S5(config-if-range)# switchport trunk native vlan 100
 S5(config-if-range)# exit
+```

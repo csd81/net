@@ -1,3 +1,4 @@
+```bash
 management access acl - normal ACL
 
 telnet vagy ssh kell
@@ -40,3 +41,4 @@ ISP(config)# access-list 1 permit host 192.168.1.8
 ISP(config)# int gi0/1
 ISP(config-if)# ip access-group 1 out
 ISP(config-if)# exit
+```

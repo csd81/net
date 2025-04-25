@@ -2,7 +2,7 @@
 
 
 
-
+```bash
 R1> en
 R1# conf t
 R1(config)# 
@@ -52,3 +52,4 @@ S1(config)#  ip default-gateway 192.168.1.1
 
 ! test: ssh -l cisco 192.168.1.1 (router)  from PC1
 ! test: ssh -l cisco 192.168.1.2  (switch) from PC1
+```
