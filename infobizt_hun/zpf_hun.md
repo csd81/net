@@ -137,4 +137,4 @@ do show policy-map type inspect zone-pair sessions
 ---
 
 Would you also like me to show you an example of how to **add return rules** (like allowing outside VPN connections to the inside), or **how to make logging better** for troubleshooting ZBFW? 🚀  
-(It's very useful if you're studying or simulating real-world setups!)
+(It's very useful if you're studying or simulating real-world setups!) +
